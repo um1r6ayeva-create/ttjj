@@ -122,7 +122,7 @@ const getStatusText = (status: string): string => {
       .replace(/\\/g, '/')
       .replace(/^\/+/, '');
 
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    const baseUrl = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
     return `${baseUrl}/${cleaned}`;
   };
 

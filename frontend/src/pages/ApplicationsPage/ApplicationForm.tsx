@@ -324,7 +324,7 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({ type, userData, onSuc
       setLoading(true);
       setMessage('');
       
-      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
       const response = await fetch(`${API_BASE_URL}/api/v1/applications/`, {
         method: 'POST',
         body: formDataToSend,

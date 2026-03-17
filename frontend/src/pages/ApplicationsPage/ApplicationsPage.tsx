@@ -6,7 +6,7 @@ import Modal from '../../components/comon/Modal';
 import ApplicationsCheckPage from './ApplicationsCheckPage';
 import { useTranslation } from 'react-i18next';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
 interface ApplicationData {
   id: number;
   user_id: number;

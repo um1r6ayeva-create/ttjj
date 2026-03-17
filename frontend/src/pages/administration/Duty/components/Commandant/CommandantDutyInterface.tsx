@@ -55,7 +55,7 @@ interface DutyWithReport extends Duty {
   report?: DutyReport;
 }
 
-const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/v1`;
+const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com'}/api/v1`;
 
 const CommandantDutyInterface = () => {
   const { t } = useTranslation();
