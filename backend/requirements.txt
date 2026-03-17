@@ -11,4 +11,5 @@ pydantic[email]
 alembic
 python-multipart
 aiofiles
+httpx
 bcrypt==3.2.0
