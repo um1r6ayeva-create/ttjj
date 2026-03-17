@@ -39,7 +39,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com').replace(/\/+$/, '');
 
 export const api = axios.create({
   baseURL: `${API_BASE_URL}/api/v1`,
