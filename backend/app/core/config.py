@@ -15,8 +15,8 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:5173",
         "http://localhost:3000",
-        "https://*.devtunnels.ms",
-        "https://*.vercel.app",
+        "https://ttjj.vercel.app",
+        "https://ttjj-*.vercel.app",
     ]  # обязательно список фронтендов
 
     # Настройки приложения

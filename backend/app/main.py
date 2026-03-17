@@ -11,6 +11,7 @@ from app.db.init_db import init_db
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UPLOADS_DIR = os.path.join(BASE_DIR, "uploads")
+os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 # Теперь можно создавать таблицы
 Base.metadata.create_all(bind=engine)
@@ -27,7 +28,7 @@ app = FastAPI(
 # --- CORS middleware должно идти до include_router ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
