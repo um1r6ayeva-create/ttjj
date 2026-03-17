@@ -556,7 +556,7 @@ const getReportStatusText = (status: string): string => {
         <div className="header-main">
           <h1>{t('commandantDuty.title')}</h1>
           <button 
-            className="btn1 refresh-btn1" 
+            className="btn refresh-btn" 
             onClick={fetchData}
             aria-label={t('commandantDuty.refresh')}
           >

@@ -21,7 +21,7 @@
 /* --- Сетка формы --- */
 .form-grid3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 25px;
   margin-bottom: 30px;
 }
@@ -42,7 +42,7 @@
 /* --- Кнопки выбора типа дежурства --- */
 .duty-type-selector {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
   gap: 12px;
   margin-top: 8px;
 }

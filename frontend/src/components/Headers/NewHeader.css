@@ -148,9 +148,18 @@
 /* Мобильная адаптивность */
 @media (max-width: 1024px) {
   .main-header {
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
+    flex-wrap: wrap;
+    padding: 15px 20px;
+    gap: 15px;
+  }
+  
+  .logo-section {
+    order: 1;
+  }
+  
+  .header-right-section {
+    order: 2;
+    gap: 12px;
   }
   
   .nav-section {
@@ -158,11 +167,6 @@
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
-  }
-  
-  .header-right-section {
-    order: 2;
-    gap: 15px;
   }
 }
 

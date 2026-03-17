@@ -68,7 +68,7 @@
 /* Statistics Dashboard */
 .applications-check-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: 20px;
   margin-bottom: 30px;
 }
@@ -222,7 +222,7 @@
 /* Applications Grid */
 .applications-check-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
   gap: 25px;
   margin-bottom: 30px;
 }
@@ -766,6 +766,11 @@
     gap: 15px;
   }
   
+  .applications-check-card-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
   .applications-check-applicant-name {
     flex-direction: column;
     align-items: flex-start;
@@ -778,5 +783,16 @@
   
   .applications-check-status-btn {
     min-width: 100%;
+  }
+
+  .applications-check-footer-actions {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .applications-check-btn-quick-download {
+    width: 100%;
+    border-radius: 8px;
   }
 }

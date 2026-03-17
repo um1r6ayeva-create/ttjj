@@ -31,7 +31,7 @@
   gap: 20px;
 }
 
-.btn1 {
+.btn {
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
@@ -45,18 +45,18 @@
   gap: 8px;
 }
 
-.btn1:hover {
+.btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.refresh-btn1 {
+.refresh-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   font-weight: 600;
 }
 
-.refresh-btn1:hover {
+.refresh-btn:hover {
   background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
 }
 
@@ -137,7 +137,7 @@
 /* Карточки */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
   gap: 20px;
 }
 
@@ -331,16 +331,16 @@
   margin-top: 16px;
 }
 
-.view-btn1 {
+.view-btn {
   background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
   color: white;
 }
 
-.view-btn1:hover {
+.view-btn:hover {
   background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
 }
 
-.confirm-btn1 {
+.confirm-btn {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
 }
@@ -990,7 +990,7 @@
 /* Адаптивность */
 @media (max-width: 1200px) {
   .cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
   }
 }
 

@@ -254,88 +254,113 @@
 /* Медиа-запросы для адаптивности */
 @media (max-width: 1024px) {
     .footer-top {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 50px;
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+        gap: 30px;
     }
     
     .footer-logo-section {
         flex-direction: column;
-        text-align: center;
-        min-width: auto;
+        align-items: flex-start;
+        text-align: left;
+        min-width: 0;
+        gap: 15px;
     }
     
     .social-section {
-        align-items: center;
-        width: 100%;
+        align-items: flex-end;
+        width: auto;
     }
     
     .social-title-container {
-        padding: 12px 20px;
-        font-size: 1.3rem;
+        padding: 10px 18px;
+        font-size: 1.1rem;
     }
 }
 
 @media (max-width: 768px) {
     .footer {
-        padding: 40px 0 25px;
+        padding: 30px 0 20px;
     }
     
     .footer-content {
-        padding: 0 20px;
+        padding: 0 15px;
+    }
+    
+    .footer-top {
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .footer-logo {
+        width: 60px;
+        height: 60px;
+        padding: 6px;
     }
     
     .university-full-name {
-        font-size: 1.6rem;
+        font-size: 1.1rem;
         max-width: 100%;
     }
     
     .university-subtitle {
-        font-size: 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .social-title-container {
+        display: none;
     }
     
     .social-links {
-        justify-content: center;
-        gap: 20px;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+        width: 90px;
     }
     
     .social-link {
-        width: 55px;
-        height: 55px;
-        font-size: 1.4rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
     }
     
     .copyright {
-        font-size: 1rem;
+        font-size: 0.9rem;
         text-align: center;
     }
     
     .footer-bottom {
         flex-direction: column;
-        gap: 20px;
+        gap: 12px;
+        padding-top: 20px;
         text-align: center;
     }
 }
 
 @media (max-width: 480px) {
     .footer-logo {
-        width: 80px;
-        height: 80px;
+        width: 50px;
+        height: 50px;
     }
     
     .university-full-name {
-        font-size: 1.4rem;
+        font-size: 0.9rem;
     }
-    
-    .social-title-container {
-        font-size: 1.1rem;
-        padding: 10px 15px;
+
+    .university-subtitle {
+        font-size: 0.75rem;
     }
     
     .social-link {
-        width: 50px;
-        height: 50px;
-        font-size: 1.3rem;
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+
+    .social-links {
+        width: 80px;
     }
 }
