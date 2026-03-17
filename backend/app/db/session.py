@@ -7,7 +7,11 @@ Base = declarative_base()
 
 SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL  # должен быть URL строки к PostgreSQL
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    pool_pre_ping=True,
+    pool_recycle=300,
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db():
