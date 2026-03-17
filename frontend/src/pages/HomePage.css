@@ -1,0 +1,11 @@
+.home-container {
+  width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 50px 20px;
+}
+
+.news-section {
+  padding: 50px 20px;
+  background-color: #f5f5f5;
+}

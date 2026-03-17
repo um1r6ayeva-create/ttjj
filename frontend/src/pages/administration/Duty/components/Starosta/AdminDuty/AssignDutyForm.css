@@ -1,0 +1,260 @@
+/* AssignDutyForm.css */
+
+.assign-duty-form {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.assign-duty-form h2 {
+  color: #2d3748;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* --- Сетка формы --- */
+.form-grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+/* --- Группы полей --- */
+.form-group3 {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group3 label {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #4a5568;
+}
+
+/* --- Кнопки выбора типа дежурства --- */
+.duty-type-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.duty-type-btn {
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  color: #4a5568;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.duty-type-btn:hover {
+  border-color: #cbd5e1;
+  background: #f7fafc;
+  transform: translateY(-2px);
+}
+
+.duty-type-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* --- Кнопки выбора этажа --- */
+.floor-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.floor-btn {
+  padding: 14px 12px;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  color: #4a5568;
+  text-align: center;
+}
+
+.floor-btn:hover {
+  border-color: #cbd5e1;
+  background: #f7fafc;
+}
+
+.floor-btn.active {
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+}
+
+/* --- Поля выбора --- */
+.room-select,
+.date-input {
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  font-size: 15px;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  color: #4a5568;
+  font-weight: 500;
+  width: 100%;
+}
+
+.room-select:focus,
+.date-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* --- Информация о студентах --- */
+.room-students-info {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #4a5568;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.room-students-info strong {
+  color: #2d3748;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* --- Информация о назначаемом дежурстве --- */
+.duty-info-summary {
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+  padding: 22px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  font-size: 15px;
+  border: 1px solid #e2e8f0;
+  color: #4a5568;
+}
+
+.duty-info-summary strong {
+  color: #2d3748;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* --- Кнопка назначения --- */
+.assign-btn4 {
+  width: 100%;
+  padding: 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.assign-btn4:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.assign-btn4:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #a0aec0;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- Адаптивность --- */
+@media (max-width: 1024px) {
+  .form-grid3 {
+    grid-template-columns: 1fr;
+  }
+  
+  .floor-selector {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .assign-duty-form {
+    padding: 20px;
+  }
+  
+  .assign-duty-form h2 {
+    font-size: 22px;
+  }
+  
+  .duty-type-btn {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  
+  .floor-btn {
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+  
+  .room-select,
+  .date-input {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .assign-btn4 {
+    padding: 16px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .assign-duty-form {
+    padding: 16px;
+  }
+  
+  .duty-type-selector {
+    grid-template-columns: 1fr;
+  }
+  
+  .floor-selector {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .duty-info-summary {
+    padding: 16px;
+    font-size: 14px;
+  }
+}

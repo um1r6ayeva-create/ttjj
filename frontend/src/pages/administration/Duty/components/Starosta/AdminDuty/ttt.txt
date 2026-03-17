@@ -1,0 +1,280 @@
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../../../../contexts/AuthContext';
+import './AssignDutyForm.css';
+
+interface Student {
+  id: number;
+  name: string;
+  surname: string;
+  n_room?: number;
+  role: string;
+}
+
+interface Duty {
+  id: number;
+  duty_type: string;
+  room_number: number;
+  floor: number;
+  assigned_to: Student[];
+  date_assigned: string;
+  date_due: string;
+  status: string;
+  assigned_by?: Student; 
+}
+
+interface AssignDutyFormProps {
+  onDutyAssigned: (duty: Duty) => void;
+}
+
+const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
+  const { t } = useTranslation();
+  const { fetchUsers, token } = useAuth();
+
+  const [dutyType, setDutyType] = useState('kitchen');
+  const [floor, setFloor] = useState(2);
+  const [roomNumber, setRoomNumber] = useState('201');
+  const [dueDate, setDueDate] = useState('');
+  const [currentRoomStudents, setCurrentRoomStudents] = useState<Student[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const floors = [2, 3, 4, 5, 6, 7, 8, 9];
+  const dutyTypes = [
+    { value: 'kitchen', label: t('assignDutyForm.dutyTypes.kitchen') },
+    { value: 'shower', label: t('assignDutyForm.dutyTypes.shower') },
+  ];
+
+  const generateRooms = (floorNum: number) =>
+    Array.from({ length: 12 }, (_, i) => (floorNum * 100 + i + 1).toString());
+
+  const rooms = generateRooms(floor);
+
+  const loadStudentsByRoom = async (room: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const users = await fetchUsers();
+      const roomNum = Number(room);
+
+      const students = users.filter(
+        u =>
+          u.n_room === roomNum &&
+          (u.role.toLowerCase() === 'student' || u.role.toLowerCase() === 'admin')
+      );
+
+      setCurrentRoomStudents(students);
+    } catch (err: any) {
+      console.error('Error loading students:', err);
+      setError(err.message || t('assignDutyForm.errors.assignError'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadStudentsByRoom(roomNumber);
+  }, [roomNumber]);
+
+  useEffect(() => {
+    setRoomNumber(String(floor * 100 + 1));
+  }, [floor]);
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      } as Intl.DateTimeFormatOptions);
+    } catch {
+      return dateString;
+    }
+  };
+
+  const handleAssignDuty = async () => {
+    if (!dueDate) {
+      setError(t('assignDutyForm.errors.selectDate'));
+      return;
+    }
+
+    if (currentRoomStudents.length === 0) {
+      setError(t('assignDutyForm.errors.noStudents'));
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch('http://localhost:8000/api/v1/duties/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          duty_type: dutyType,
+          floor,
+          room_number: Number(roomNumber),
+          date_due: `${dueDate}T00:00:00`,
+          status: 'assigned',
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(t('assignDutyForm.errors.assignError'));
+      }
+
+      const data = await res.json();
+
+      const newDuty = {
+        ...data,
+        assigned_to: data.assigned_to,
+      };
+
+      onDutyAssigned(newDuty);
+      setDueDate('');
+      setError(null);
+    } catch (err: any) {
+      console.error('Error assigning duty:', err);
+      setError(err.message || t('assignDutyForm.errors.assignError'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="assign-duty-form">
+      <h2>{t('assignDutyForm.title')}</h2>
+      
+      {error && (
+        <div className="error-message">
+          <span className="error-icon">⚠️</span>
+          {error}
+        </div>
+      )}
+      
+      <div className="form-grid3">
+        {/* Выбор типа дежурства */}
+        <div className="form-group3">
+          <label>{t('assignDutyForm.labels.dutyType')}</label>
+          <div className="duty-type-selector">
+            {dutyTypes.map(type => (
+              <button
+                key={type.value}
+                type="button"
+                className={`duty-type-btn ${dutyType === type.value ? 'active' : ''}`}
+                onClick={() => setDutyType(type.value)}
+                aria-label={`${t('assignDutyForm.labels.dutyType')}: ${type.label}`}
+                aria-pressed={dutyType === type.value}
+              >
+                {type.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Выбор этажа */}
+        <div className="form-group3">
+          <label>{t('assignDutyForm.labels.floor')}</label>
+          <div className="floor-selector">
+            {floors.map(f => (
+              <button
+                key={f}
+                type="button"
+                className={`floor-btn ${floor === f ? 'active' : ''}`}
+                onClick={() => setFloor(f)}
+                aria-label={`${f} ${t('assignDutyForm.labels.floorButton')}`}
+                aria-pressed={floor === f}
+              >
+                {f} {t('assignDutyForm.labels.floorButton')}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Выбор комнаты */}
+        <div className="form-group3">
+          <label>{t('assignDutyForm.labels.room')}</label>
+          <select 
+            className="room-select"
+            value={roomNumber} 
+            onChange={e => setRoomNumber(e.target.value)}
+            aria-label={t('assignDutyForm.labels.room')}
+          >
+            {rooms.map(r => (
+              <option key={r} value={r}>
+                {t('assignDutyForm.rooms.roomPrefix')} {r}
+              </option>
+            ))}
+          </select>
+          
+          {/* Информация о студентах в комнате */}
+          {loading ? (
+            <div className="loading-students">
+              <small>{t('assignDutyForm.messages.loadingStudents')}</small>
+            </div>
+          ) : currentRoomStudents.length > 0 ? (
+            <div className="room-students-info">
+              <small>
+                <strong>{t('assignDutyForm.rooms.studentsInRoom')}</strong><br />
+                {currentRoomStudents.map((s, index) => (
+                  <span key={s.id}>
+                    {s.name} {s.surname}
+                    {index < currentRoomStudents.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
+              </small>
+            </div>
+          ) : (
+            <div className="no-students-info">
+              <small>{t('assignDutyForm.rooms.noStudents')}</small>
+            </div>
+          )}
+        </div>
+
+        {/* Выбор даты */}
+        <div className="form-group3">
+          <label>{t('assignDutyForm.labels.dueDate')}</label>
+          <input
+            className="date-input"
+            type="date"
+            value={dueDate}
+            min={new Date().toISOString().split('T')[0]}
+            onChange={e => setDueDate(e.target.value)}
+            aria-label={t('assignDutyForm.labels.dueDate')}
+          />
+        </div>
+      </div>
+
+      {/* Информация о назначаемом дежурстве */}
+      {currentRoomStudents.length > 0 && roomNumber && dueDate && (
+        <div className="duty-info-summary">
+          <p>
+            <strong>{t('assignDutyForm.summary.dutyWillBeAssigned')}</strong><br />
+            {t('assignDutyForm.summary.type')}: {dutyTypes.find(t => t.value === dutyType)?.label}<br />
+            {t('assignDutyForm.summary.floor')}: {floor}<br />
+            {t('assignDutyForm.summary.room')}: {roomNumber}<br />
+            {t('assignDutyForm.summary.date')}: {formatDate(dueDate + 'T00:00:00')}<br />
+            {t('assignDutyForm.summary.students')}: {currentRoomStudents.length}
+          </p>
+        </div>
+      )}
+
+      {/* Кнопка назначения */}
+      <button 
+        className="assign-btn4"
+        onClick={handleAssignDuty} 
+        disabled={loading || !dueDate || currentRoomStudents.length === 0}
+        aria-label={t('assignDutyForm.buttons.assignDuty')}
+        aria-busy={loading}
+      >
+        {loading ? t('assignDutyForm.buttons.assigning') : t('assignDutyForm.buttons.assignDuty')}
+      </button>
+    </div>
+  );
+};
+
+export default AssignDutyForm;

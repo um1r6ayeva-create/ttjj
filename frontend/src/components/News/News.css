@@ -1,0 +1,557 @@
+/* News.css - Оптимизированная версия */
+
+/* Анимация появления */
+.fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Основной контейнер новостей */
+.news-section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    padding: 60px;
+    margin-bottom: 70px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.section-title {
+    font-size: 2.8rem;
+    margin-bottom: 50px;
+    color: #002147;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Контейнер для карточек новостей */
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 40px;
+}
+
+/* Карточка новости */
+.news-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    transition: all 0.3s;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Заголовок карточки */
+.news-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #4fc3f7;
+}
+
+.news-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.news-card-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #002147;
+    margin: 0;
+    flex: 1;
+}
+
+/* Дата новости */
+.news-date {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Категория */
+.news-category {
+    display: inline-block;
+    padding: 5px 15px;
+    background: #e3f2fd;
+    color: #1565c0;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Содержимое новости */
+.news-content {
+    flex: 1;
+    margin-bottom: 20px;
+}
+
+.news-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.read-more-btn {
+    background: transparent;
+    color: #4fc3f7;
+    border: 1px solid #4fc3f7;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.read-more-btn:hover {
+    background: #4fc3f7;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Футер карточки */
+.news-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* Автор новости */
+.news-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.author-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: 600;
+    color: #002147;
+    font-size: 0.95rem;
+}
+
+.author-position {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Кнопки действий */
+.news-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.edit-news-btn {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-news-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+}
+
+.delete-news-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-news-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(238, 90, 82, 0.3);
+}
+
+/* Форма добавления/редактирования */
+.news-add-form {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 40px;
+    border: 2px dashed #4fc3f7;
+}
+
+.news-add-form h3 {
+    color: #002147;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s;
+    background: white;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #4fc3f7;
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Кнопки формы */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.add-news-btn,
+.save-news-btn,
+.cancel-edit-btn {
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.add-news-btn {
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    color: white;
+}
+
+.add-news-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.4);
+}
+
+.add-news-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.save-news-btn {
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+}
+
+.save-news-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+}
+
+.cancel-edit-btn {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: white;
+}
+
+.cancel-edit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+}
+
+/* Индикаторы состояния */
+.loading-spinner {
+    text-align: center;
+    padding: 60px;
+    grid-column: 1 / -1;
+}
+
+.loading-spinner i {
+    color: #4fc3f7;
+    margin-bottom: 20px;
+}
+
+.loading-spinner p {
+    color: #666;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.no-news {
+    text-align: center;
+    padding: 60px;
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 15px;
+    border: 2px dashed #4fc3f7;
+}
+
+.no-news i {
+    color: rgba(79, 195, 247, 0.6);
+    margin-bottom: 20px;
+}
+
+.no-news h3 {
+    color: #002147;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.no-news p {
+    color: #666;
+    font-size: 1.05rem;
+}
+
+/* Кнопка "Все новости" */
+.more-news-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 50px auto 0;
+    background: linear-gradient(135deg, #4fc3f7, #002147);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    box-shadow: 0 6px 20px rgba(0, 33, 71, 0.3);
+}
+
+.more-news-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 33, 71, 0.4);
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .news-section {
+        padding: 50px 40px;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .news-section {
+        padding: 40px 30px;
+    }
+    
+    .news-container {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .news-section {
+        padding: 30px 20px;
+        border-radius: 20px;
+        margin-bottom: 50px;
+    }
+    
+    .news-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+    
+    .news-card {
+        padding: 25px;
+    }
+    
+    .news-add-form {
+        padding: 25px;
+    }
+    
+    .news-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .more-news-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .news-section {
+        padding: 25px 15px;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .news-card-title {
+        font-size: 1.3rem;
+    }
+    
+    .news-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .news-actions {
+        justify-content: flex-end;
+        width: 100%;
+        margin-top: 10px;
+    }
+    
+    .news-add-form {
+        padding: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+}
+/* News.css - добавьте эти стили */
+
+/* Три колонки */
+.language-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.language-column {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.language-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.language-header h4 {
+  margin: 0;
+  color: #495057;
+  font-size: 16px;
+}
+
+.flag {
+  font-size: 24px;
+}
+
+.common-fields {
+  background: #e9ecef;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.common-fields .form-group {
+  margin-bottom: 0;
+}
+
+/* Остальные существующие стили... */

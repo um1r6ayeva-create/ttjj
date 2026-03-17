@@ -1,0 +1,341 @@
+/* Footer.css */
+.footer {
+    background: linear-gradient(135deg, #002147 0%, #003366 100%);
+    padding: 60px 0 30px;
+    border-top: 4px solid #4fc3f7;
+    width: 100%;
+    margin-top: auto;
+    position: relative;
+    z-index: 100;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.footer-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 50px;
+    gap: 40px;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    flex: 1;
+    min-width: 300px;
+}
+
+.footer-logo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    padding: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(79, 195, 247, 0.3);
+}
+
+.footer-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.footer-logo:hover img {
+    transform: scale(1.05);
+}
+
+.university-full-name {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: white;
+    max-width: 450px;
+    line-height: 1.4;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.university-subtitle {
+    font-size: 1.2rem;
+    color: #4fc3f7;
+    margin-top: 8px;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.social-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 25px;
+    flex: 0 1 auto;
+}
+
+.social-title-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #4fc3f7;
+    font-size: 1.4rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px 25px;
+    border-radius: 50px;
+    border: 1px solid rgba(79, 195, 247, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.social-title-icon {
+    font-size: 1.2rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+}
+
+.social-link i {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.social-link:hover i {
+    transform: scale(1.2);
+}
+
+.social-link:hover::before {
+    transform: scale(1);
+}
+
+/* YouTube */
+.social-link.youtube {
+    background: #FF0000;
+    color: white;
+}
+
+.social-link.youtube:hover {
+    background: #FF0000;
+    transform: translateY(-8px) rotate(5deg);
+}
+
+/* Instagram */
+.social-link.instagram {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    color: white;
+}
+
+.social-link.instagram:hover {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    transform: translateY(-8px) rotate(-5deg);
+}
+
+/* Facebook */
+.social-link.facebook {
+    background: #1877F2;
+    color: white;
+}
+
+.social-link.facebook:hover {
+    background: #1877F2;
+    transform: translateY(-8px) rotate(5deg);
+}
+
+/* Telegram */
+.social-link.telegram {
+    background: #0088cc;
+    color: white;
+}
+
+.social-link.telegram:hover {
+    background: #0088cc;
+    transform: translateY(-8px) rotate(-5deg);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.copyright {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+.contact-email {
+    color: #4fc3f7;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    padding: 2px 0;
+    transition: all 0.3s ease;
+}
+
+.contact-email::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #4fc3f7;
+    transition: width 0.3s ease;
+}
+
+.contact-email:hover {
+    color: white;
+}
+
+.contact-email:hover::after {
+    width: 100%;
+}
+
+/* Анимация появления */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.footer {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 1024px) {
+    .footer-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 50px;
+    }
+    
+    .footer-logo-section {
+        flex-direction: column;
+        text-align: center;
+        min-width: auto;
+    }
+    
+    .social-section {
+        align-items: center;
+        width: 100%;
+    }
+    
+    .social-title-container {
+        padding: 12px 20px;
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 40px 0 25px;
+    }
+    
+    .footer-content {
+        padding: 0 20px;
+    }
+    
+    .university-full-name {
+        font-size: 1.6rem;
+        max-width: 100%;
+    }
+    
+    .university-subtitle {
+        font-size: 1rem;
+    }
+    
+    .social-links {
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .social-link {
+        width: 55px;
+        height: 55px;
+        font-size: 1.4rem;
+    }
+    
+    .copyright {
+        font-size: 1rem;
+        text-align: center;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-logo {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .university-full-name {
+        font-size: 1.4rem;
+    }
+    
+    .social-title-container {
+        font-size: 1.1rem;
+        padding: 10px 15px;
+    }
+    
+    .social-link {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+}

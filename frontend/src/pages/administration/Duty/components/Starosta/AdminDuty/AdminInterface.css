@@ -1,0 +1,61 @@
+/* AdminInterface.css */
+
+.admin-interface {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    min-height: 100vh;
+}
+
+.interface-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+/* Заголовки */
+.assign-duty-form h2,
+.assigned-duties-list h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #2d3748;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 1024px) {
+    .admin-interface {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-interface {
+        padding: 20px 15px;
+    }
+    
+    .interface-container {
+        gap: 30px;
+    }
+    
+    .assign-duty-form h2,
+    .assigned-duties-list h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-interface {
+        padding: 15px 10px;
+    }
+    
+    .interface-container {
+        gap: 25px;
+    }
+    
+    .assign-duty-form h2,
+    .assigned-duties-list h2 {
+        font-size: 1.6rem;
+    }
+}

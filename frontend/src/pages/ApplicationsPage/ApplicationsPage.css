@@ -1,0 +1,780 @@
+/* ApplicationsPage.css - Оптимизированная версия */
+
+/* Основные стили страницы */
+.applications-page {
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #000000 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.applications-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 40px 15px;
+}
+
+.applications-section {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 24px;
+  padding: 50px;
+  margin-bottom: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Заголовки и общие элементы */
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #002147;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.current-date-time {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #4fc3f7;
+  margin-bottom: 30px;
+  background: rgba(79, 195, 247, 0.08);
+  padding: 14px;
+  border-radius: 12px;
+  border-left: 4px solid #4fc3f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Информация о боте */
+.bot-info {
+  background: linear-gradient(135deg, rgba(0, 33, 71, 0.03) 0%, rgba(79, 195, 247, 0.05) 100%);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 35px;
+  border: 2px solid rgba(79, 195, 247, 0.2);
+  text-align: center;
+}
+
+.bot-info h3 {
+  color: #002147;
+  font-size: 1.7rem;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.bot-info p {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #555;
+  margin-bottom: 22px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.telegram-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #0088cc, #006699);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 28px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 18px rgba(0, 136, 204, 0.25);
+}
+
+.telegram-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 136, 204, 0.35);
+  background: linear-gradient(135deg, #0077b5, #005580);
+}
+
+/* Табы */
+.application-tabs {
+  display: flex;
+  margin-bottom: 30px;
+  border-bottom: 2px solid rgba(79, 195, 247, 0.3);
+  gap: 5px;
+}
+
+.tab-btn2 {
+  background: rgba(182, 217, 252, 0.8);
+  border: none;
+  padding: 16px 36px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+  transition: all 0.3s;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 5px;
+}
+
+.tab-btn2.active {
+  background: linear-gradient(135deg, #4fc3f7, #0288d1);
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+}
+
+/* Предупреждение об авторизации */
+.auth-warning {
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  border: 1px solid rgba(243, 156, 18, 0.3);
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.auth-warning i {
+  color: #f39c12;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.auth-warning p {
+  margin: 0;
+  color: #856404;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.auth-link {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.auth-link:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+/* Страница входа */
+.login-required {
+  background: white;
+  border-radius: 18px;
+  padding: 45px 35px;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.5s ease-out;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.login-required-icon {
+  color: #4fc3f7;
+  margin-bottom: 25px;
+  opacity: 0.8;
+}
+
+.login-required h3 {
+  color: #002147;
+  margin-bottom: 12px;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.login-required p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.login-required-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.login-required-actions .btn2 {
+  padding: 14px 28px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  min-width: 150px;
+  justify-content: center;
+}
+
+.btn2-primary {
+  background: linear-gradient(135deg, #4fc3f7, #0288d1);
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+}
+
+.btn2-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79, 195, 247, 0.4);
+  background: linear-gradient(135deg, #0288d1, #0277bd);
+}
+
+.btn2-secondary {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #002147;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.btn2-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #e9ecef, #dee2e6);
+}
+
+/* История заявок */
+.applications-history {
+  margin-top: 40px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(79, 195, 247, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.history-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  color: #002147;
+  font-size: 1.8rem;
+  font-weight: 700;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(79, 195, 247, 0.3);
+}
+
+.history-title i {
+  color: #4fc3f7;
+  font-size: 1.6rem;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 60px;
+  color: #002147;
+}
+
+.loading-spinner i {
+  color: #4fc3f7;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.loading-spinner p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #666;
+}
+
+/* Сетка заявок */
+.history-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 20px;
+}
+
+/* Карточка заявки */
+.application-item {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(0, 33, 71, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border-left: 4px solid #4fc3f7;
+}
+
+.application-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0, 33, 71, 0.12);
+  border-color: rgba(79, 195, 247, 0.4);
+}
+
+/* Заголовок карточки */
+.application-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 15px;
+}
+
+.application-type {
+  font-weight: 700;
+  color: #002147;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.application-type i.fa-file-contract {
+  color: #2196f3;
+}
+
+.application-type i.fa-file-signature {
+  color: #9c27b0;
+}
+
+/* Кнопки действий */
+.application-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.application-actions .btn2 {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  white-space: nowrap;
+}
+
+.download-btn2 {
+  background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 195, 247, 0.25);
+  margin-right: 5px;
+  border-radius: 50px;
+}
+
+.download-btn2:hover {
+  background: linear-gradient(135deg, #2196f3 0%, #0d8bf2 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.35);
+}
+
+.delete-btn2 {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  color: rgb(115, 21, 21);
+  box-shadow: 0 4px 12px rgba(28, 15, 14, 0.25);
+  margin-left: 5px;
+  border-radius: 50px;
+}
+
+.delete-btn2:hover {
+  background: linear-gradient(135deg, #ee5a52 0%, #e53935 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(238, 90, 82, 0.35);
+}
+
+/* Дата заявки */
+.application-date {
+  color: #666;
+  font-size: 0.92rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(79, 195, 247, 0.05);
+  border-radius: 8px;
+}
+
+.application-date i {
+  color: #4fc3f7;
+  font-size: 0.9rem;
+}
+
+/* Статус заявки */
+.application-status {
+  margin-bottom: 20px;
+}
+
+.status-badge2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge i {
+  font-size: 0.85rem;
+}
+
+.status-sent {
+  background: linear-gradient(135deg, rgba(79, 195, 247, 0.12) 0%, rgba(79, 195, 247, 0.2) 100%);
+  color: #0288d1;
+  border: 1px solid rgba(79, 195, 247, 0.25);
+}
+
+.status-sent i {
+  color: #0288d1;
+}
+
+.status-viewed {
+  background: linear-gradient(135deg, rgba(56, 178, 172, 0.12) 0%, rgba(56, 178, 172, 0.2) 100%);
+  color: #0d9488;
+  border: 1px solid rgba(56, 178, 172, 0.25);
+}
+
+.status-viewed i {
+  color: #0d9488;
+}
+
+.status-approved {
+  background: linear-gradient(135deg, rgba(72, 187, 120, 0.12) 0%, rgba(72, 187, 120, 0.2) 100%);
+  color: #10b981;
+  border: 1px solid rgba(72, 187, 120, 0.25);
+}
+
+.status-approved i {
+  color: #10b981;
+}
+
+.status-rejected {
+  background: linear-gradient(135deg, rgba(245, 101, 101, 0.12) 0%, rgba(245, 101, 101, 0.2) 100%);
+  color: #ef4444;
+  border: 1px solid rgba(245, 101, 101, 0.25);
+}
+
+.status-rejected i {
+  color: #ef4444;
+}
+
+/* Детали заявки */
+.application-details {
+  background: rgba(0, 33, 71, 0.015);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 15px;
+  border: 1px solid rgba(0, 33, 71, 0.05);
+}
+
+.detail-row {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.94rem;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-row strong {
+  color: #002147;
+  min-width: 110px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.detail-row i {
+  color: #4fc3f7;
+  width: 16px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.detail-row span {
+  color: #555;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Информация об обновлении */
+.application-updated {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed rgba(0, 33, 71, 0.1);
+  color: #777;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.application-updated i {
+  color: #4fc3f7;
+  font-size: 0.85rem;
+}
+
+/* Пустая история */
+.no-applications {
+  text-align: center;
+  padding: 60px 35px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 18px;
+  border: 2px dashed rgba(0, 33, 71, 0.1);
+  max-width: 600px;
+  margin: 30px auto 0;
+}
+
+.no-applications-icon {
+  margin-bottom: 25px;
+  color: rgba(79, 195, 247, 0.6);
+  font-size: 3.5rem;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.no-applications h3 {
+  color: #002147;
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.no-applications p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 380px;
+  margin: 0 auto;
+  color: #777;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .applications-section {
+    padding: 40px 35px;
+  }
+  
+  .section-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .applications-section {
+    padding: 35px 30px;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .history-list {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .applications-page {
+    padding: 15px;
+  }
+  
+  .container {
+    padding: 30px 15px;
+  }
+  
+  .applications-section {
+    padding: 30px 25px;
+    margin-bottom: 40px;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+  }
+  
+  .history-list {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  
+  .history-title {
+    font-size: 1.5rem;
+  }
+  
+  .application-header {
+    display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 15px;
+  }
+  
+  .application-actions {
+    justify-content: flex-start;
+  }
+  
+  .bot-info {
+    padding: 24px 20px;
+  }
+  
+  .bot-info h3 {
+    font-size: 1.5rem;
+  }
+  
+  .tab-btn2 {
+    padding: 14px 28px;
+    font-size: 1.05rem;
+  }
+  
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .detail-row strong {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .applications-section {
+    padding: 25px 20px;
+    border-radius: 20px;
+  }
+  
+  .section-title {
+    font-size: 1.6rem;
+  }
+  
+  .current-date-time {
+    font-size: 1rem;
+    padding: 12px;
+  }
+  
+  .bot-info {
+    padding: 20px 18px;
+  }
+  
+  .bot-info h3 {
+    font-size: 1.4rem;
+  }
+  
+  .bot-info p {
+    font-size: 1rem;
+  }
+  
+  .telegram-link {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+  
+  .history-title {
+    font-size: 1.4rem;
+  }
+  
+  .applications-history {
+    padding: 25px 20px;
+  }
+  
+  .application-item {
+    padding: 20px;
+  }
+  
+  .application-type {
+    font-size: 1.1rem;
+  }
+  .application-actions1 {
+  display: flex;
+  gap: 10px; /* Убедитесь, что здесь есть отступ */
+  flex-shrink: 0;
+}
+  .application-actions1 .btn2 {
+    padding: 7px 14px;
+    font-size: 0.85rem;
+    min-width: auto;
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .application-details {
+    padding: 16px;
+  }
+  
+  .detail-row {
+    font-size: 0.9rem;
+  }
+  
+  .login-required {
+    padding: 35px 25px;
+  }
+  
+  .login-required-actions {
+    flex-direction: column;
+  }
+  
+  .login-required-actions .btn2 {
+    width: 100%;
+  }
+  
+  .auth-warning {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .auth-warning i {
+    margin: 0;
+  }
+}

@@ -1,0 +1,418 @@
+import React, { useEffect, useState } from 'react';
+import { authApi } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
+import Modal from '../../components/comon/Modal';
+import ConfirmModal from '../../components/comon/ConfirmModal';
+import './News.css';
+
+interface NewsItem {
+  id: number;
+  title: string;
+  content: string;
+  category: string;
+  icon: string;
+  created_at: string;
+  author_name?: string;
+  author_position?: string;
+}
+
+const News: React.FC = () => {
+  const { user } = useAuth();
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [category, setCategory] = useState('Общежитие');
+  const [isLoading, setIsLoading] = useState(true);
+  const [showFullContent, setShowFullContent] = useState<number | null>(null);
+  
+  // Состояния для редактирования
+  const [editingNews, setEditingNews] = useState<NewsItem | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
+  const [editCategory, setEditCategory] = useState('Общежитие');
+  const [, setEditIcon] = useState('fas fa-lightbulb');
+
+  // Состояния для модальных окон
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalType, setModalType] = useState<'success' | 'error'>('success');
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [newsToDelete, setNewsToDelete] = useState<NewsItem | null>(null);
+
+  const isAdmin = user?.role === 'commandant';
+
+  const categoryIcons: Record<string, string> = {
+    'Общежитие': 'fas fa-home',
+    'Учеба': 'fas fa-graduation-cap',
+    'Спорт': 'fas fa-running',
+    'Мероприятия': 'fas fa-calendar-alt',
+    'Важное': 'fas fa-exclamation-circle'
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `Сегодня, ${hours}:${minutes}`;
+    } else if (diffDays === 1) {
+      return 'Вчера';
+    } else if (diffDays === 2) {
+      return 'Позавчера';
+    } else {
+      return date.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+  };
+
+  const loadNews = async () => {
+    try {
+      setIsLoading(true);
+      const res = await authApi.get('/news/');
+      const sortedNews = res.data.sort((a: NewsItem, b: NewsItem) => 
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+      setNews(sortedNews);
+    } catch (error) {
+      console.error('Ошибка при загрузке новостей:', error);
+      showModal('Ошибка при загрузке новостей', 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadNews();
+  }, []);
+
+  const showModal = (message: string, type: 'success' | 'error' = 'success') => {
+    setModalMessage(message);
+    setModalType(type);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalMessage('');
+  };
+
+  const openDeleteConfirm = (newsItem: NewsItem) => {
+    setNewsToDelete(newsItem);
+    setIsConfirmModalOpen(true);
+  };
+
+  const closeDeleteConfirm = () => {
+    setIsConfirmModalOpen(false);
+    setNewsToDelete(null);
+  };
+
+  const addNews = async () => {
+    if (!title.trim() || !content.trim()) {
+      showModal('Заполните все поля', 'error');
+      return;
+    }
+
+    try {
+      await authApi.post('/news/', {
+        title,
+        content,
+        category,
+        icon: categoryIcons[category] || 'fas fa-info-circle',
+        author_name: user?.name || 'Администрация',
+        author_position: user?.role === 'commandant' ? 'Комендант' : 'Администрация'
+      });
+      setTitle('');
+      setContent('');
+      setCategory('Общежитие');
+      loadNews();
+      showModal('Новость успешно добавлена');
+    } catch (error) {
+      console.error('Ошибка при добавлении новости:', error);
+      showModal('Не удалось добавить новость', 'error');
+    }
+  };
+
+  const deleteNews = async () => {
+    if (!newsToDelete) return;
+
+    try {
+      await authApi.delete(`/news/${newsToDelete.id}`);
+      loadNews();
+      closeDeleteConfirm();
+      showModal('Новость успешно удалена');
+    } catch (error) {
+      console.error('Ошибка при удалении новости:', error);
+      closeDeleteConfirm();
+      showModal('Не удалось удалить новость', 'error');
+    }
+  };
+
+  const startEditing = (newsItem: NewsItem) => {
+    setEditingNews(newsItem);
+    setEditTitle(newsItem.title);
+    setEditContent(newsItem.content);
+    setEditCategory(newsItem.category);
+    setEditIcon(newsItem.icon);
+  };
+
+  const cancelEditing = () => {
+    setEditingNews(null);
+    setEditTitle('');
+    setEditContent('');
+    setEditCategory('Общежитие');
+    setEditIcon('fas fa-lightbulb');
+  };
+
+  const updateNews = async () => {
+    if (!editingNews || !editTitle.trim() || !editContent.trim()) {
+      showModal('Заполните все поля', 'error');
+      return;
+    }
+
+    try {
+      await authApi.put(`/news/${editingNews.id}`, {
+        title: editTitle,
+        content: editContent,
+        category: editCategory,
+        icon: categoryIcons[editCategory] || 'fas fa-info-circle',
+        author_name: user?.name || editingNews.author_name,
+        author_position: user?.role === 'commandant' ? 'Комендант' : editingNews.author_position
+      });
+      cancelEditing();
+      loadNews();
+      showModal('Новость успешно обновлена');
+    } catch (error) {
+      console.error('Ошибка при обновлении новости:', error);
+      showModal('Не удалось обновить новость', 'error');
+    }
+  };
+
+  const toggleFullContent = (id: number) => {
+    if (showFullContent === id) {
+      setShowFullContent(null);
+    } else {
+      setShowFullContent(id);
+    }
+  };
+
+  const getInitials = (name: string) => {
+    if (!name) return 'АО';
+    const parts = name.split(' ');
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+  };
+
+  return (
+    <section className="news-section fade-in" id="news">
+      {/* Модальное окно для сообщений */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title={modalType === 'success' ? 'Успешно!' : 'Внимание!'}
+        type={modalType}
+      >
+        <div className="modal-message">
+          <i className={`fas fa-${modalType === 'success' ? 'check-circle' : 'exclamation-circle'}`}></i>
+          <p>{modalMessage}</p>
+        </div>
+        <div className="modal-actions">
+          <button 
+            className={`btn ${modalType === 'success' ? 'btn-primary' : 'btn-secondary'}`} 
+            onClick={closeModal}
+          >
+            Понятно
+          </button>
+        </div>
+      </Modal>
+
+      {/* Модальное окно подтверждения удаления */}
+      <ConfirmModal
+              isOpen={isConfirmModalOpen}
+              onClose={closeDeleteConfirm}
+              onConfirm={deleteNews}
+              title="Подтверждение удаления"
+              message={newsToDelete ? (
+                  <>
+                      Вы уверены, что хотите удалить новость?
+                      <br /><br />
+                      <strong>Заголовок:</strong> {newsToDelete.title}
+                      <br />
+                      <strong>Категория:</strong> {newsToDelete.category}
+                      <br />
+                      <strong>Дата:</strong> {formatDate(newsToDelete.created_at)}
+                  </>
+              ) : null}
+              confirmText="Удалить"
+              cancelText="Отмена"
+              type="error" children={undefined}      />
+
+      <h2 className="section-title">Последние новости</h2>
+
+      {isAdmin && (
+        <div className="news-add-form">
+          <h3>{editingNews ? 'Редактировать новость' : 'Добавить новость'}</h3>
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Заголовок новости"
+              value={editingNews ? editTitle : title}
+              onChange={e => editingNews ? setEditTitle(e.target.value) : setTitle(e.target.value)}
+              className="form-input"
+            />
+          </div>
+          <div className="form-group">
+            <textarea
+              placeholder="Текст новости"
+              value={editingNews ? editContent : content}
+              onChange={e => editingNews ? setEditContent(e.target.value) : setContent(e.target.value)}
+              className="form-textarea"
+              rows={4}
+            />
+          </div>
+          <div className="form-group">
+            <select
+              value={editingNews ? editCategory : category}
+              onChange={e => editingNews ? setEditCategory(e.target.value) : setCategory(e.target.value)}
+              className="form-select"
+            >
+              <option value="Общежитие">Общежитие</option>
+              <option value="Учеба">Учеба</option>
+              <option value="Спорт">Спорт</option>
+              <option value="Мероприятия">Мероприятия</option>
+              <option value="Важное">Важное</option>
+            </select>
+          </div>
+          <div className="form-actions">
+            {editingNews ? (
+              <>
+                <button 
+                  onClick={updateNews} 
+                  className="save-news-btn"
+                  disabled={!editTitle.trim() || !editContent.trim()}
+                >
+                  <i className="fas fa-save"></i> Сохранить изменения
+                </button>
+                <button 
+                  onClick={cancelEditing} 
+                  className="cancel-edit-btn"
+                >
+                  <i className="fas fa-times"></i> Отмена
+                </button>
+              </>
+            ) : (
+              <button 
+                onClick={addNews} 
+                className="add-news-btn"
+                disabled={!title.trim() || !content.trim()}
+              >
+                <i className="fas fa-plus"></i> Добавить новость
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="news-container">
+        {isLoading ? (
+          <div className="loading-spinner">
+            <i className="fas fa-spinner fa-spin fa-2x"></i>
+            <p>Загрузка новостей...</p>
+          </div>
+        ) : news.length === 0 ? (
+          <div className="no-news">
+            <i className="fas fa-newspaper fa-3x"></i>
+            <h3>Новостей пока нет</h3>
+            <p>Будьте первым, кто добавит новость!</p>
+          </div>
+        ) : (
+          news.map((item) => (
+            <div key={item.id} className="news-card">
+              <div className="news-header">
+                <div className="news-icon">
+                  <i className={item.icon || 'fas fa-info-circle'}></i>
+                </div>
+                <div className="news-card-title">{item.title}</div>
+              </div>
+              
+              <div className="news-date">
+                <i className="far fa-calendar-alt"></i>
+                <span>{formatDate(item.created_at)}</span>
+              </div>
+              
+              <div className="news-category">{item.category}</div>
+              
+              <div className="news-content">
+                <p className="news-text">
+                  {showFullContent === item.id || item.content.length <= 150
+                    ? item.content
+                    : `${item.content.substring(0, 150)}...`
+                  }
+                </p>
+                {item.content.length > 150 && (
+                  <button 
+                    className="read-more-btn"
+                    onClick={() => toggleFullContent(item.id)}
+                  >
+                    {showFullContent === item.id ? 'Скрыть' : 'Подробнее'}
+                  </button>
+                )}
+              </div>
+              
+              <div className="news-footer">
+                <div className="news-author">
+                  <div className="author-avatar">
+                    {getInitials(item.author_name || 'Администрация')}
+                  </div>
+                  <div className="author-info">
+                    <div className="author-name">
+                      {item.author_name || 'Администрация общежитий'}
+                    </div>
+                    <div className="author-position">
+                      {item.author_position || 'Объявление'}
+                    </div>
+                  </div>
+                </div>
+                
+                {isAdmin && (
+                  <div className="news-actions">
+                    <button 
+                      className="edit-news-btn"
+                      onClick={() => startEditing(item)}
+                      title="Редактировать новость"
+                    >
+                      <i className="fas fa-edit"></i>
+                    </button>
+                    <button 
+                      className="delete-news-btn"
+                      onClick={() => openDeleteConfirm(item)}
+                      title="Удалить новость"
+                    >
+                      <i className="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {news.length > 3 && (
+        <button className="more-news-btn">
+          <i className="fas fa-list-alt"></i> Все новости
+        </button>
+      )}
+    </section>
+  );
+};
+
+export default News;

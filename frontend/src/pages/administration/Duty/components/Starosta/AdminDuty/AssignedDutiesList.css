@@ -1,0 +1,320 @@
+/* AssignedDutiesList.css */
+
+.assigned-duties-list {
+    width: 100%;
+    padding: 20px;
+    color:#0a0b0e;
+}
+
+.assigned-duties-list h2 {
+    color: #0a0b0e;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+/* --- Таблица назначенных дежурств --- */
+.duties-table-container {
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.duties-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    min-width: 1000px;
+}
+
+.duties-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.duties-table th {
+    padding: 18px 20px;
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    text-align: left;
+    border: none;
+    position: sticky;
+    top: 0;
+}
+
+.duties-table th:first-child {
+    border-top-left-radius: 16px;
+}
+
+.duties-table th:last-child {
+    border-top-right-radius: 16px;
+}
+
+.duties-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    background: white;
+    color: #4a5568;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.duties-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.duties-table tbody tr:hover td {
+    background: #f8fafc;
+}
+
+/* --- Бейджи типов дежурств --- */
+.duty-badge {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #ffffff;
+    display: inline-block;
+    min-width: 100px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.duty-badge.kitchen {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+.duty-badge.shower {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+/* --- Бейджи статусов --- */
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-block;
+    min-width: 120px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge.pending {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.status-badge.waiting {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+.status-badge.confirmed {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+/* --- Кнопки действий --- */
+.action-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 100px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+.edit-btn3 {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #ffffff;
+}
+
+.edit-btn3:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.delete-btn3 {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #ffffff;
+}
+
+.delete-btn3:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+}
+
+.cancel-btn {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+    color: #ffffff;
+}
+
+.cancel-btn:hover {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    box-shadow: 0 4px 8px rgba(100, 116, 139, 0.3);
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+}
+
+.save-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* --- Стили для редактирования --- */
+.edit-select,
+.edit-input {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    font-size: 14px;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.edit-select:focus,
+.edit-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.edit-room-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 140px;
+}
+
+.room-students-info-small {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+    font-weight: 500;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* --- Группировка кнопок действий --- */
+.action-buttons3 {
+    display: flex;
+    gap: 8px;
+}
+
+/* --- Состояние "нет дежурств" --- */
+.no-duties {
+    text-align: center;
+    padding: 50px 30px;
+    font-size: 16px;
+    color: #64748b;
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 2px dashed #cbd5e1;
+    margin: 20px 0;
+}
+
+.no-duties::before {
+    content: '📋';
+    font-size: 48px;
+    display: block;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* --- Мобильная адаптация --- */
+@media (max-width: 768px) {
+    .assigned-duties-list {
+        padding: 15px;
+    }
+    
+    .assigned-duties-list h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .duties-table {
+        font-size: 13px;
+        min-width: 900px;
+    }
+    
+    .duties-table th,
+    .duties-table td {
+        padding: 14px 16px;
+    }
+    
+    .duty-badge,
+    .status-badge {
+        padding: 6px 12px;
+        font-size: 13px;
+        min-width: 90px;
+    }
+    
+    .action-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+        min-width: 90px;
+    }
+    
+    .edit-room-group {
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .assigned-duties-list {
+        padding: 10px;
+    }
+    
+    .duties-table-container {
+        border-radius: 12px;
+    }
+    
+    .duties-table th,
+    .duties-table td {
+        padding: 12px 14px;
+    }
+    
+    .action-buttons3 {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .edit-actions {
+        flex-direction: column;
+    }
+}

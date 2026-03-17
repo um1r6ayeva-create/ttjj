@@ -1,0 +1,324 @@
+/* ОСНОВНОЙ КОНТЕЙНЕР */
+.container {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 50px 20px;
+}
+
+/* Анимация появления */
+.fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* СТИЛИ ДЛЯ КАРТОЧЕК РЕКТОРАТА */
+.page-title {
+    color: white;
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.page-subtitle {
+    color: #4fc3f7;
+    font-size: 1.6rem;
+    text-align: center;
+    margin-bottom: 60px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 35px;
+    margin-bottom: 70px;
+}
+
+.person-card {
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 250px;
+    position: relative;
+}
+
+/* УДАЛИЛ ВСЕ transform что двигал карточки */
+.person-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.person-card.active {
+    border: 2px solid #4fc3f7;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+}
+
+.person-photo {
+    width: 100%;
+    height: 340px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #002147, #4fc3f7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.3rem;
+}
+
+.person-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s;
+}
+
+.person-card:hover .person-photo img {
+    transform: scale(1.05);
+}
+
+.expand-icon {
+    text-align: center;
+    padding: 18px;
+    background: #f5f5f5;
+    color: #002147;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-top: 2px solid #e0e0e0;
+    transition: all 0.3s;
+}
+
+.person-card.active .expand-icon {
+    background: #4fc3f7;
+    color: white;
+}
+
+.person-info {
+    padding: 30px;
+    
+}
+
+.person-position {
+    color: #002147;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    background: linear-gradient(to right, #002147, #4fc3f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.person-name {
+    color: #002147;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    border-bottom: 3px solid #4fc3f7;
+    padding-bottom: 15px;
+    line-height: 1.4;
+}
+
+.person-degree {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    font-style: italic;
+    min-height: 24px;
+    line-height: 1.5;
+}
+
+.person-details {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    padding: 25px;
+    display: none;
+    z-index: 5;
+    border-top: 2px solid #4fc3f7;
+}
+
+.person-card.active .person-details {
+    display: block;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 18px;
+    color: #333;
+    padding: 8px 0;
+    border-bottom: 1px dashed #e0e0e0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.detail-label {
+    font-weight: 700;
+    min-width: 160px;
+    color: #002147;
+    font-size: 1.05rem;
+}
+
+.detail-value {
+    flex: 1;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.email-link {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 2px dotted #0066cc;
+    transition: all 0.3s;
+    font-weight: 600;
+    padding: 2px 0;
+}
+
+.email-link:hover {
+    color: #ff6600;
+    border-bottom: 2px solid #ff6600;
+}
+
+.back-btn {
+    display: inline-block;
+    background: linear-gradient(to right, #002147, #4fc3f7);
+    color: white;
+    border: none;
+    padding: 18px 45px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    margin-top: 40px;
+    box-shadow: 0 8px 20px rgba(0, 33, 71, 0.3);
+}
+
+.back-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 33, 71, 0.4);
+}
+
+.back-btn-container {
+    text-align: center;
+    margin-top: 60px;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 1200px) {
+    .page-title {
+        font-size: 3rem;
+    }
+    
+    .page-subtitle {
+        font-size: 1.4rem;
+        padding: 0 15px;
+    }
+    
+    .cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 15px;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+    }
+    
+    .page-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+    }
+    
+    .cards-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .person-card {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .person-photo {
+        height: 280px;
+    }
+    
+    .person-name {
+        font-size: 1.6rem;
+    }
+    
+    .back-btn {
+        padding: 15px 35px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .page-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .person-photo {
+        height: 240px;
+    }
+    
+    .person-name {
+        font-size: 1.4rem;
+    }
+    
+    .person-degree {
+        font-size: 1rem;
+    }
+    
+    .detail-item {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .detail-label {
+        min-width: auto;
+    }
+    
+    .back-btn {
+        width: 100%;
+        padding: 14px 25px;
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,201 @@
+/* DutyPage.css */
+
+/* Основной контейнер */
+.duty-page {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #000000 100%);
+}
+
+/* Хедер */
+.duty-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Заголовок */
+.duty-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #2d3748;
+}
+
+.duty-icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* Подзаголовок */
+.duty-subtitle {
+  font-size: 1.1rem;
+  color: #4a5568;
+  font-weight: 500;
+  margin-top: 16px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-radius: 12px;
+  display: inline-block;
+  border: 1px solid #667eea20;
+}
+
+/* Контент */
+.duty-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .duty-page {
+    padding: 16px;
+  }
+
+  .duty-header {
+    padding: 24px 16px;
+    margin-bottom: 24px;
+  }
+
+  .duty-title {
+    font-size: 1.8rem;
+    gap: 10px;
+  }
+
+  .duty-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .duty-subtitle {
+    font-size: 1rem;
+    padding: 10px 16px;
+  }
+
+  .duty-content {
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .duty-title {
+    font-size: 1.5rem;
+  }
+  
+  .duty-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+/* DutyPage.css */
+
+/* Секция глобальных дежурств */
+.global-duty-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #e2e8f0; /* светлая рамка */
+  border-radius: 8px;
+  background-color: #f9fafb; /* светлый фон */
+}
+
+.global-duty-section h2 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #1f2937; /* темный текст */
+  border-bottom: 1px solid #d1d5db;
+  padding-bottom: 5px;
+}
+
+/* Секция обычных дежурств */
+.commandant-duty-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(235, 243, 255, 0.8);
+  border-radius: 0.5rem;
+  border: 1px solid #334155;
+}
+
+/* Общие карточки внутри секций */
+.global-duty-section .duty-card,
+.commandant-duty-section .duty-card {
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.global-duty-section .duty-card h3,
+.commandant-duty-section .duty-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+/* Статус дежурства */
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-confirmed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* Кнопки действий */
+.action-buttons {
+  margin-top: 10px;
+}
+
+.action-buttons .btn {
+  margin-right: 8px;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+}
+
+.confirm-btn {
+  background-color: #10b981;
+}
+
+.reject-btn {
+  background-color: #ef4444;
+}
+
+.view-btn {
+  background-color: #3b82f6;
+}
+
+.secondary-btn {
+  background-color: #6b7280;
+}

@@ -1,0 +1,468 @@
+/* frontend/src/pages/auth/ProfilePage.css */
+.profile-container11 {
+  min-height: 100vh;
+ 
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .profile-container11 {
+    padding: 2rem;
+  }
+}
+
+/* Хедер */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.05); /* прозрачный фон */
+  backdrop-filter: blur(10px);           /* размытие фона за хедером */
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+}
+
+/* Заголовок */
+.profile-header h1 {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+/* Подзаголовок */
+.profile-header-subtitle {
+  color: #93c5fd;
+}
+
+/* Кнопка домой */
+.home-button {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 500;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Основной контент */
+.profile-content22 {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .profile-content22 {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.profile-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Карточка профиля */
+.profile-card23 {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  position: sticky;
+  top: 2rem;
+}
+
+.profile-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8rem;
+  height: 8rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.profile-avatar svg {
+  width: 4rem;
+  height: 4rem;
+  color: white;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.role-badge.admin {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.role-badge.commandant {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.role-badge.student {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.profile-info {
+  margin: 1.5rem 0;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #bfdbfe;
+  margin-bottom: 1rem;
+}
+
+.info-item svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.action-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  color: white;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+}
+
+.action-button.edit {
+  background: linear-gradient(to right, #3b82f6, #1d4ed8);
+}
+
+.action-button.edit:hover {
+  background: linear-gradient(to right, #2563eb, #1e40af);
+}
+
+.action-button.password {
+  background: linear-gradient(to right, #8b5cf6, #7c3aed);
+}
+
+.action-button.password:hover {
+  background: linear-gradient(to right, #7c3aed, #6d28d9);
+}
+
+.action-button.logout {
+  background: linear-gradient(to right, #ef4444, #dc2626);
+}
+
+.action-button.logout:hover {
+  background: linear-gradient(to right, #dc2626, #b91c1c);
+}
+
+/* Формы */
+.form-card23 {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.form-header h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+}
+
+.close-button {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #bfdbfe;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  color: white;
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.3);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.form-button {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.form-button.cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.form-button.cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.form-button.save {
+  background: linear-gradient(to right, #10b981, #059669);
+  color: white;
+}
+
+.form-button.save:hover {
+  background: linear-gradient(to right, #059669, #047857);
+}
+
+.form-button.change {
+  background: linear-gradient(to right, #8b5cf6, #7c3aed);
+  color: white;
+}
+
+.form-button.change:hover {
+  background: linear-gradient(to right, #7c3aed, #6d28d9);
+}
+
+/* Сообщения */
+.message-alert {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid;
+}
+
+.message-alert.success {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #bbf7d0;
+}
+
+.message-alert.error {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fecaca;
+}
+
+.message-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.message-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.message-icon.success {
+  background: #22c55e;
+  color: white;
+}
+
+.message-icon.error {
+  background: #ef4444;
+  color: white;
+}
+
+/* Информация о системе */
+.system-card23 {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.system-card23 h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.system-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .system-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.system-section {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+}
+
+.system-section h4 {
+  font-weight: 600;
+  color: #93c5fd;
+  margin-bottom: 0.5rem;
+}
+
+.privilege-list {
+  list-style: none;
+}
+
+.privilege-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #bfdbfe;
+  margin-bottom: 0.5rem;
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.active {
+  background: #22c55e;
+}
+
+.status-dot.inactive {
+  background: #ef4444;
+}
+
+/* Футер */
+.profile-footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: #93c5fd;
+  font-size: 0.875rem;
+}
+
+.footer-subtext {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+}
+
+/* Спиннер загрузки */
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.spinner-circle {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Утилиты */
+.hint-text {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #93c5fd;
+}

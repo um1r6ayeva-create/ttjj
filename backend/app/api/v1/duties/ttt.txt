@@ -1,0 +1,239 @@
+-- Table: public.duties
+
+-- DROP TABLE IF EXISTS public.duties;
+
+CREATE TABLE IF NOT EXISTS public.duties
+(
+    id integer NOT NULL DEFAULT nextval('duties_id_seq'::regclass),
+    duty_type character varying COLLATE pg_catalog."default" NOT NULL,
+    room_number integer NOT NULL,
+    floor integer NOT NULL,
+    date_due timestamp without time zone NOT NULL,
+    assigned_by_id integer NOT NULL,
+    status character varying COLLATE pg_catalog."default" NOT NULL,
+    notes text COLLATE pg_catalog."default",
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone,
+    date_assigned timestamp without time zone DEFAULT now(),
+    CONSTRAINT duties_pkey PRIMARY KEY (id),
+    CONSTRAINT duties_assigned_by_id_fkey FOREIGN KEY (assigned_by_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT duties_status_check CHECK (status::text = ANY (ARRAY['pending'::character varying, 'verified'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.duties
+    OWNER to postgres;
+-- Index: ix_duties_id
+
+-- DROP INDEX IF EXISTS public.ix_duties_id;
+
+CREATE INDEX IF NOT EXISTS ix_duties_id
+    ON public.duties USING btree
+    (id ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
+    -- Table: public.duty_assignments
+
+-- DROP TABLE IF EXISTS public.duty_assignments;
+
+CREATE TABLE IF NOT EXISTS public.duty_assignments
+(
+    duty_id integer NOT NULL,
+    user_id integer NOT NULL,
+    assigned_at timestamp with time zone DEFAULT now(),
+    completed_at timestamp with time zone,
+    CONSTRAINT duty_assignments_pkey PRIMARY KEY (duty_id, user_id),
+    CONSTRAINT duty_assignments_duty_id_fkey FOREIGN KEY (duty_id)
+        REFERENCES public.duties (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT duty_assignments_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.duty_assignments
+    OWNER to postgres;
+
+    -- Table: public.duty_reports
+
+-- DROP TABLE IF EXISTS public.duty_reports;
+
+CREATE TABLE IF NOT EXISTS public.duty_reports
+(
+    id integer NOT NULL DEFAULT nextval('duty_reports_id_seq'::regclass),
+    duty_id integer NOT NULL,
+    student_id integer NOT NULL,
+    description text COLLATE pg_catalog."default" NOT NULL,
+    submitted_at timestamp without time zone DEFAULT now(),
+    status character varying(20) COLLATE pg_catalog."default",
+    reviewed_at timestamp without time zone,
+    reviewed_by integer,
+    review_notes text COLLATE pg_catalog."default",
+    CONSTRAINT duty_reports_pkey PRIMARY KEY (id),
+    CONSTRAINT duty_reports_duty_id_fkey FOREIGN KEY (duty_id)
+        REFERENCES public.duties (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT duty_reports_reviewed_by_fkey FOREIGN KEY (reviewed_by)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT duty_reports_student_id_fkey FOREIGN KEY (student_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT duty_reports_review_check CHECK (status::text <> 'verified'::text OR reviewed_at IS NOT NULL AND reviewed_by IS NOT NULL),
+    CONSTRAINT duty_reports_status_check CHECK (status::text = ANY (ARRAY['submitted'::character varying, 'reviewing'::character varying, 'verified'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.duty_reports
+    OWNER to postgres;
+-- Index: ix_duty_reports_id
+
+-- DROP INDEX IF EXISTS public.ix_duty_reports_id;
+
+CREATE INDEX IF NOT EXISTS ix_duty_reports_id
+    ON public.duty_reports USING btree
+    (id ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+-- Index: ux_duty_reports_duty_id
+
+-- DROP INDEX IF EXISTS public.ux_duty_reports_duty_id;
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_duty_reports_duty_id
+    ON public.duty_reports USING btree
+    (duty_id ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
+    -- Table: public.report_photos
+
+-- DROP TABLE IF EXISTS public.report_photos;
+
+CREATE TABLE IF NOT EXISTS public.report_photos
+(
+    id integer NOT NULL DEFAULT nextval('report_photos_id_seq'::regclass),
+    report_id integer NOT NULL,
+    photo_url character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    uploaded_at timestamp without time zone,
+    CONSTRAINT report_photos_pkey PRIMARY KEY (id),
+    CONSTRAINT report_photos_report_id_fkey FOREIGN KEY (report_id)
+        REFERENCES public.duty_reports (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.report_photos
+    OWNER to postgres;
+-- Index: ix_report_photos_id
+
+-- DROP INDEX IF EXISTS public.ix_report_photos_id;
+
+CREATE INDEX IF NOT EXISTS ix_report_photos_id
+    ON public.report_photos USING btree
+    (id ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
+
+    -- Table: public.roles
+
+-- DROP TABLE IF EXISTS public.roles;
+
+CREATE TABLE IF NOT EXISTS public.roles
+(
+    id integer NOT NULL DEFAULT nextval('roles_id_seq'::regclass),
+    name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    CONSTRAINT roles_pkey PRIMARY KEY (id),
+    CONSTRAINT roles_name_key UNIQUE (name)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.roles
+    OWNER to postgres;
+
+    -- Table: public.users
+
+-- DROP TABLE IF EXISTS public.users;
+
+CREATE TABLE IF NOT EXISTS public.users
+(
+    id integer NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+    role_id integer NOT NULL DEFAULT 3,
+    name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    surname character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    password_hash character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    phone character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(100) COLLATE pg_catalog."default",
+    user_group character varying(10) COLLATE pg_catalog."default",
+    n_room integer,
+    is_active boolean DEFAULT true,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT users_pkey PRIMARY KEY (id),
+    CONSTRAINT users_email_key UNIQUE (email),
+    CONSTRAINT users_phone_key UNIQUE (phone),
+    CONSTRAINT users_role_id_fkey FOREIGN KEY (role_id)
+        REFERENCES public.roles (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.users
+    OWNER to postgres;
+-- Index: idx_users_email
+
+-- DROP INDEX IF EXISTS public.idx_users_email;
+
+CREATE INDEX IF NOT EXISTS idx_users_email
+    ON public.users USING btree
+    (email COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+-- Index: idx_users_phone
+
+-- DROP INDEX IF EXISTS public.idx_users_phone;
+
+CREATE INDEX IF NOT EXISTS idx_users_phone
+    ON public.users USING btree
+    (phone COLLATE pg_catalog."default" ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+-- Index: idx_users_role
+
+-- DROP INDEX IF EXISTS public.idx_users_role;
+
+CREATE INDEX IF NOT EXISTS idx_users_role
+    ON public.users USING btree
+    (role_id ASC NULLS LAST)
+    WITH (fillfactor=100, deduplicate_items=True)
+    TABLESPACE pg_default;
+
+-- Trigger: update_users_updated_at
+
+-- DROP TRIGGER IF EXISTS update_users_updated_at ON public.users;
+
+CREATE OR REPLACE TRIGGER update_users_updated_at
+    BEFORE UPDATE 
+    ON public.users
+    FOR EACH ROW
+    EXECUTE FUNCTION public.update_updated_at_column();
+    

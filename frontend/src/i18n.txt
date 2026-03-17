@@ -1,0 +1,768 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+i18n.use(initReactI18next).init({
+  lng: 'ru',
+  fallbackLng: 'ru',
+  interpolation: { escapeValue: false },
+  resources: {
+    ru: {
+      translation: {
+        header: {
+          home: "Главная",
+          rectorate: "Ректорат",
+          dekanat: "Деканат",
+          staff: "Сотрудники",
+          duty: "Дежурства",
+          applications: "Заявки",
+          content: "Контент",
+        },
+        profile: {
+          my_profile: "Мой профиль",
+          logout: "Выйти",
+          login: "Войти",
+          register: "Регистрация",
+        },
+        footer: {
+          university_name: "Ташкентский университет информационных технологий имени Мухаммада ал-Хоразмий",
+          university_subtitle: "Tashkent University of Information Technologies named after Muhammad al-Khwarizmi",
+          social_title: "Мы в социальных сетях:",
+          copyright: "© 2026 Ташкентский университет информационных технологий. Все права защищены. E-mail:"
+        },
+        hero: {
+          title: "Ташкентский университет информационных технологий",
+          subtitle: "Ведущий образовательный и научный центр в сфере информационных технологий в Узбекистане, готовящий высококвалифицированных специалистов для цифровой экономики.",
+          news_button: "Последние новости",
+          official_button: "Официальный сайт"
+        },
+        content: {
+          gallery_title: "Фотогалерея",
+          view: "Просмотр",
+          location: "Локация",
+          address: "Адрес",
+          schedule: "Режим работы",
+          phones: "Телефоны",
+          registry: "Регистратура",
+          info_phone: "Справочная",
+          services: "Услуги для студентов"
+        },
+        days: {
+          monday: "Понедельник",
+          tuesday: "Вторник",
+          wednesday: "Среда",
+          thursday: "Четверг",
+          friday: "Пятница",
+          saturday: "Суббота",
+          sunday: "Воскресенье"
+        },
+        photos: {
+          dormitory: {
+            alt: "Студенческое общежитие",
+            title: "Студенческое общежитие",
+            description: "Современное общежитие для студентов ТУИТ. Комнаты оборудованы всей необходимой мебелью и доступом к интернету, а также условиями для комфортного проживания."
+          },
+          library: {
+            alt: "Библиотека",
+            title: "Библиотека",
+            description: "Фонд библиотеки насчитывает более 500,000 экземпляров книг, журналов и электронных ресурсов. Пространство оборудовано для комфортной учебы и исследований."
+          },
+          reading_room: {
+            alt: "Читальный зал",
+            title: "Читальный зал библиотеки",
+            description: "Просторный читальный зал с современными компьютерами и доступом к электронным базам данных. Идеальное место для самостоятельной подготовки к занятиям."
+          },
+          manaviyat: {
+            alt: "Манавият хонаси",
+            title: "Манавият хонаси",
+            description: "Комната для духовного развития и отдыха студентов. Проводятся культурные мероприятия и беседы."
+          },
+          commandant: {
+            alt: "Комната коменданта",
+            title: "Комната коменданта общежития",
+            description: "Рабочее место коменданта общежития. Здесь решаются все организационные вопросы, связанные с проживанием студентов."
+          },
+          sewing: {
+            alt: "Швейная комната",
+            title: "Швейная комната",
+            description: "Комната для пошива и ремонта одежды. Оборудована современными швейными машинами и необходимыми материалами."
+          },
+          medpoint: {
+            alt: "Медицинский пункт",
+            title: "Медицинский пункт в общежитии",
+            description: "Медпункт, оборудованный для оказания первой медицинской помощи. Работает квалифицированный медицинский персонал."
+          },
+          procedure_room: {
+            alt: "Процедурный кабинет",
+            title: "Процедурный кабинет медпункта",
+            description: "Процедурный кабинет для проведения медицинских манипуляций. Стерильные условия и современное оборудование."
+          },
+          polyclinic: {
+            alt: "Поликлиника №50",
+            title: "Поликлиника №50",
+            description: "Поликлиника для студентов",
+            clinicInfo: {
+              address: "массив Минор, 120",
+              day_off: "Выходной",
+              services: "Общая терапия, стоматология, физиотерапия, лабораторные исследования, вакцинация"
+            }
+          }
+        },
+        application: {
+          university: "Ташкентский университет информационных технологий",
+          university_subtitle: "имени Мухаммада ал-Хоразмий",
+          position: "Первому проректору по делам молодежи",
+          position_subtitle: "и духовно-просветительской работе",
+          recipient: "Яхшибаеву Данияру Султанбаевичу",
+          
+          months: {
+            january: "января",
+            february: "февраля",
+            march: "марта",
+            april: "апреля",
+            may: "мая",
+            june: "июня",
+            july: "июля",
+            august: "августа",
+            september: "сентября",
+            october: "октября",
+            november: "ноября",
+            december: "декабря"
+          },
+          
+          form: {
+            // Основные поля
+            faculty: "Факультет:",
+            group: "Группа:",
+            full_name: "ФИО:",
+            dorm: "Общежитие №:",
+            room: "Комната №:",
+            phone: "Тел:",
+            date: "Дата:",
+            signature: "Подпись",
+            date_suffix: "года",
+            
+            // Плейсхолдеры
+            faculty_placeholder: "Введите название факультета",
+            group_placeholder: "Например: ПИ-20-01",
+            name_placeholder: "Иванов Иван Иванович",
+            dorm_placeholder: "Выберите общежитие",
+            room_placeholder: "Номер комнаты",
+            phone_placeholder: "+998 90 123 45 67",
+            signature_placeholder: "Имя.Фамилия",
+            custom_destination_placeholder: "Укажите место",
+            custom_reason_placeholder: "Укажите причину",
+            
+            // Заголовки документов
+            gallery_title: "Фотогалерея",
+            guarantee_title: "ГАРАНТИЙНОЕ ПИСЬМО",
+            application_title: "ЗАЯВЛЕНИЕ",
+            view: "Просмотр",
+            location: "Локация",
+            
+            // Текст документов
+            guarantee_text1: "Я",
+            guarantee_text2: ", студент",
+            guarantee_text3: "факультета,",
+            guarantee_text4: "группы.",
+            guarantee_text5: "Проживаю в общежитии №",
+            guarantee_text6: ", комната №",
+            guarantee_text7: ".",
+            guarantee_text8: "Выезжаю",
+            guarantee_text9: "в связи с",
+            guarantee_text10: ".",
+            guarantee_text11: "В период с",
+            guarantee_text12: "по",
+            guarantee_text13: "беру на себя полную ответственность за все возможные ситуации, которые могут возникнуть в процессе поездки и обратно.",
+            guarantee_text14: "Данное гарантийное письмо составлено по моему собственному желанию.",
+            
+            application_text1: "Прошу разрешить мне выехать из общежития в связи с",
+            application_text2: "На период с",
+            application_text3: "по",
+            application_text4: "выезжаю",
+            application_text5: "Беру на себя полную ответственность за все возможные ситуации, которые могут возникнуть в процессе поездки и обратно.",
+            
+            // Причины
+            reasons: {
+              winter_vacation: "Зимние каникулы",
+              summer_vacation: "Летние каникулы",
+              family_reasons: "Семейные обстоятельства",
+              illness: "Болезнь",
+              other: "Другое"
+            },
+            
+            // Направления
+            destinations: {
+              relatives: "К родственникам",
+              friends: "К друзьям",
+              other_place: "Другое место"
+            },
+            
+            // Общежития
+            dorm_options: {
+              dorm_1: "Общежитие 1",
+              dorm_2: "Общежитие 2",
+              dorm_3: "Общежитие 3",
+              dorm_4: "Общежитие 4"
+            },
+            
+            // Кнопки
+            submit_guarantee: "Отправить гарантийное письмо",
+            submit_application: "Отправить заявление",
+            sending: "Отправка...",
+            other_separator: ": ",
+            
+            // Сообщения
+            note: "* После отправки файл автоматически скачается и будет отправлен коменданту",
+            success: "✅ Заявка успешно отправлена коменданту!",
+            error: "Ошибка отправки заявки. Попробуйте снова.",
+            
+            // Ошибки валидации
+            validation: {
+              required_fields: "Пожалуйста, заполните все обязательные поля",
+              date_error: "Дата выезда не может быть позже даты возвращения",
+              destination_required: "Пожалуйста, укажите место выезда",
+              reason_required: "Пожалуйста, укажите причину",
+              server_error: "Ошибка отправки заявки"
+            },
+            
+            // Файлы
+            files: {
+              guarantee: "Гарантийное_письмо",
+              application: "Заявление"
+            }
+          },
+          
+          documents: {
+            // Тексты для документов
+            guarantee_text1: "Я, ",
+            guarantee_text2: ", студент ",
+            guarantee_text3: " факультета, ",
+            guarantee_text4: " группы.",
+            guarantee_text5: "Проживаю в общежитии №",
+            guarantee_text6: ", комната №",
+            guarantee_text7: ".",
+            guarantee_text8: "Выезжаю ",
+            guarantee_text9: " в связи с ",
+            guarantee_text10: ".",
+            guarantee_text11: "В период с ",
+            guarantee_text12: " по ",
+            guarantee_text13: " беру на себя полную ответственность за все возможные ситуации, которые могут возникнуть в процессе поездки и обратно.",
+            guarantee_text14: "Данное гарантийное письмо составлено по моему собственному желанию.",
+            
+            application_text1: "Прошу разрешить мне выехать из общежития в связи с",
+            application_text2: "На период с ",
+            application_text3: " по ",
+            application_text4: " выезжаю ",
+            application_text5: "Беру на себя полную ответственность за все возможные ситуации, которые могут возникнуть в процессе поездки и обратно."
+          }
+        }
+      }
+    },
+    en: {
+      translation: {
+        header: {
+          home: "Home",
+          rectorate: "Rectorate",
+          dekanat: "Dean's office",
+          staff: "Staff",
+          duty: "Duties",
+          applications: "Applications",
+          content: "Content",
+        },
+        profile: {
+          my_profile: "My Profile",
+          logout: "Logout",
+          login: "Login",
+          register: "Register",
+        },
+        footer: {
+          university_name: "Tashkent University of Information Technologies named after Muhammad al-Khwarizmi",
+          university_subtitle: "Tashkent University of Information Technologies named after Muhammad al-Khwarizmi",
+          social_title: "Follow us on social networks:",
+          copyright: "© 2026 Tashkent University of Information Technologies. All rights reserved. E-mail:"
+        },
+        hero: {
+          title: "Tashkent University of Information Technologies",
+          subtitle: "The leading educational and scientific center in the field of information technologies in Uzbekistan, training highly qualified specialists for the digital economy.",
+          news_button: "Latest News",
+          official_button: "Official Website"
+        },
+        content: {
+          gallery_title: "Photo Gallery",
+          view: "View",
+          location: "Location",
+          address: "Address",
+          schedule: "Schedule",
+          phones: "Phones",
+          registry: "Registry",
+          info_phone: "Information",
+          services: "Services for students"
+        },
+        days: {
+          monday: "Monday",
+          tuesday: "Tuesday",
+          wednesday: "Wednesday",
+          thursday: "Thursday",
+          friday: "Friday",
+          saturday: "Saturday",
+          sunday: "Sunday"
+        },
+        photos: {
+          dormitory: {
+            alt: "Student dormitory",
+            title: "Student dormitory",
+            description: "Modern dormitory for TUIT students. Rooms are equipped with all necessary furniture and internet access, as well as conditions for comfortable living."
+          },
+          library: {
+            alt: "Library",
+            title: "Library",
+            description: "The library fund contains more than 500,000 copies of books, journals and electronic resources. The space is equipped for comfortable study and research."
+          },
+          reading_room: {
+            alt: "Reading room",
+            title: "Library reading room",
+            description: "A spacious reading room with modern computers and access to electronic databases. An ideal place for independent study preparation."
+          },
+          manaviyat: {
+            alt: "Spirituality room",
+            title: "Spirituality room",
+            description: "A room for spiritual development and student relaxation. Cultural events and conversations are held."
+          },
+          commandant: {
+            alt: "Commandant's room",
+            title: "Dormitory commandant's room",
+            description: "Workplace of the dormitory commandant. All organizational issues related to student accommodation are resolved here."
+          },
+          sewing: {
+            alt: "Sewing room",
+            title: "Sewing room",
+            description: "Room for sewing and repairing clothes. Equipped with modern sewing machines and necessary materials."
+          },
+          medpoint: {
+            alt: "Medical point",
+            title: "Medical point in the dormitory",
+            description: "Medical point equipped to provide first aid. Qualified medical staff work here."
+          },
+          procedure_room: {
+            alt: "Procedure room",
+            title: "Medical point procedure room",
+            description: "Procedure room for medical manipulations. Sterile conditions and modern equipment."
+          },
+          polyclinic: {
+            alt: "Polyclinic № 50",
+            title: "Polyclinic № 50",
+            description: "Polyclinic for students",
+            clinicInfo: {
+              address: "Minor massif, 120",
+              day_off: "Day off",
+              services: "General therapy, dentistry, physiotherapy, laboratory tests, vaccination"
+            }
+          }
+        },
+        application: {
+          university: "Tashkent University of Information Technologies",
+          university_subtitle: "named after Muhammad al-Khwarizmi",
+          position: "To the First Vice-Rector for Youth Affairs",
+          position_subtitle: "and Spiritual-Educational Work",
+          recipient: "Yakhshibayev Daniyar Sultanbaevich",
+          
+          months: {
+            january: "January",
+            february: "February",
+            march: "March",
+            april: "April",
+            may: "May",
+            june: "June",
+            july: "July",
+            august: "August",
+            september: "September",
+            october: "October",
+            november: "November",
+            december: "December"
+          },
+          
+          form: {
+            // Основные поля
+            faculty: "Faculty:",
+            group: "Group:",
+            full_name: "Full Name:",
+            dorm: "Dormitory №:",
+            room: "Room №:",
+            phone: "Phone:",
+            date: "Date:",
+            signature: "Signature",
+            date_suffix: "",
+            
+            // Плейсхолдеры
+            faculty_placeholder: "Enter faculty name",
+            group_placeholder: "For example: PI-20-01",
+            name_placeholder: "Ivanov Ivan Ivanovich",
+            dorm_placeholder: "Select dormitory",
+            room_placeholder: "Room number",
+            phone_placeholder: "+998 90 123 45 67",
+            signature_placeholder: "Name.Surname",
+            custom_destination_placeholder: "Specify destination",
+            custom_reason_placeholder: "Specify reason",
+            
+            // Заголовки документов
+            gallery_title: "Photo Gallery",
+            guarantee_title: "GUARANTEE LETTER",
+            application_title: "APPLICATION",
+            view: "View",
+            location: "Location",
+            
+            // Текст документов
+            guarantee_text1: "I",
+            guarantee_text2: ", student of",
+            guarantee_text3: "faculty,",
+            guarantee_text4: "group.",
+            guarantee_text5: "I live in dormitory №",
+            guarantee_text6: ", room №",
+            guarantee_text7: ".",
+            guarantee_text8: "I'm leaving to",
+            guarantee_text9: "due to",
+            guarantee_text10: ".",
+            guarantee_text11: "During the period from",
+            guarantee_text12: "to",
+            guarantee_text13: "I take full responsibility for all possible situations that may arise during the trip and back.",
+            guarantee_text14: "This guarantee letter is drawn up of my own free will.",
+            
+            application_text1: "I ask for permission to leave the dormitory due to",
+            application_text2: "For the period from",
+            application_text3: "to",
+            application_text4: "I'm leaving to",
+            application_text5: "I take full responsibility for all possible situations that may arise during the trip and back.",
+            
+            // Причины
+            reasons: {
+              winter_vacation: "Winter holidays",
+              summer_vacation: "Summer holidays",
+              family_reasons: "Family circumstances",
+              illness: "Illness",
+              other: "Other"
+            },
+            
+            // Направления
+            destinations: {
+              relatives: "To relatives",
+              friends: "To friends",
+              other_place: "Other place"
+            },
+            
+            // Общежития
+            dorm_options: {
+              dorm_1: "Dormitory 1",
+              dorm_2: "Dormitory 2",
+              dorm_3: "Dormitory 3",
+              dorm_4: "Dormitory 4"
+            },
+            
+            // Кнопки
+            submit_guarantee: "Send Guarantee Letter",
+            submit_application: "Send Application",
+            sending: "Sending...",
+            other_separator: ": ",
+            
+            // Сообщения
+            note: "* After submission, the file will automatically download and be sent to the commandant",
+            success: "✅ Application successfully sent to the commandant!",
+            error: "Error sending application. Please try again.",
+            
+            // Ошибки валидации
+            validation: {
+              required_fields: "Please fill in all required fields",
+              date_error: "Departure date cannot be later than return date",
+              destination_required: "Please specify destination",
+              reason_required: "Please specify reason",
+              server_error: "Application sending error"
+            },
+            
+            // Файлы
+            files: {
+              guarantee: "Guarantee_Letter",
+              application: "Application"
+            }
+          },
+          
+          documents: {
+            // Тексты для документов
+            guarantee_text1: "I, ",
+            guarantee_text2: ", student of ",
+            guarantee_text3: " faculty, ",
+            guarantee_text4: " group.",
+            guarantee_text5: "I live in dormitory №",
+            guarantee_text6: ", room №",
+            guarantee_text7: ".",
+            guarantee_text8: "I'm leaving to ",
+            guarantee_text9: " due to ",
+            guarantee_text10: ".",
+            guarantee_text11: "During the period from ",
+            guarantee_text12: " to ",
+            guarantee_text13: " I take full responsibility for all possible situations that may arise during the trip and back.",
+            guarantee_text14: "This guarantee letter is drawn up of my own free will.",
+            
+            application_text1: "I ask for permission to leave the dormitory due to",
+            application_text2: "For the period from ",
+            application_text3: " to ",
+            application_text4: " I'm leaving to ",
+            application_text5: "I take full responsibility for all possible situations that may arise during the trip and back."
+          }
+        }
+      }
+    },
+    uz: {
+      translation: {
+        header: {
+          home: "Bosh sahifa",
+          rectorate: "Rektorat",
+          dekanat: "Dekanat",
+          staff: "Xodimlar",
+          duty: "Navbatchilik",
+          applications: "Arizalar",
+          content: "Kontent",
+        },
+        profile: {
+          my_profile: "Profil",
+          logout: "Chiqish",
+          login: "Kirish",
+          register: "Ro'yxatdan o'tish",
+        },
+        footer: {
+          university_name: "Toshkent Axborot Texnologiyalari Universiteti Muhammad al-Xorazmiy nomidagi",
+          university_subtitle: "Tashkent University of Information Technologies named after Muhammad al-Khwarizmi",
+          social_title: "Biz ijtimoiy tarmoqlarda:",
+          copyright: "© 2026 Toshkent Axborot Texnologiyalari Universiteti. Barcha huquqlar himoyalangan. E-mail:"
+        },
+        hero: {
+          title: "Toshkent Axborot Texnologiyalari Universiteti",
+          subtitle: "O'zbekistonda axborot texnologiyalari sohasidagi yetakchi ta'lim va ilmiy markaz bo'lib, raqamli iqtisodiyot uchun yuqori malakali mutaxassislar tayyorlaydi.",
+          news_button: "So'nggi yangiliklar",
+          official_button: "Rasmiy veb-sayt"
+        },
+        content: {
+          gallery_title: "Foto galereya",
+          view: "Ko'rish",
+          location: "Lokatsiya",
+          address: "Manzil",
+          schedule: "Ish vaqti",
+          phones: "Telefonlar",
+          registry: "Registratura",
+          info_phone: "Ma'lumot",
+          services: "Talabalar uchun xizmatlar"
+        },
+        days: {
+          monday: "Dushanba",
+          tuesday: "Seshanba",
+          wednesday: "Chorshanba",
+          thursday: "Payshanba",
+          friday: "Juma",
+          saturday: "Shanba",
+          sunday: "Yakshanba"
+        },
+        photos: {
+          dormitory: {
+            alt: "Talabalar yotoqxonasi",
+            title: "Talabalar yotoqxonasi",
+            description: "TUIT talabalari uchun zamonaviy yotoqxona. Xonalar zarur mebellar va internetga kirish bilan jihozlangan, shuningdek qulay yashash sharoitlari mavjud."
+          },
+          library: {
+            alt: "Kutubxona",
+            title: "Kutubxona",
+            description: "Kutubxona fondi 500,000 dan ortiq kitob, jurnal va elektron resurslarni o'z ichiga oladi. O'qish va tadqiqotlar uchun qulay joylashtirilgan."
+          },
+          reading_room: {
+            alt: "O'qish zali",
+            title: "Kutubxona o'qish zali",
+            description: "Zamonaviy kompyuterlar va elektron ma'lumotlar bazalariga kirish imkoniyati bilan keng o'qish zali. Mustaqil tayyorgarlik uchun ideal joy."
+          },
+          manaviyat: {
+            alt: "Ma'naviyat xonasi",
+            title: "Ma'naviyat xonasi",
+            description: "Talabalarning ma'naviy rivojlanishi va dam olishi uchun xona. Madaniy tadbirlar va suhbatlar o'tkaziladi."
+          },
+          commandant: {
+            alt: "Komendant xonasi",
+            title: "Yotoqxona komendant xonasi",
+            description: "Yotoqxona komendantining ish joyi. Bu erda talabalarning yashashi bilan bog'liq barcha tashkiliy masalalar hal qilinadi."
+          },
+          sewing: {
+            alt: "Tikuv xonasi",
+            title: "Tikuv xonasi",
+            description: "Kiyim-kechak tikish va tuzatish uchun xona. Zamonaviy tikuv mashinalari va zarur materiallar bilan jihozlangan."
+          },
+          medpoint: {
+            alt: "Tibbiy punkt",
+            title: "Yotoqxonadagi tibbiy punkt",
+            description: "Birinchi tibbiy yordam ko'rsatish uchun jihozlangan tibbiy punkt. Malakali tibbiy xodimlar ishlaydi."
+          },
+          procedure_room: {
+            alt: "Prosedura kabinetti",
+            title: "Tibbiy punkt prosedura kabinetti",
+            description: "Tibbiy manipulatsiyalar o'tkazish uchun prosedura kabinetti. Steril sharoitlar va zamonaviy uskunalar."
+          },
+          polyclinic: {
+            alt: "50-sonli poliklinika",
+            title: "50-sonli poliklinika",
+            description: "Talabalar uchun poliklinika",
+            clinicInfo: {
+              address: "Minor massivi, 120",
+              day_off: "Dam olish kuni",
+              services: "Umumiy terapiya, stomatologiya, fizioterapiya, laboratoriya tekshiruvlari, vaktsinatsiya"
+            }
+          }
+        },
+        application: {
+          university: "Toshkent Axborot Texnologiyalari Universiteti",
+          university_subtitle: "Muhammad al-Xorazmiy nomidagi",
+          position: "Yoshlar ishlari va ma'naviy-ma'rifiy ishlar bo'yicha birinchi prorektor",
+          position_subtitle: "va ma'naviy-ma'rifiy ishlar bo'yicha",
+          recipient: "Yaxshiboyev Daniyar Sultonboyevichga",
+          
+          months: {
+            january: "yanvar",
+            february: "fevral",
+            march: "mart",
+            april: "aprel",
+            may: "may",
+            june: "iyun",
+            july: "iyul",
+            august: "avgust",
+            september: "sentabr",
+            october: "oktabr",
+            november: "noyabr",
+            december: "dekabr"
+          },
+          
+          form: {
+            // Основные поля
+            faculty: "Fakultet:",
+            group: "Guruh:",
+            full_name: "FISH:",
+            dorm: "Yotoqxona №:",
+            room: "Xona №:",
+            phone: "Telefon:",
+            date: "Sana:",
+            signature: "Imzo",
+            date_suffix: "yil",
+            
+            // Плейсхолдеры
+            faculty_placeholder: "Fakultet nomini kiriting",
+            group_placeholder: "Masalan: PI-20-01",
+            name_placeholder: "Ivanov Ivan Ivanovich",
+            dorm_placeholder: "Yotoqxona tanlang",
+            room_placeholder: "Xona raqami",
+            phone_placeholder: "+998 90 123 45 67",
+            signature_placeholder: "Ism.Familiya",
+            custom_destination_placeholder: "Manzilni ko'rsating",
+            custom_reason_placeholder: "Sababni ko'rsating",
+            
+            // Заголовки документов
+            gallery_title: "Foto galereya",
+            guarantee_title: "KAFOLAT XATI",
+            application_title: "ARIZA",
+            view: "Ko'rish",
+            location: "Lokatsiya",
+            
+            // Текст документов
+            guarantee_text1: "Men",
+            guarantee_text2: ", talabasi",
+            guarantee_text3: "fakulteti,",
+            guarantee_text4: "guruhi.",
+            guarantee_text5: "Men yotoqxona №",
+            guarantee_text6: "da, xona №",
+            guarantee_text7: "da yashayman.",
+            guarantee_text8: "Men ketaman",
+            guarantee_text9: "sababli",
+            guarantee_text10: ".",
+            guarantee_text11: "Davr oralig'ida",
+            guarantee_text12: "dan",
+            guarantee_text13: "gacha men yo'l va orqaga qaytish jarayonida yuzaga kelishi mumkin bo'lgan barcha holatlar uchun to'liq javobgarlikni o'z zimmasiga olaman.",
+            guarantee_text14: "Ushbu kafolat xati mening shaxsiy ixtiyorim bilan tuzilgan.",
+            
+            application_text1: "Men yotoqxonadan chiqishga ruxsat so'rayman",
+            application_text2: "Davr oralig'ida",
+            application_text3: "dan",
+            application_text4: "gacha men ketaman",
+            application_text5: "Men yo'l va orqaga qaytish jarayonida yuzaga kelishi mumkin bo'lgan barcha holatlar uchun to'liq javobgarlikni o'z zimmasiga olaman.",
+            
+            // Причины
+            reasons: {
+              winter_vacation: "Qishki ta'til",
+              summer_vacation: "Yozgi ta'til",
+              family_reasons: "Oila sabablari",
+              illness: "Kasallik",
+              other: "Boshqa"
+            },
+            
+            // Направления
+            destinations: {
+              relatives: "Qarindoshlarga",
+              friends: "Do'stlarga",
+              other_place: "Boshqa joyga"
+            },
+            
+            // Общежития
+            dorm_options: {
+              dorm_1: "Yotoqxona 1",
+              dorm_2: "Yotoqxona 2",
+              dorm_3: "Yotoqxona 3",
+              dorm_4: "Yotoqxona 4"
+            },
+            
+            // Кнопки
+            submit_guarantee: "Kafolat xatini yuborish",
+            submit_application: "Arizani yuborish",
+            sending: "Yuborilmoqda...",
+            other_separator: ": ",
+            
+            // Сообщения
+            note: "* Yuborilgandan so'ng fayl avtomatik ravishda yuklanadi va komendantga yuboriladi",
+            success: "✅ Arizangiz komendantga muvaffaqiyatli yuborildi!",
+            error: "Ariza yuborishda xatolik. Iltimos, qayta urinib ko'ring.",
+            
+            // Ошибки валидации
+            validation: {
+              required_fields: "Iltimos, barcha majburiy maydonlarni to'ldiring",
+              date_error: "Ketish sanasi qaytish sanasidan kech bo'lishi mumkin emas",
+              destination_required: "Iltimos, manzilni ko'rsating",
+              reason_required: "Iltimos, sababni ko'rsating",
+              server_error: "Ariza yuborishda xatolik"
+            },
+            
+            // Файлы
+            files: {
+              guarantee: "Kafolat_xati",
+              application: "Ariza"
+            }
+          },
+          
+          documents: {
+            // Тексты для документов
+            guarantee_text1: "Men, ",
+            guarantee_text2: ", talabasi ",
+            guarantee_text3: " fakulteti, ",
+            guarantee_text4: " guruhi.",
+            guarantee_text5: "Men yotoqxona №",
+            guarantee_text6: "da, xona №",
+            guarantee_text7: "da yashayman.",
+            guarantee_text8: "Men ketaman ",
+            guarantee_text9: " sababli ",
+            guarantee_text10: ".",
+            guarantee_text11: "Davr oralig'ida ",
+            guarantee_text12: " dan ",
+            guarantee_text13: " gacha men yo'l va orqaga qaytish jarayonida yuzaga kelishi mumkin bo'lgan barcha holatlar uchun to'liq javobgarlikni o'z zimmasiga olaman.",
+            guarantee_text14: "Ushbu kafolat xati mening shaxsiy ixtiyorim bilan tuzilgan.",
+            
+            application_text1: "Men yotoqxonadan chiqishga ruxsat so'rayman",
+            application_text2: "Davr oralig'ida ",
+            application_text3: " dan ",
+            application_text4: " gacha men ketaman ",
+            application_text5: "Men yo'l va orqaga qaytish jarayonida yuzaga kelishi mumkin bo'lgan barcha holatlar uchun to'liq javobgarlikni o'z zimmasiga olaman."
+          }
+        }
+      }
+    }
+  },
+});
+
+export default i18n;

@@ -1,0 +1,167 @@
+/* ОСНОВНОЙ КОНТЕЙНЕР СТРАНИЦЫ */
+.hero-container2 {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 35px 16px;
+}
+
+/* ГЕРОЙ-СЕКЦИЯ С ОБНОВЛЕННЫМ ДИЗАЙНОМ */
+.hero-section {
+    text-align: center;
+    padding: 70px 0;
+    background: linear-gradient(135deg, #1a237e, #283593, #3949ab);
+    border-radius: 25px;
+    margin-bottom: 70px;
+    position: relative;
+    overflow: hidden;
+    border: 3px solid #4fc3f7;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+
+/* АНИМАЦИЯ ПОЯВЛЕНИЯ */
+.fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ЗАГОЛОВОК ГЕРОЙ-СЕКЦИИ */
+.hero-title {
+    font-size: 3.8rem;
+    margin-bottom: 25px;
+    color: white;
+    font-weight: 800;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* ПОДЗАГОЛОВОК */
+.hero-subtitle {
+    font-size: 1.6rem;
+    color: #e3f2fd;
+    max-width: 900px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* КОНТЕЙНЕР КНОПОК */
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 50px;
+}
+
+/* ОСНОВНЫЕ СТИЛИ КНОПОК */
+.hero-btn {
+    background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+    color: white;
+    border: none;
+    padding: 18px 45px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+}
+
+/* ЭФФЕКТ ПРИ НАВЕДЕНИИ ДЛЯ ОСНОВНОЙ КНОПКИ */
+.hero-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(79, 195, 247, 0.6);
+    background: linear-gradient(135deg, #29b6f6, #4fc3f7);
+}
+
+/* СТИЛИ ВТОРОСТЕПЕННОЙ КНОПКИ */
+.hero-btn.secondary {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    box-shadow: none;
+}
+
+/* ЭФФЕКТ ПРИ НАВЕДЕНИИ ДЛЯ ВТОРОСТЕПЕННОЙ КНОПКИ */
+.hero-btn.secondary:hover {
+    background: white;
+    color: #1a237e;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+
+/* АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТОВ (1200px) */
+@media (max-width: 1200px) {
+    .hero-title {
+        font-size: 3.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.4rem;
+        max-width: 800px;
+    }
+}
+
+/* АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТОВ (768px) */
+@media (max-width: 768px) {
+    
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+        padding: 0 10px;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 40px;
+    }
+    
+    .hero-btn {
+        width: 100%;
+        max-width: 300px;
+        padding: 16px 30px;
+        font-size: 1.1rem;
+    }
+    
+
+}
+
+/* АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ (480px) */
+@media (max-width: 480px) {
+    
+    
+    .hero-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+    
+    .hero-btn {
+        width: 100%;
+        padding: 14px 25px;
+        font-size: 1rem;
+    }
+    
+   
+}

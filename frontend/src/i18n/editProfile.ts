@@ -1,0 +1,57 @@
+// i18n/editProfile.ts
+export const editProfile = {
+  ru: {
+    title: 'Редактирование профиля',
+    firstName: 'Имя',
+    lastName: 'Фамилия',
+    email: 'Email',
+    emailPlaceholder: 'ivan@example.com',
+    phone: 'Телефон',
+    phonePlaceholder: '+998901234567',
+    group: 'Группа',
+    groupPlaceholder: '222-22',
+    room: 'Комната',
+    roomPlaceholder: '101',
+    cancel: 'Отмена',
+    save: 'Сохранить изменения',
+    saving: 'Сохранение...',
+    updateError: 'Ошибка обновления профиля',
+    readOnly: 'Это поле недоступно для редактирования'
+  },
+  en: {
+    title: 'Edit Profile',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    email: 'Email',
+    emailPlaceholder: 'ivan@example.com',
+    phone: 'Phone',
+    phonePlaceholder: '+998901234567',
+    group: 'Group',
+    groupPlaceholder: '222-22',
+    room: 'Room',
+    roomPlaceholder: '101',
+    cancel: 'Cancel',
+    save: 'Save Changes',
+    saving: 'Saving...',
+    updateError: 'Error updating profile',
+    readOnly: 'This field is not editable'
+  },
+  uz: {
+    title: 'Profilni tahrirlash',
+    firstName: 'Ism',
+    lastName: 'Familiya',
+    email: 'Email',
+    emailPlaceholder: 'ivan@example.com',
+    phone: 'Telefon',
+    phonePlaceholder: '+998901234567',
+    group: 'Guruh',
+    groupPlaceholder: '222-22',
+    room: 'Xona',
+    roomPlaceholder: '101',
+    cancel: 'Bekor qilish',
+    save: 'O\'zgarishlarni saqlash',
+    saving: 'Saqlanmoqda...',
+    updateError: 'Profili yangilashda xatolik',
+    readOnly: 'Ushbu maydonni tahrirlash mumkin emas'
+  }
+};
