@@ -113,9 +113,8 @@
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   min-width: 200px;
-  z-index: 1000;
+  z-index: 9999;
   border: 1px solid #e5e7eb;
-  overflow: hidden;
 }
 
 .profile-dropdown-header {
@@ -184,6 +183,10 @@
   .site-name {
     font-size: 1.8rem;
   }
+  
+  .profile-dropdown {
+    right: -10px;
+  }
 }
 /* Кнопка Профиль */
 .profile-btn {
@@ -197,6 +200,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  border: none;
 }
 
 .profile-btn i {
