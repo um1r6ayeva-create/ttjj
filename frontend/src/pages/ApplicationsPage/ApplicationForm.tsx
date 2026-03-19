@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle } from 'docx';
 import './ApplicationForm.css';
 import { useTranslation } from 'react-i18next';
-import { useAuth, api } from '../../contexts/AuthContext';
+import { api } from '../../contexts/AuthContext';
 
 interface ApplicationFormData {
   faculty: string;
