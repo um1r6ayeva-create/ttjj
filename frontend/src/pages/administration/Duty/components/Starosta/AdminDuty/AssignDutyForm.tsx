@@ -29,7 +29,7 @@ interface AssignDutyFormProps {
 
 const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
   const { t } = useTranslation();
-  const { fetchUsers, token } = useAuth();
+  const { fetchUsers, token, user } = useAuth();
 
   const [dutyType, setDutyType] = useState('kitchen');
   const [floor, setFloor] = useState(2);
@@ -42,6 +42,9 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
   const dutyTypes = [
     { value: 'kitchen', label: t('assignDutyForm.dutyTypes.kitchen') },
     { value: 'shower', label: t('assignDutyForm.dutyTypes.shower') },
+    { value: 'sink', label: t('assignDutyForm.dutyTypes.sink') },
+    { value: 'subbotnik', label: t('assignDutyForm.dutyTypes.subbotnik') },
+    { value: 'general', label: t('assignDutyForm.dutyTypes.general') },
   ];
 
   const generateRooms = (floorNum: number) =>
@@ -67,6 +70,12 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user?.role.toLowerCase() === 'admin' && user.floor) {
+      setFloor(user.floor);
+    }
+  }, [user]);
 
   useEffect(() => {
     loadStudentsByRoom(roomNumber);
@@ -159,16 +168,24 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
         <div className="form-group3">
           <label>{t('assignDutyForm.labels.floor')}</label>
           <div className="floor-selector">
-            {floors.map(f => (
-              <button
-                key={f}
-                type="button"
-                className={`floor-btn ${floor === f ? 'active' : ''}`}
-                onClick={() => setFloor(f)}
-              >
-                {getFloorButtonText(f)}
-              </button>
-            ))}
+            {floors.map(f => {
+              const isAdmin = user?.role.toLowerCase() === 'admin';
+              const isUserFloor = user?.floor === f;
+              const isDisabled = isAdmin && !isUserFloor;
+
+              return (
+                <button
+                  key={f}
+                  type="button"
+                  className={`floor-btn ${floor === f ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`}
+                  onClick={() => !isDisabled && setFloor(f)}
+                  disabled={isDisabled}
+                  title={isDisabled ? t('assignDutyForm.labels.floorRestricted') : ''}
+                >
+                  {getFloorButtonText(f)}
+                </button>
+              );
+            })}
           </div>
         </div>
 

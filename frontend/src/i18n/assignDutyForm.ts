@@ -7,7 +7,10 @@ export const assignDutyForm = {
     // Типы дежурств
     dutyTypes: {
       kitchen: '🍽️ Кухня',
-      shower: '🚿 Душевая'
+      shower: '🚿 Душевая',
+      sink: '🚰 Раковины',
+      subbotnik: '🧹 Субботник',
+      general: '🧼 Генеральная уборка'
     },
     
     // Поля формы
@@ -16,7 +19,8 @@ export const assignDutyForm = {
       floor: 'Этаж',
       room: 'Комната',
       dueDate: 'Дата выполнения',
-      floorButton: 'этаж'
+      floorButton: 'этаж',
+      floorRestricted: 'Вы можете выбирать только свой этаж'
     },
     
     // Комнаты и студенты
@@ -62,7 +66,10 @@ export const assignDutyForm = {
     // Duty types
     dutyTypes: {
       kitchen: '🍽️ Kitchen',
-      shower: '🚿 Shower'
+      shower: '🚿 Shower',
+      sink: '🚰 Sinks',
+      subbotnik: '🧹 Subbotnik',
+      general: '🧼 General cleaning'
     },
     
     // Form fields
@@ -71,7 +78,8 @@ export const assignDutyForm = {
       floor: 'Floor',
       room: 'Room',
       dueDate: 'Due Date',
-      floorButton: 'floor'
+      floorButton: 'floor',
+      floorRestricted: 'You can only select your own floor'
     },
     
     // Rooms and students
@@ -117,7 +125,10 @@ export const assignDutyForm = {
     // Navbatchilik turlari
     dutyTypes: {
       kitchen: '🍽️ Oshxona',
-      shower: '🚿 Dushxona'
+      shower: '🚿 Dushxona',
+      sink: '🚰 Rakovinalar',
+      subbotnik: '🧹 Shanbalik',
+      general: '🧼 General tozalash'
     },
     
     // Forma maydonlari
@@ -126,7 +137,8 @@ export const assignDutyForm = {
       floor: 'Qavat',
       room: 'Xona',
       dueDate: 'Bajarish sanasi',
-      floorButton: 'qavat'
+      floorButton: 'qavat',
+      floorRestricted: 'Siz faqat o\'z qavatingizni tanlashingiz mumkin'
     },
     
     // Xonalar va talabalar

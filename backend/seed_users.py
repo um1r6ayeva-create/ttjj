@@ -10,7 +10,7 @@ SessionLocal = sessionmaker(bind=engine)
 def seed_users():
     db = SessionLocal()
     try:
-        # Check if commandant exists
+        # 1. Commandant (ID 3)
         cmd = db.query(User).filter(User.phone == "+998901234567").first()
         if not cmd:
             cmd = User(
@@ -24,22 +24,23 @@ def seed_users():
             )
             db.add(cmd)
             
-        # Check if admin (starosta) exists
-        adm = db.query(User).filter(User.phone == "+998907654321").first()
+        # 2. Starosta (ID 1)
+        adm = db.query(User).filter(User.phone == "+998998901234").first()
         if not adm:
             adm = User(
                 name="Староста",
                 surname="Тестовый",
-                phone="+998907654321",
+                phone="+998998901234",
                 email="admin@example.com",
                 user_group="123-22",
                 n_room=201,
+                floor=3,
                 password_hash=hash_password("password"),
                 role_id=1, # Admin/Starosta
                 is_active=True
             )
             db.add(adm)
-            
+
         db.commit()
         print("Default users created successfully!")
     except Exception as e:

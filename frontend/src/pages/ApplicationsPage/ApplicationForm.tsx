@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { Document, Packer, Paragraph, TextRun, AlignmentType, BorderStyle } from 'docx';
 import './ApplicationForm.css';
 import { useTranslation } from 'react-i18next';
+import { useAuth, api } from '../../contexts/AuthContext';
 
 interface ApplicationFormData {
   faculty: string;
@@ -324,21 +325,11 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({ type, userData, onSuc
       setLoading(true);
       setMessage('');
       
-      const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
-      const response = await fetch(`${API_BASE_URL}/api/v1/applications/`, {
-        method: 'POST',
-        body: formDataToSend,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`${t('application.form.validation.server_error')}: ${response.status} ${errorText}`);
-      }
-
-      const result = await response.json();
+      const response = await api.post('/applications/', formDataToSend);
+      
       setMessage(t('application.form.success'));
       onSuccess();
-      return result;
+      return response.data;
       
     } catch (error) {
       console.error('Ошибка отправки:', error);

@@ -132,3 +132,4 @@ def admin_or_student_required(current_user: User = Depends(get_current_active_us
             detail="Доступ запрещен: только для администраторов или студентов"
         )
     return current_user
+

@@ -1,11 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import './ApplicationsCheckPage.css';
 import Modal from '../../components/comon/Modal';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth, api } from '../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
 
 interface ApplicationData {
   id: number;
@@ -34,7 +32,7 @@ const ITEMS_PER_PAGE = 10;
 
 const ApplicationsCheckPage = () => {
   const { t } = useTranslation();
-  const { user, isAuthenticated, token } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [applications, setApplications] = useState<ApplicationData[]>([]);
   const [filteredApplications, setFilteredApplications] = useState<ApplicationData[]>([]);
   const [statistics, setStatistics] = useState<Statistics>({ total: 0, sent: 0, viewed: 0, approved: 0, rejected: 0 });
@@ -70,13 +68,9 @@ const ApplicationsCheckPage = () => {
   const fetchApplications = async () => {
     try {
       setLoading(true);
-      const resp = await fetch(`${API_BASE_URL}/api/v1/applications/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!resp.ok) throw new Error('Ошибка при загрузке заявок');
-      const data = await resp.json();
-      setApplications(data);
-      calculateStatistics(data);
+      const resp = await api.get('/applications/');
+      setApplications(resp.data);
+      calculateStatistics(resp.data);
     } catch (err) {
       console.error(err);
       showModal(t('applicationsCheckPage.errorLoad'), 'error');
@@ -122,16 +116,11 @@ const ApplicationsCheckPage = () => {
 
   const updateStatus = async (app: ApplicationData, status: ApplicationData['status']) => {
     try {
-      const resp = await fetch(`${API_BASE_URL}/api/v1/applications/${app.id}/status`, {
-        method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Bearer ${token}`,
-        },
-        body: new URLSearchParams({ status }),
-      });
-      if (!resp.ok) throw new Error('Не удалось обновить статус');
-      const updated = await resp.json();
+      const resp = await api.patch(`/applications/${app.id}/status`, 
+        new URLSearchParams({ status }),
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+      );
+      const updated = resp.data;
       setApplications(prev => prev.map(a => a.id === updated.id ? updated : a));
       
       const statusTranslations: Record<string, string> = {
@@ -156,6 +145,7 @@ const ApplicationsCheckPage = () => {
       return;
     }
     const filePath = application.file_path.replace(/\\/g, '/');
+    const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com').replace(/\/+$/, '');
     const fileUrl = `${API_BASE_URL}/uploads/${filePath}`;
     const a = document.createElement('a');
     a.href = fileUrl;

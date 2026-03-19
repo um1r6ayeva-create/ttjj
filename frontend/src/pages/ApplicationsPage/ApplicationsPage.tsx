@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import './ApplicationsPage.css';
 import ApplicationForm from './ApplicationForm';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth, api } from '../../contexts/AuthContext';
 import Modal from '../../components/comon/Modal';
 import ApplicationsCheckPage from './ApplicationsCheckPage';
 import { useTranslation } from 'react-i18next';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
 interface ApplicationData {
   id: number;
   user_id: number;
@@ -67,14 +66,8 @@ if (user?.role === 'commandant') {
   const fetchUserApplications = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/api/v1/applications/user/${user?.id}`);
-      
-      if (!response.ok) {
-        throw new Error('Ошибка при загрузке заявок');
-      }
-      
-      const data = await response.json();
-      setApplications(data);
+      const response = await api.get(`/applications/user/${user?.id}`);
+      setApplications(response.data);
     } catch (error) {
       console.error('Ошибка загрузки истории заявок:', error);
       showModal('Ошибка при загрузке истории заявок', 'error');
@@ -142,6 +135,7 @@ if (user?.role === 'commandant') {
 
     // file_path в БД: applications/YYYY/MM/uuid.docx
     const filePath = application.file_path.replace(/\\/g, '/');
+    const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com').replace(/\/+$/, '');
     const fileUrl = `${API_BASE_URL}/uploads/${filePath}`;
 
     console.log('URL для скачивания:', fileUrl);
@@ -165,13 +159,7 @@ if (user?.role === 'commandant') {
     if (!applicationToDelete) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/applications/${applicationToDelete.id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка при удалении заявки');
-      }
+      await api.delete(`/applications/${applicationToDelete.id}`);
 
       // Обновляем список после удаления
       setApplications((prev) => prev.filter(app => app.id !== applicationToDelete.id));

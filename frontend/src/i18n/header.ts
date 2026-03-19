@@ -7,6 +7,7 @@ export const header = {
     duty: "Дежурства",
     applications: "Заявки",
     content: "Контент",
+    news_management: "Управление новостями",
   },
   en: {
     home: "Home",
@@ -16,6 +17,7 @@ export const header = {
     duty: "Duties",
     applications: "Applications",
     content: "Content",
+    news_management: "News Management",
   },
   uz: {
     home: "Bosh sahifa",
@@ -25,5 +27,6 @@ export const header = {
     duty: "Navbatchilik",
     applications: "Arizalar",
     content: "Kontent",
+    news_management: "Yangiliklar boshqaruvi",
   }
 }

@@ -1,7 +1,9 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+import traceback
 
 from app.core.config import settings
 from app.api.v1.api import router as api_v1_router
@@ -25,10 +27,22 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
+@app.middleware("http")
+async def catch_exceptions_middleware(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        print(f"--- GLOBAL ERROR CAUGHT: {e} ---")
+        print(traceback.format_exc())
+        return JSONResponse(
+            status_code=500,
+            content={"detail": str(e), "traceback": traceback.format_exc()}
+        )
+
 # --- CORS middleware должно идти до include_router ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.BACKEND_CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

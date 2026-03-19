@@ -75,7 +75,7 @@ const News: React.FC = () => {
     'Учеба': 'fas fa-graduation-cap',
     'Спорт': 'fas fa-running',
     'Мероприятия': 'fas fa-calendar-alt',
-    'Важное': 'fas fa-exclamation-circle'
+    'Важное': 'fas fa-exclamation-circle',
   };
 
   const loadNews = async () => {

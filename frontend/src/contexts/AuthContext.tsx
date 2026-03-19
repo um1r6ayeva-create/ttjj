@@ -11,6 +11,7 @@ export interface User {
   email?: string;
   user_group?: string;
   n_room?: number;
+  floor?: number;
   role: string;
   is_active: boolean;
 }
@@ -23,6 +24,7 @@ interface RegisterData {
   email?: string;
   user_group?: string;
   n_room?: number;
+  floor?: number;
   role_id?: number;
 }
 

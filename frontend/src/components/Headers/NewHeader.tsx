@@ -97,15 +97,28 @@ const adminNavItems = [
           </Link>
         ))}
         
-        {adminNavItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {adminNavItems.map((item) => {
+          // Определяем видимость пунктов меню в зависимости от роли
+          const isCommandant = user?.role === 'commandant';
+          const isStarosta = user?.role === 'admin';
+
+          if (isStarosta) {
+            // Староста видит только дежурства
+            if (item.path !== '/duty') return null;
+          }
+          
+          if (!isCommandant && !isStarosta) return null;
+
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
       </div>
       
       <div className="header-right-section">

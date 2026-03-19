@@ -46,9 +46,16 @@ def get_all_applications(
     skip: int = 0,
     limit: int = 100
 ) -> List[Application]:
-    return db.query(Application)\
-             .order_by(Application.created_at.desc())\
-             .offset(skip).limit(limit).all()
+    print("--- FETCHING ALL APPLICATIONS ---")
+    try:
+        results = db.query(Application)\
+                 .order_by(Application.created_at.desc())\
+                 .offset(skip).limit(limit).all()
+        print(f"Found {len(results)} applications")
+        return results
+    except Exception as e:
+        print(f"ERROR IN get_all_applications: {e}")
+        raise e
 
 def update_application_status(
     db: Session,

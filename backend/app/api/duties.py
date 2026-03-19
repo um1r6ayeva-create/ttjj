@@ -16,7 +16,14 @@ from app.crud.crud_duty import (
     get_duties_by_room,
 )
 from app.models.user import User
-from app.dependencies.auth import admin_or_student_required, commandant_required, admin_required, get_current_user, student_required
+from app.dependencies.auth import (
+    admin_or_student_required, 
+    commandant_required, 
+    admin_required, 
+    get_current_user, 
+    student_required,
+    admin_or_commandant_required
+)
 from app.models.duty import Duty
 from app.models.duty_report import DutyReport
 
@@ -26,8 +33,16 @@ router = APIRouter()
 def assign_duty(
     duty_in: DutyCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(admin_required),
+    current_user: User = Depends(admin_or_commandant_required),
 ):
+    # Если это староста (admin), он может назначать только на свой этаж
+    if current_user.role.name == "admin":
+        if current_user.floor and duty_in.floor != current_user.floor:
+            raise HTTPException(
+                status_code=http_status.HTTP_403_FORBIDDEN,
+                detail=f"Вы можете назначать дежурства только на {current_user.floor} этаже"
+            )
+    
     duty = create_duty(db, duty_in, assigned_by_id=current_user.id)
     db.refresh(duty)
     

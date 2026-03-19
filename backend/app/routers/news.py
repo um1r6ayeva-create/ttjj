@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.news import News
 from app.schemas.news import NewsCreate, NewsOut, NewsUpdate, NewsFrontendOut
-from app.dependencies.auth import commandant_required
+from app.dependencies.auth import commandant_or_zhensovet_required
 from typing import List
 
 router = APIRouter(prefix="/news", tags=["News"])
@@ -14,13 +14,15 @@ CATEGORY_MAP = {
     "Спорт": {"ru": "Спорт", "uz": "Sport", "en": "Sport"},
     "Мероприятия": {"ru": "Мероприятия", "uz": "Tadbirlar", "en": "Events"},
     "Важное": {"ru": "Важное", "uz": "Muhim", "en": "Important"},
+    "Собрание": {"ru": "Собрание", "uz": "Yig'ilish", "en": "Meeting"},
+    "Праздник": {"ru": "Праздник", "uz": "Bayram", "en": "Holiday"},
 }
 
 @router.post("/", response_model=NewsOut)
 def create_news(
     data: NewsCreate,
     db: Session = Depends(get_db),
-    commandant=Depends(commandant_required)
+    current_user=Depends(commandant_or_zhensovet_required)
 ):
     if data.category not in CATEGORY_MAP:
         raise HTTPException(status_code=400, detail="Invalid category")
@@ -147,7 +149,7 @@ def update_news(
     news_id: int,
     data: NewsUpdate,
     db: Session = Depends(get_db),
-    commandant=Depends(commandant_required)
+    current_user=Depends(commandant_or_zhensovet_required)
 ):
     news = db.query(News).filter(News.id == news_id).first()
     if not news:
@@ -165,7 +167,7 @@ def update_news(
 def delete_news(
     news_id: int,
     db: Session = Depends(get_db),
-    commandant=Depends(commandant_required)
+    current_user=Depends(commandant_or_zhensovet_required)
 ):
     news = db.query(News).filter(News.id == news_id).first()
     if not news:

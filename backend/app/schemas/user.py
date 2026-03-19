@@ -61,18 +61,33 @@ class UserResponse(BaseModel):
     email: Optional[str] = None
     user_group: Optional[str] = None
     n_room: Optional[int] = None
+    floor: Optional[int] = None
     is_active: bool
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     role: str  # строка роли
 
     @classmethod
-    def model_validate(cls, obj):
-        # obj — это User, заменяем role объект на его name
-        if hasattr(obj, "role") and obj.role:
-            obj_dict = obj.__dict__.copy()
-            obj_dict["role"] = obj.role.name
-            return super().model_validate(obj_dict)
+    def model_validate(cls, obj, **kwargs):
+        # Если это SQLAlchemy объект
+        if hasattr(obj, "role"):
+            data = {
+                "id": obj.id,
+                "name": obj.name,
+                "surname": obj.surname,
+                "phone": obj.phone,
+                "email": obj.email,
+                "user_group": obj.user_group,
+                "n_room": obj.n_room,
+                "floor": obj.floor,
+                "is_active": obj.is_active,
+                "created_at": obj.created_at,
+                "updated_at": obj.updated_at,
+                "role": obj.role.name if obj.role else "student"
+            }
+            return super().model_validate(data)
+        
+        # Если это уже словарь или другой объект
         return super().model_validate(obj)
 
 # Для внутреннего использования с полной информацией о роли

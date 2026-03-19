@@ -21,15 +21,20 @@ def login_user(
     """
     Вход в систему по phone и паролю
     """
+    print(f"--- Login attempt for: {user_data.phone} ---")
     user = db.query(User).filter(User.phone == user_data.phone).first()
     
     if not user:
+        print(f"User not found in DB: {user_data.phone}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверный телефон или пароль"
         )
     
-    if not verify_password(user_data.password, user.password_hash):
+    is_verified = verify_password(user_data.password, user.password_hash)
+    print(f"User found: {user.name}, RoleID: {user.role_id}, Password verified: {is_verified}")
+    
+    if not is_verified:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Неверный телефон или пароль"
