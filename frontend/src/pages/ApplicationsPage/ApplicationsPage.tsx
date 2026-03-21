@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './ApplicationsPage.css';
 import ApplicationForm from './ApplicationForm';
-import { api } from '../../contexts/AuthContext';
+import { api, useAuth } from '../../contexts/AuthContext';
 import Modal from '../../components/comon/Modal';
 import ApplicationsCheckPage from './ApplicationsCheckPage';
 import { useTranslation } from 'react-i18next';
