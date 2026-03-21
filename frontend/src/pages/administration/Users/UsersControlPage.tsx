@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { User, Check, X, Shield, Search, Filter } from 'lucide-react';
+import { User, Check, X, Search, Filter } from 'lucide-react';
 import './UsersControlPage.css';
 
 const UsersControlPage: React.FC = () => {
