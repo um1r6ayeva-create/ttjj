@@ -8,7 +8,7 @@ import EditProfileForm from './EditProfileForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import SystemInfo from './SystemInfo';
 import { useTranslation } from 'react-i18next';
-import { LogOut, Settings, Calendar, Bell, ChevronRight, User as UserIcon, Shield, UserCheck, Building, GraduationCap, Users, ClipboardList, FileText, FileEdit } from 'lucide-react';
+import { Shield, UserCheck, Building, GraduationCap, Users, ClipboardList, FileText, FileEdit } from 'lucide-react';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
