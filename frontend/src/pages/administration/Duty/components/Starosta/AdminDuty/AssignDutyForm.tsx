@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../../../../../contexts/AuthContext';
+import { useAuth, api } from '../../../../../../contexts/AuthContext';
 import './AssignDutyForm.css';
 
 interface Student {
@@ -29,7 +29,7 @@ interface AssignDutyFormProps {
 
 const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
   const { t } = useTranslation();
-  const { fetchUsers, token, user } = useAuth();
+  const { fetchUsers, user } = useAuth();
 
   const [dutyType, setDutyType] = useState('kitchen');
   const [floor, setFloor] = useState(2);
@@ -103,25 +103,15 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
 
     setLoading(true);
     try {
-      const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
-      const res = await fetch(`${API_BASE_URL}/api/v1/duties/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          duty_type: dutyType,
-          floor,
-          room_number: Number(roomNumber),
-          date_due: `${dueDate}T00:00:00`,
-          status: 'assigned',
-        }),
+      const res = await api.post('/duties/', {
+        duty_type: dutyType,
+        floor,
+        room_number: Number(roomNumber),
+        date_due: `${dueDate}T00:00:00`,
+        status: 'assigned',
       });
 
-      if (!res.ok) throw new Error();
-
-      const data = await res.json();
+      const data = res.data;
 
       const newDuty = {
         ...data,

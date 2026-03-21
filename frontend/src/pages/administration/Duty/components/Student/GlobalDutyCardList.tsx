@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import { api } from '../../../../../contexts/AuthContext';
 import Modal from '../../../../../components/comon/Modal';
 import { CalendarMonth } from '@mui/icons-material';
 import './GlobalDutyCardList.css';
@@ -16,7 +16,6 @@ interface Props {
   token: string | null;
 }
 
-const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com'}/api/v1`;
 
 const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
   const { t } = useTranslation();
@@ -27,11 +26,6 @@ const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
   const [selectedDuty, setSelectedDuty] = useState<GlobalDuty | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const api = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 15000,
-    headers: { Authorization: token ? `Bearer ${token}` : '' },
-  });
 
   const fetchDuties = async () => {
     setLoading(true);

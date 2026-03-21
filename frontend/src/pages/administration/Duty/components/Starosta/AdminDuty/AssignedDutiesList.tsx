@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../../../../../contexts/AuthContext';
+import { useAuth, api } from '../../../../../../contexts/AuthContext';
 import './AssignedDutiesList.css';
 import { toast } from 'react-toastify';
 import ConfirmModal from '../../../../../../../styles/ConfirmModal';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
 
 interface Student {
   id: number;
@@ -34,7 +33,7 @@ interface AssignedDutiesListProps {
 
 const AssignedDutiesList = ({ duties, onDutiesLoaded, onDutyUpdated }: AssignedDutiesListProps) => {
   const { t } = useTranslation();
-  const { token, fetchUsers } = useAuth();
+  const { fetchUsers } = useAuth();
   const [, setLoading] = useState(false);
   const [editingDutyId, setEditingDutyId] = useState<number | null>(null);
   const [editedDuty, setEditedDuty] = useState<Partial<Duty>>({});
@@ -65,16 +64,8 @@ const AssignedDutiesList = ({ duties, onDutiesLoaded, onDutyUpdated }: AssignedD
   const loadAssignedDuties = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/duties/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) throw new Error();
-
-      const data = await res.json();
-      onDutiesLoaded(data);
+      const res = await api.get('/duties/');
+      onDutiesLoaded(res.data);
     } catch {
       toast.error(t('assignedDutiesList.messages.loadError'));
     } finally {
@@ -143,22 +134,8 @@ const AssignedDutiesList = ({ duties, onDutiesLoaded, onDutyUpdated }: AssignedD
         date_due: new Date(editedDuty.date_due!).toISOString(),
       };
 
-      const res = await fetch(`${API_BASE_URL}/api/v1/duties/${dutyId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.detail || t('assignedDutiesList.messages.updateError'));
-      }
-
-      const updatedDuty = await res.json();
-      onDutyUpdated(updatedDuty);
+      const res = await api.put(`/duties/${dutyId}`, updatedData);
+      onDutyUpdated(res.data);
 
       setEditingDutyId(null);
       setEditedDuty({});
@@ -173,12 +150,7 @@ const AssignedDutiesList = ({ duties, onDutiesLoaded, onDutyUpdated }: AssignedD
   const handleDelete = (dutyId: number) => {
     showConfirm(t('assignedDutiesList.confirmations.delete'), async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/duties/${dutyId}`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!res.ok) throw new Error();
+        await api.delete(`/duties/${dutyId}`);
 
         onDutiesLoaded(duties.filter(duty => duty.id !== dutyId));
         toast.success(t('assignedDutiesList.messages.deleteSuccess'));

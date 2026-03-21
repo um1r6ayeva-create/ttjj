@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import { api } from '../../../../../contexts/AuthContext';
 import './CommandantDutyInterface.css';
 import ReportViewModal from './ReportViewModal';
 
@@ -55,8 +55,6 @@ interface DutyWithReport extends Duty {
   report?: DutyReport;
 }
 
-const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com'}/api/v1`;
-
 const CommandantDutyInterface = () => {
   const { t } = useTranslation();
   const [duties, setDuties] = useState<DutyWithReport[]>([]);
@@ -82,13 +80,6 @@ const CommandantDutyInterface = () => {
     message: string;
   }>({ show: false, type: 'success', message: '' });
 
-  const token = localStorage.getItem('token');
-
-  const api = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 15000,
-    headers: { Authorization: token ? `Bearer ${token}` : '' },
-  });
 
   const fetchData = async () => {
     try {

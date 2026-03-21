@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import { api } from '../../../../../contexts/AuthContext';
 import Modal from '../../../../../components/comon/Modal';
 import './GlobalDutyInterface.css';
 
@@ -11,7 +11,6 @@ interface GlobalDuty {
   notes?: string;
 }
 
-const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com'}/api/v1`;
 
 const GlobalDutyInterface = () => {
   const { t } = useTranslation();
@@ -40,13 +39,6 @@ const GlobalDutyInterface = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [dutyToDelete, setDutyToDelete] = useState<GlobalDuty | null>(null);
 
-  const token = localStorage.getItem('token');
-
-  const api = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 15000,
-    headers: { Authorization: token ? `Bearer ${token}` : '' },
-  });
 
   const fetchDuties = async () => {
     try {
