@@ -155,8 +155,38 @@ const adminNavItems = [
           className="dropdown-btn"
         >
           <i className="fas fa-user"></i>
-          <span>Мой профиль</span>
+          <span>{t('profile.my_profile')}</span>
         </button>
+
+        {/* Панели управления для персонала */}
+        {(user.role === 'commandant' || user.role === 'admin') && (
+          <button
+            onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
+            className="dropdown-btn"
+          >
+            <i className="fas fa-calendar-alt"></i>
+            <span>{t('header.duty')}</span>
+          </button>
+        )}
+
+        {user.role === 'commandant' && (
+          <>
+            <button
+              onClick={() => { navigate('/applications'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-file-alt"></i>
+              <span>{t('header.applications')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/content'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-edit"></i>
+              <span>{t('header.content')}</span>
+            </button>
+          </>
+        )}
         <button
           onClick={handleLogout}
           className="dropdown-btn logout"

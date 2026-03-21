@@ -17,6 +17,7 @@ router.include_router(duties_module_router, prefix="/duties", tags=["Duties"])
 router.include_router(duty_reports_module_router, prefix="/duty-reports", tags=["Duty Reports"])
 router.include_router(global_duties_router, tags=["Global Duties"])
 router.include_router(applications_router, prefix="/applications", tags=["Applications"])
+router.include_router(commandant_router, prefix="/duties/commandant", tags=["Commandant Duties"])
 router.include_router(news_router, tags=["News"])
 router.include_router(translate_router, tags=["Translate"])
 

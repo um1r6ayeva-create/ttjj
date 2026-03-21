@@ -43,8 +43,6 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
     { value: 'kitchen', label: t('assignDutyForm.dutyTypes.kitchen') },
     { value: 'shower', label: t('assignDutyForm.dutyTypes.shower') },
     { value: 'sink', label: t('assignDutyForm.dutyTypes.sink') },
-    { value: 'subbotnik', label: t('assignDutyForm.dutyTypes.subbotnik') },
-    { value: 'general', label: t('assignDutyForm.dutyTypes.general') },
   ];
 
   const generateRooms = (floorNum: number) =>
@@ -182,17 +180,18 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
         {/* Выбор комнаты */}
         <div className="form-group3">
           <label>{t('assignDutyForm.labels.room')}</label>
-          <select 
-            className="room-select"
-            value={roomNumber} 
-            onChange={e => setRoomNumber(e.target.value)}
-          >
+          <div className="room-selector">
             {rooms.map(r => (
-              <option key={r} value={r}>
-                {t('assignDutyForm.rooms.roomPrefix')} {r}
-              </option>
+              <button
+                key={r}
+                type="button"
+                className={`room-btn ${roomNumber === r ? 'active' : ''}`}
+                onClick={() => setRoomNumber(r)}
+              >
+                {r}
+              </button>
             ))}
-          </select>
+          </div>
           
           {/* Информация о студентах в комнате */}
           {currentRoomStudents.length > 0 && (

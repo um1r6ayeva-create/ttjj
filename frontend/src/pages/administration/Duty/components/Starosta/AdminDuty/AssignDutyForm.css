@@ -110,8 +110,39 @@
   box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
 }
 
-/* --- Поля выбора --- */
-.room-select,
+/* --- Кнопки выбора комнаты --- */
+.room-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.room-btn {
+  padding: 12px 8px;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  color: #4a5568;
+  text-align: center;
+}
+
+.room-btn:hover {
+  border-color: #cbd5e1;
+  background: #f7fafc;
+}
+
+.room-btn.active {
+  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+}
+
 .date-input {
   padding: 14px 18px;
   border-radius: 12px;
@@ -124,7 +155,6 @@
   width: 100%;
 }
 
-.room-select:focus,
 .date-input:focus {
   outline: none;
   border-color: #667eea;

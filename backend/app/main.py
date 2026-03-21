@@ -15,11 +15,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UPLOADS_DIR = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 
-# Теперь можно создавать таблицы
-Base.metadata.create_all(bind=engine)
-
-# Инициализируем начальные данные (если нужно)
-init_db()
+# --- Настройка Базы Данных ---
+try:
+    print("--- STARTING DATABASE INITIALIZATION ---")
+    # Теперь можно создавать таблицы
+    Base.metadata.create_all(bind=engine)
+    print("--- DATABASE TABLES CREATED ---")
+    
+    # Инициализируем начальные данные (если нужно)
+    init_db()
+    print("--- DATABASE INITIALIZED SUCCESSFULLY ---")
+except Exception as e:
+    print(f"!!! CRITICAL STARTUP ERROR: {e} !!!")
+    traceback.print_exc()
+    # Мы не будем вызывать exit(), чтобы uvicorn успел вывести логи в консоль Render
 
 app = FastAPI(
     title=settings.APP_NAME,
