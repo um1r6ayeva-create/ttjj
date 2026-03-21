@@ -8,6 +8,7 @@ import EditProfileForm from './EditProfileForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import SystemInfo from './SystemInfo';
 import { useTranslation } from 'react-i18next';
+import { Shield, FileText, Calendar, Edit3 } from 'lucide-react';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -85,6 +86,31 @@ const ProfilePage: React.FC = () => {
               setLoading={setLoading}
               loading={loading}
             />
+          )}
+
+          {/* Панели управления */}
+          {(user.role === 'admin' || user.role === 'commandant') && (
+            <div className="system-card23 management-card">
+              <h3><Shield className="w-5 h-5 inline mr-2" /> {t('profilePage.managementPanels')}</h3>
+              <div className="management-grid">
+                <button onClick={() => navigate('/duty')} className="management-btn">
+                  <Calendar className="w-6 h-6" />
+                  <span>{t('header.duty')}</span>
+                </button>
+                {user.role === 'commandant' && (
+                  <>
+                    <button onClick={() => navigate('/applications')} className="management-btn">
+                      <FileText className="w-6 h-6" />
+                      <span>{t('header.applications')}</span>
+                    </button>
+                    <button onClick={() => navigate('/content')} className="management-btn">
+                      <Edit3 className="w-6 h-6" />
+                      <span>{t('header.content')}</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
           )}
 
           {/* Информация о системе */}

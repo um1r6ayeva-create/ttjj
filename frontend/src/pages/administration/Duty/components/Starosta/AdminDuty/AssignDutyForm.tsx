@@ -157,18 +157,12 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
           <label>{t('assignDutyForm.labels.floor')}</label>
           <div className="floor-selector">
             {floors.map(f => {
-              const isAdmin = user?.role.toLowerCase() === 'admin';
-              const isUserFloor = user?.floor === f;
-              const isDisabled = isAdmin && !isUserFloor;
-
               return (
                 <button
                   key={f}
                   type="button"
-                  className={`floor-btn ${floor === f ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`}
-                  onClick={() => !isDisabled && setFloor(f)}
-                  disabled={isDisabled}
-                  title={isDisabled ? t('assignDutyForm.labels.floorRestricted') : ''}
+                  className={`floor-btn ${floor === f ? 'active' : ''}`}
+                  onClick={() => setFloor(f)}
                 >
                   {getFloorButtonText(f)}
                 </button>

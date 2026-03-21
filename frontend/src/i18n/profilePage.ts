@@ -6,7 +6,8 @@ export const profilePage = {
     logout: 'Выйти',
     editProfile: 'Редактировать профиль',
     changePassword: 'Сменить пароль',
-    systemInfo: 'Информация о системе'
+    systemInfo: 'Информация о системе',
+    managementPanels: 'Панели управления'
   },
   en: {
     profileUpdated: 'Profile successfully updated!',
@@ -14,7 +15,8 @@ export const profilePage = {
     logout: 'Logout',
     editProfile: 'Edit Profile',
     changePassword: 'Change Password',
-    systemInfo: 'System Information'
+    systemInfo: 'System Information',
+    managementPanels: 'Management Panels'
   },
   uz: {
     profileUpdated: 'Profil muvaffaqiyatli yangilandi!',
@@ -22,6 +24,7 @@ export const profilePage = {
     logout: 'Chiqish',
     editProfile: 'Profilni tahrirlash',
     changePassword: 'Parolni o\'zgartirish',
-    systemInfo: 'Tizim ma\'lumotlari'
+    systemInfo: 'Tizim ma\'lumotlari',
+    managementPanels: 'Boshqaruv panellari'
   }
 };
