@@ -87,7 +87,7 @@ const UsersControlPage: React.FC = () => {
           <Search size={20} />
           <input 
             type="text" 
-            placeholder="Поиск по имени или телефону..." 
+            placeholder="Поиск по имени или логину..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

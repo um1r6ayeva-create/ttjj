@@ -83,22 +83,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initAuth();
   }, []);
 
-  const formatPhone = (phone: string) => {
-    // Если это логин, возвращаем как есть
-    if (/[a-zA-Z]/.test(phone)) {
-      return phone.trim();
-    }
-    let digits = phone.replace(/\D/g, '');
-    if (digits.startsWith('998')) digits = digits.slice(3);
-    digits = digits.slice(-9);
-    return `+998${digits}`;
-  };
+
 
   const login = async (phone: string, password: string) => {
     setIsLoading(true);
     try {
-      const formattedPhone = formatPhone(phone);
-      const resp = await api.post('/users/login', { phone: formattedPhone, password });
+      const resp = await api.post('/users/login', { phone, password });
       const { access_token } = resp.data;
       if (!access_token) throw new Error('Токен не получен');
 
@@ -122,7 +112,7 @@ const register = async (data: RegisterData) => {
   try {
     const payload = { 
       ...data, 
-      phone: formatPhone(data.phone),
+      phone: data.phone,
       role_id: data.role_id && data.role_id !== 3 ? data.role_id : undefined
     };
     

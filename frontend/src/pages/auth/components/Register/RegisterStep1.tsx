@@ -1,6 +1,6 @@
 // frontend/src/pages/auth/components/RegisterStep1.tsx
 import React from 'react';
-import { User, Phone, Mail } from 'lucide-react';
+import { User, Mail } from 'lucide-react';
 
 interface RegisterStep1Props {
   formData: {
@@ -13,27 +13,8 @@ interface RegisterStep1Props {
 }
 
 const RegisterStep1: React.FC<RegisterStep1Props> = ({ formData, onChange }) => {
-  const formatPhone = (value: string) => {
-    let digits = value.replace(/\D/g, '');
-    if (!digits.startsWith('998')) digits = '998' + digits.slice(3);
-    digits = digits.slice(0, 12);
-
-    const part1 = digits.slice(3, 5);
-    const part2 = digits.slice(5, 8);
-    const part3 = digits.slice(8, 10);
-    const part4 = digits.slice(10, 12);
-
-    let formatted = '+998';
-    if (part1) formatted += ` ${part1}`;
-    if (part2) formatted += ` ${part2}`;
-    if (part3) formatted += `-${part3}`;
-    if (part4) formatted += `-${part4}`;
-
-    return formatted;
-  };
-
   const handlePhoneChange = (value: string) => {
-    onChange('phone', formatPhone(value));
+    onChange('phone', value.trim());
   };
 
   return (
@@ -71,17 +52,17 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ formData, onChange }) => 
         <div className="form-group">
           <label className="form-label">
             <div className="form-label-content">
-              <Phone className="w-4 h-4" />
-              Номер телефона
+              <User className="w-4 h-4" />
+              Логин
             </div>
           </label>
           <input
-            type="tel"
+            type="text"
             value={formData.phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            maxLength={17}
+            maxLength={30}
             className="form-input"
-            placeholder="+998 90 123-45-67"
+            placeholder="Ваш логин (напр. ivanov123)"
             required
           />
         </div>

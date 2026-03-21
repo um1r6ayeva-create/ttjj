@@ -15,7 +15,7 @@ const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
-    phone: '+998',
+    phone: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -52,10 +52,10 @@ const RegisterPage: React.FC = () => {
       return false;
     }
     
-    // Проверяем формат телефона +998 XX XXX-XX-XX
-    const phoneRegex = /^\+998 \d{2} \d{3}-\d{2}-\d{2}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      setError('Введите корректный номер телефона в формате +998 XX XXX-XX-XX');
+    // Проверяем формат логина (буквы, цифры, _, -, от 3 до 30 символов)
+    const loginRegex = /^[a-zA-Z0-9_\-\+]{3,30}$/;
+    if (!loginRegex.test(formData.phone)) {
+      setError('Логин должен содержать от 3 до 30 символов (латинские буквы, цифры, - и _)');
       return false;
     }
     

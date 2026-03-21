@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../contexts/AuthContext';
-import { Eye, EyeOff, Phone, Lock, LogIn, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Lock, LogIn, AlertCircle, User as UserIcon } from 'lucide-react';
 import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
@@ -26,26 +26,7 @@ const LoginPage: React.FC = () => {
     };
   }, []);
 
-  const formatPhone = (value: string) => {
-    // Если это логин (содержит буквы), не форматируем как номер
-    if (/[a-zA-Z]/.test(value)) {
-      return value.trim();
-    }
-    let digits = value.replace(/\D/g, '');
-    if (!digits) return '';
-    if (!digits.startsWith('998')) digits = '998' + digits;
-    digits = digits.slice(0, 12);
-    const part1 = digits.slice(3, 5);
-    const part2 = digits.slice(5, 8);
-    const part3 = digits.slice(8, 10);
-    const part4 = digits.slice(10, 12);
-    let formatted = '+998';
-    if (part1) formatted += ` ${part1}`;
-    if (part2) formatted += ` ${part2}`;
-    if (part3) formatted += `-${part3}`;
-    if (part4) formatted += `-${part4}`;
-    return formatted;
-  };
+
 
   useEffect(() => {
     if (user && user.id) navigate('/profile');
@@ -54,12 +35,8 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (!phone) {
-      setError('Введите логин или телефон');
-      return;
-    }
-    if (!/[a-zA-Z]/.test(phone) && phone.replace(/\D/g, '').length < 12) {
-      setError('Введите корректный номер телефона');
+    if (phone.length < 3) {
+      setError('Логин должен содержать минимум 3 символа');
       return;
     }
     if (!password || password.length < 6) {
@@ -68,8 +45,7 @@ const LoginPage: React.FC = () => {
     }
     setIsSubmitting(true);
     try {
-      const payloadPhone = phone.replace(/\D/g, '');
-      await login(payloadPhone, password);
+      await login(phone, password);
       navigate('/profile');
     } catch (err: any) {
       setError(err.message || 'Ошибка при входе в систему');
@@ -97,14 +73,14 @@ const LoginPage: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div>
-            <label className="login-label"><Phone /> Логин или телефон</label>
+            <label className="login-label"><UserIcon className="w-4 h-4" /> Логин</label>
             <input
               type="text"
               value={phone}
               maxLength={17}
-              onChange={(e) => setPhone(formatPhone(e.target.value))}
+              onChange={(e) => setPhone(e.target.value.trim())}
               className="input-field"
-              placeholder="+998 XX XXX-XX-XX или ваш логин"
+              placeholder="Введите логин"
               required
             />
           </div>

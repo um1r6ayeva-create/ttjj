@@ -15,9 +15,9 @@ class UserBase(BaseModel):
     
     @field_validator('phone')
     def validate_phone(cls, v):
-        # Разрешаем номера телефонов ИЛИ логины (буквы, цифры, _, -, от 4 до 20 символов)
-        if not re.match(r'^(\+?[0-9]{10,15}|[a-zA-Z0-9_\-]{4,20})$', v):
-            raise ValueError('Неверный формат телефона или логина')
+        # Разрешаем любые логины: буквы, цифры, _, -, + от 3 до 30 символов
+        if not re.match(r'^[a-zA-Z0-9_\-\+]{3,30}$', v):
+            raise ValueError('Неверный формат логина')
         return v
     
     @field_validator('user_group')

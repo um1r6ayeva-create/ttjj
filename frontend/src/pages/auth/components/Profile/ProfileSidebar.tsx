@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Phone, Mail, Hash, Home, Calendar, Shield, Edit, Key, LogOut } from 'lucide-react';
+import { User, Mail, Hash, Home, Calendar, Shield, Edit, Key, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface UserType {
@@ -67,9 +67,9 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
 
       <div className="profile-info">
         <div className="info-item">
-          <Phone className="w-5 h-5" />
+          <User className="w-5 h-5" />
           <span className="font-medium">{user.phone}</span>
-          <span className="info-label">({t('profileSidebar.phone')})</span>
+          <span className="info-label">(Логин)</span>
         </div>
         
         {user.email && (
