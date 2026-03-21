@@ -56,8 +56,8 @@ def get_current_user(
     # Проверяем, что пользователь активен
     if not user.is_active:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Аккаунт деактивирован"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Ваш аккаунт ожидает подтверждения комендантом"
         )
     
     return user
@@ -68,8 +68,8 @@ def get_current_active_user(current_user: User = Depends(get_current_user)) -> U
     """
     if not current_user.is_active:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Аккаунт деактивирован"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Ваш аккаунт ожидает подтверждения комендантом"
         )
     return current_user
 
@@ -115,7 +115,7 @@ def student_required(current_user: User = Depends(get_current_active_user)) -> U
     return current_user
 
 # Для нескольких ролей
-def admin_or_commandant_required(current_user: User = Depends(get_current_active_user)) -> User:
+def any_admin_required(current_user: User = Depends(get_current_active_user)) -> User:
     """Для администраторов или комендантов"""
     if current_user.role.name not in ["admin", "commandant"]:
         raise HTTPException(

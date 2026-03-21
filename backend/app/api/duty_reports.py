@@ -18,7 +18,7 @@ from app.schemas.duty_report import (
     DutyReportReview,
     ReportStatus
 )
-from app.dependencies.auth import admin_or_student_required, get_current_user, student_required, admin_or_commandant_required
+from app.dependencies.auth import admin_or_student_required, get_current_user, student_required, any_admin_required
 
 router = APIRouter()
 
@@ -216,7 +216,7 @@ async def submit_duty_report(
 @router.get("/pending", response_model=List[DutyReportResponse])
 def get_pending_reports(
     db: Session = Depends(get_db),
-    current_user: User = Depends(admin_or_commandant_required),
+    current_user: User = Depends(any_admin_required),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=200)
 ):
@@ -267,7 +267,7 @@ def get_pending_reports(
 @router.get("/", response_model=List[DutyReportResponse])
 def get_all_reports(
     db: Session = Depends(get_db),
-    current_user: User = Depends(admin_or_commandant_required),
+    current_user: User = Depends(any_admin_required),
     status: Optional[str] = Query(None),
     duty_id: Optional[int] = Query(None),
     student_id: Optional[int] = Query(None),
@@ -404,7 +404,7 @@ def review_report(
     report_id: int,
     review_data: DutyReportReview,
     db: Session = Depends(get_db),
-    current_user: User = Depends(admin_or_commandant_required),
+    current_user: User = Depends(any_admin_required),
 ):
     """
     Проверить отчет (подтвердить или отклонить).

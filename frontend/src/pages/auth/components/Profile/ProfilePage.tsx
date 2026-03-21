@@ -8,7 +8,7 @@ import EditProfileForm from './EditProfileForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import SystemInfo from './SystemInfo';
 import { useTranslation } from 'react-i18next';
-import { Shield, FileText, Calendar, Edit3 } from 'lucide-react';
+import { Shield, FileText, Calendar, Edit3, UserCheck } from 'lucide-react';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -118,6 +118,12 @@ const ProfilePage: React.FC = () => {
                   <Edit3 size={24} />
                   <span>{t('header.content')}</span>
                 </button>
+                {user.role === 'commandant' && (
+                  <button onClick={() => navigate('/users-control')} className="management-btn">
+                    <UserCheck size={24} />
+                    <span>{t('profilePage.usersControl')}</span>
+                  </button>
+                )}
               </div>
             </div>
           )}

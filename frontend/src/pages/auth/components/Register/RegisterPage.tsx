@@ -29,6 +29,7 @@ const RegisterPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
 
   // Скрываем Header и Footer при монтировании
   useEffect(() => {
@@ -151,6 +152,7 @@ const RegisterPage: React.FC = () => {
       console.log('Отправка данных на регистрацию:', registerData);
       
       await register(registerData);
+      setIsRegistered(true);
       // Редирект происходит внутри AuthContext после успешной регистрации
     } catch (err: any) {
       console.error('Ошибка регистрации:', err);
@@ -207,7 +209,26 @@ const RegisterPage: React.FC = () => {
   return (
     <div className="register-container">
       <div className="register-card">
-        <RegisterHeader step={step} />
+        {isRegistered ? (
+          <div className="registration-success-view">
+             <div className="success-icon">✓</div>
+             <h1>Регистрация завершена!</h1>
+             <p className="success-description">
+               Ваш аккаунт успешно создан и ожидает подтверждения комендантом.
+               Пожалуйста, подождите, пока администрация проверит ваши данные.
+             </p>
+             <div className="success-actions">
+               <Link to="/login" className="form-button primary">
+                 Перейти к входу
+               </Link>
+               <Link to="/" className="back-link">
+                 ← На главную
+               </Link>
+             </div>
+          </div>
+        ) : (
+          <>
+            <RegisterHeader step={step} />
 
         {error && (
           <div className="error-message">
@@ -271,6 +292,8 @@ const RegisterPage: React.FC = () => {
             ← Вернуться на главную
           </Link>
         </div>
+      </>
+    )}
       </div>
     </div>
   );

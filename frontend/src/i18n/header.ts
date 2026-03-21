@@ -8,6 +8,7 @@ export const header = {
     applications: "Заявки",
     content: "Контент",
     news_management: "Управление новостями",
+    usersControl: "Пользователи",
   },
   en: {
     home: "Home",
@@ -18,6 +19,7 @@ export const header = {
     applications: "Applications",
     content: "Content",
     news_management: "News Management",
+    usersControl: "Users",
   },
   uz: {
     home: "Bosh sahifa",
@@ -28,5 +30,6 @@ export const header = {
     applications: "Arizalar",
     content: "Kontent",
     news_management: "Yangiliklar boshqaruvi",
+    usersControl: "Foydalanuvchilar",
   }
 }

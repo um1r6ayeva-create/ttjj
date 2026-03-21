@@ -13,6 +13,7 @@ const Content = lazy(() => import('../pages/Content/Content'));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const DutyPage = lazy(() => import("../pages/administration/Duty/DutyPage"));
 const ApplicationsPage = lazy(() => import("../pages/ApplicationsPage/ApplicationsPage"));
+const UsersControlPage = lazy(() => import("../pages/administration/Users/UsersControlPage"));
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center min-h-screen">
@@ -38,6 +39,7 @@ const AppRoutes = () => {
           <Route path="/duty" element={<DutyPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           <Route path="/applications" element={<ApplicationsPage />} />
+          <Route path="/users-control" element={<UsersControlPage />} />
         </Route>
         
         {/* Страница 404 */}

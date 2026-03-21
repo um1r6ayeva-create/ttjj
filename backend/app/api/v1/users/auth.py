@@ -42,8 +42,8 @@ def login_user(
     
     if not user.is_active:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Аккаунт деактивирован"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Ваш аккаунт ожидает подтверждения комендантом"
         )
     
     access_token = create_user_token(user.phone)
@@ -112,7 +112,7 @@ def register_user(
         user_group=user_data.user_group,
         n_room=user_data.n_room,
         role_id=user_data.role_id,
-        is_active=True
+        is_active=False
     )
     
     db.add(user)

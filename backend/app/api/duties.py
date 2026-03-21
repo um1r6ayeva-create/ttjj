@@ -22,7 +22,7 @@ from app.dependencies.auth import (
     admin_required, 
     get_current_user, 
     student_required,
-    admin_or_commandant_required
+    any_admin_required
 )
 from app.models.duty import Duty
 from app.models.duty_report import DutyReport
@@ -33,7 +33,7 @@ router = APIRouter()
 def assign_duty(
     duty_in: DutyCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(admin_or_commandant_required),
+    current_user: User = Depends(any_admin_required),
 ):
     
     

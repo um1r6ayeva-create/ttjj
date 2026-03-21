@@ -81,8 +81,7 @@ const LoginPage: React.FC = () => {
           <div className="error-msg">
             <AlertCircle />
             <div>
-              <p>Неверный номер или пароль </p>
-              
+              <p>{error}</p>
             </div>
           </div>
         )}

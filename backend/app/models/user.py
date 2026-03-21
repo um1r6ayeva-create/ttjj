@@ -16,7 +16,7 @@ class User(Base):
     user_group = Column(String(10), nullable=True)
     n_room = Column(Integer, nullable=True)
     floor = Column(Integer, nullable=True)
-    is_active = Column(Boolean, default=True)
+    is_active = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     

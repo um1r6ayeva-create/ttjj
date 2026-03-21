@@ -30,6 +30,7 @@ const adminNavItems = [
   { path: '/duty', label: t('header.duty') },
   { path: '/applications', label: t('header.applications') },
   { path: '/content', label: t('header.content') },
+  { path: '/users-control', label: t('header.usersControl') },
 ];
 
   // Инициализация после монтирования
@@ -198,6 +199,15 @@ const adminNavItems = [
               <i className="fas fa-edit"></i>
               <span>{t('header.content')}</span>
             </button>
+            {user.role === 'commandant' && (
+              <button
+                onClick={() => { navigate('/users-control'); setIsProfileOpen(false); }}
+                className="dropdown-btn"
+              >
+                <i className="fas fa-user-shield"></i>
+                <span>{t('header.usersControl')}</span>
+              </button>
+            )}
           </>
         )}
         <button

@@ -37,6 +37,8 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   fetchUsers: () => Promise<User[]>;
+  approveUser: (userId: number) => Promise<void>;
+  rejectUser: (userId: number) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -117,42 +119,21 @@ const register = async (data: RegisterData) => {
     const payload = { 
       ...data, 
       phone: formatPhone(data.phone),
-      // Убираем role_id, если он равен 3, либо устанавливаем правильный
       role_id: data.role_id && data.role_id !== 3 ? data.role_id : undefined
     };
     
-    // Удаляем все undefined поля
     Object.keys(payload).forEach(k => {
       if (payload[k as keyof typeof payload] === undefined) 
         delete payload[k as keyof typeof payload];
     });
 
     console.log('Регистрационные данные:', payload);
-
-    // Регистрируем
     const response = await api.post('/users/register', payload);
     console.log('Ответ регистрации:', response.data);
-
-    // Авто-логин
-    const loginResp = await api.post('/users/login', {
-      phone: payload.phone,
-      password: payload.password
-    });
-
-    const { access_token } = loginResp.data;
-    if (!access_token) throw new Error('Токен не получен');
-
-    localStorage.setItem('token', access_token);
-    setToken(access_token);
-
-    const userResp = await api.get('/users/me');
-    setUser(userResp.data);
-    navigate('/');
+    
+    // Auto-login removed as user is inactive by default
   } catch (err: any) {
     console.error('Полная ошибка регистрации:', err.response?.data || err);
-    localStorage.removeItem('token');
-    setToken(null);
-    setUser(null);
     throw err;
   } finally {
     setIsLoading(false);
@@ -182,6 +163,8 @@ const register = async (data: RegisterData) => {
         register,
         logout,
         fetchUsers,
+        approveUser: (userId: number) => api.post(`/users/commandant/${userId}/approve`),
+        rejectUser: (userId: number) => api.delete(`/users/commandant/${userId}/reject`),
       }}
     >
       {children}
