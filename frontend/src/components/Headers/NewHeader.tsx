@@ -98,18 +98,8 @@ const adminNavItems = [
         ))}
         
         {adminNavItems.map((item) => {
-          // Определяем видимость пунктов меню в зависимости от роли (регистронезависимо)
-          const userRole = user?.role?.toLowerCase() || '';
-          const isCommandant = userRole === 'commandant';
-          const isStarosta = userRole === 'admin' || userRole === 'elder' || userRole === 'starosta';
-          const isStudent = userRole === 'student' || userRole === 'user' || userRole === 'standard';
-
-          if (isStarosta || isStudent) {
-            // Староста и студент видят только дежурства и заявки
-            if (item.path !== '/duty' && item.path !== '/applications') return null;
-          }
-          
-          if (!isCommandant && !isStarosta && !isStudent) return null;
+          // Показываем все пункты меню всем авторизованным пользователям
+          if (!user) return null;
 
           return (
             <Link
@@ -160,45 +150,52 @@ const adminNavItems = [
           <span>{t('profile.my_profile')}</span>
         </button>
 
-        {/* Панели управления для персонала и студентов */}
+        {/* Панели управления для всех авторизованных пользователей */}
         {user && (
-          (() => {
-            const userRole = user.role.toLowerCase();
-            const isCommandant = userRole === 'commandant';
-            const isStarosta = userRole === 'admin' || userRole === 'elder' || userRole === 'starosta';
-            const isStudent = userRole === 'student' || userRole === 'user' || userRole === 'standard';
-            
-            if (!isCommandant && !isStarosta && !isStudent) return null;
-
-            return (
-              <>
-                <button
-                  onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
-                  className="dropdown-btn"
-                >
-                  <i className="fas fa-calendar-alt"></i>
-                  <span>{t('header.duty')}</span>
-                </button>
-                <button
-                  onClick={() => { navigate('/applications'); setIsProfileOpen(false); }}
-                  className="dropdown-btn"
-                >
-                  <i className="fas fa-file-alt"></i>
-                  <span>{t('header.applications')}</span>
-                </button>
-              </>
-            );
-          })()
-        )}
-
-        {user.role === 'commandant' && (
-          <button
-            onClick={() => { navigate('/content'); setIsProfileOpen(false); }}
-            className="dropdown-btn"
-          >
-            <i className="fas fa-edit"></i>
-            <span>{t('header.content')}</span>
-          </button>
+          <>
+            <button
+              onClick={() => { navigate('/rectorate'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-shield-alt"></i>
+              <span>{t('header.rectorate')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/dekanat'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-building"></i>
+              <span>{t('header.dekanat')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/staff'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-users"></i>
+              <span>{t('header.staff')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-calendar-alt"></i>
+              <span>{t('header.duty')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/applications'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-file-alt"></i>
+              <span>{t('header.applications')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/content'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-edit"></i>
+              <span>{t('header.content')}</span>
+            </button>
+          </>
         )}
         <button
           onClick={handleLogout}
