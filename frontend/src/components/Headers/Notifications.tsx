@@ -60,7 +60,7 @@ const Notifications: React.FC<NotificationsProps> = ({ onOpenTab }) => {
             dutyId: r.duty_id,
             date_assigned: r.submitted_at,
           }));
-        } else if (user.role === 'user' || user.role === 'admin'){
+        } else if (user.role === 'student' || user.role === 'admin'){
           // Личные дежурства
           const { data: studentDuties } = await authApi.get(
   `/duties/room/${user.n_room}`, 
