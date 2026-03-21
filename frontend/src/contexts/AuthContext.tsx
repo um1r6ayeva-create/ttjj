@@ -84,6 +84,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const formatPhone = (phone: string) => {
+    // Если это логин, возвращаем как есть
+    if (/[a-zA-Z]/.test(phone)) {
+      return phone.trim();
+    }
     let digits = phone.replace(/\D/g, '');
     if (digits.startsWith('998')) digits = digits.slice(3);
     digits = digits.slice(-9);

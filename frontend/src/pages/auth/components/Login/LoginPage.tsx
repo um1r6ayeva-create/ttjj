@@ -5,7 +5,7 @@ import { Eye, EyeOff, Phone, Lock, LogIn, AlertCircle } from 'lucide-react';
 import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
-  const [phone, setPhone] = useState('+998');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -27,7 +27,12 @@ const LoginPage: React.FC = () => {
   }, []);
 
   const formatPhone = (value: string) => {
+    // Если это логин (содержит буквы), не форматируем как номер
+    if (/[a-zA-Z]/.test(value)) {
+      return value.trim();
+    }
     let digits = value.replace(/\D/g, '');
+    if (!digits) return '';
     if (!digits.startsWith('998')) digits = '998' + digits;
     digits = digits.slice(0, 12);
     const part1 = digits.slice(3, 5);
@@ -49,7 +54,11 @@ const LoginPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (!phone || phone.replace(/\D/g, '').length < 12) {
+    if (!phone) {
+      setError('Введите логин или телефон');
+      return;
+    }
+    if (!/[a-zA-Z]/.test(phone) && phone.replace(/\D/g, '').length < 12) {
       setError('Введите корректный номер телефона');
       return;
     }
@@ -88,14 +97,14 @@ const LoginPage: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="login-form">
           <div>
-            <label className="login-label"><Phone /> Номер телефона</label>
+            <label className="login-label"><Phone /> Логин или телефон</label>
             <input
-              type="tel"
+              type="text"
               value={phone}
               maxLength={17}
               onChange={(e) => setPhone(formatPhone(e.target.value))}
               className="input-field"
-              placeholder="+998 XX XXX-XX-XX"
+              placeholder="+998 XX XXX-XX-XX или ваш логин"
               required
             />
           </div>
