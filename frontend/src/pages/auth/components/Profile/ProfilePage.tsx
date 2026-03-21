@@ -8,7 +8,7 @@ import EditProfileForm from './EditProfileForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import SystemInfo from './SystemInfo';
 import { useTranslation } from 'react-i18next';
-import { Shield, FileText, Calendar, Edit3, UserCheck } from 'lucide-react';
+import { Shield, UserCheck } from 'lucide-react';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -94,30 +94,6 @@ const ProfilePage: React.FC = () => {
             <div className="system-card23 management-card">
               <h3><Shield size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} /> {t('profilePage.managementPanels')}</h3>
               <div className="management-grid">
-                <button onClick={() => navigate('/rectorate')} className="management-btn">
-                  <Shield size={24} />
-                  <span>{t('header.rectorate')}</span>
-                </button>
-                <button onClick={() => navigate('/dekanat')} className="management-btn">
-                  <Shield size={24} />
-                  <span>{t('header.dekanat')}</span>
-                </button>
-                <button onClick={() => navigate('/staff')} className="management-btn">
-                  <Shield size={24} />
-                  <span>{t('header.staff')}</span>
-                </button>
-                <button onClick={() => navigate('/duty')} className="management-btn">
-                  <Calendar size={24} />
-                  <span>{t('header.duty')}</span>
-                </button>
-                <button onClick={() => navigate('/applications')} className="management-btn">
-                  <FileText size={24} />
-                  <span>{t('header.applications')}</span>
-                </button>
-                <button onClick={() => navigate('/content')} className="management-btn">
-                  <Edit3 size={24} />
-                  <span>{t('header.content')}</span>
-                </button>
                 {user.role === 'commandant' && (
                   <button onClick={() => navigate('/users-control')} className="management-btn">
                     <UserCheck size={24} />
