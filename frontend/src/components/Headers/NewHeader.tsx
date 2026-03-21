@@ -24,8 +24,12 @@ const NewHeader = () => {
 ];
 
 const adminNavItems = [
+  { path: '/rectorate', label: t('header.rectorate') },
+  { path: '/dekanat', label: t('header.dekanat') },
+  { path: '/staff', label: t('header.staff') },
   { path: '/duty', label: t('header.duty') },
   { path: '/applications', label: t('header.applications') },
+  { path: '/content', label: t('header.content') },
   { path: '/users-control', label: t('header.usersControl') },
 ];
 
@@ -151,7 +155,50 @@ const adminNavItems = [
 
         {/* Дополнительные пункты для специальных ролей */}
         {user && (
-          <>            {user.role === 'commandant' && (
+          <>
+            <button
+              onClick={() => { navigate('/rectorate'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-building"></i>
+              <span>{t('header.rectorate')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/dekanat'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-user-graduate"></i>
+              <span>{t('header.dekanat')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/staff'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-users"></i>
+              <span>{t('header.staff')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-clipboard-list"></i>
+              <span>{t('header.duty')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/applications'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-file-alt"></i>
+              <span>{t('header.applications')}</span>
+            </button>
+            <button
+              onClick={() => { navigate('/content'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-edit"></i>
+              <span>{t('header.content')}</span>
+            </button>
+            {user.role === 'commandant' && (
               <button
                 onClick={() => { navigate('/users-control'); setIsProfileOpen(false); }}
                 className="dropdown-btn"

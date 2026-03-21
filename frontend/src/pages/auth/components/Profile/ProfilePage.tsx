@@ -8,7 +8,7 @@ import EditProfileForm from './EditProfileForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import SystemInfo from './SystemInfo';
 import { useTranslation } from 'react-i18next';
-import { Shield, UserCheck } from 'lucide-react';
+import { LogOut, Settings, Calendar, Bell, ChevronRight, User as UserIcon, Shield, UserCheck, Building, GraduationCap, Users, ClipboardList, FileText, FileEdit } from 'lucide-react';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -90,14 +90,40 @@ const ProfilePage: React.FC = () => {
 
           {/* Панели управления */}
           {/* Панели управления */}
-          {user?.role === 'commandant' && (
+          {user && (
             <div className="system-card23 management-card">
               <h3><Shield size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} /> {t('profilePage.managementPanels')}</h3>
               <div className="management-grid">
-                <button onClick={() => navigate('/users-control')} className="management-btn">
-                  <UserCheck size={24} />
-                  <span>{t('profilePage.usersControl')}</span>
+                <button onClick={() => navigate('/rectorate')} className="management-btn">
+                  <Building size={24} />
+                  <span>{t('profilePage.rectorate')}</span>
                 </button>
+                <button onClick={() => navigate('/dekanat')} className="management-btn">
+                  <GraduationCap size={24} />
+                  <span>{t('profilePage.dekanat')}</span>
+                </button>
+                <button onClick={() => navigate('/staff')} className="management-btn">
+                  <Users size={24} />
+                  <span>{t('profilePage.staff')}</span>
+                </button>
+                <button onClick={() => navigate('/duty')} className="management-btn">
+                  <ClipboardList size={24} />
+                  <span>{t('profilePage.duty')}</span>
+                </button>
+                <button onClick={() => navigate('/applications')} className="management-btn">
+                  <FileText size={24} />
+                  <span>{t('profilePage.applications')}</span>
+                </button>
+                <button onClick={() => navigate('/content')} className="management-btn">
+                  <FileEdit size={24} />
+                  <span>{t('profilePage.content')}</span>
+                </button>
+                {user.role === 'commandant' && (
+                  <button onClick={() => navigate('/users-control')} className="management-btn">
+                    <UserCheck size={24} />
+                    <span>{t('profilePage.usersControl')}</span>
+                  </button>
+                )}
               </div>
             </div>
           )}
