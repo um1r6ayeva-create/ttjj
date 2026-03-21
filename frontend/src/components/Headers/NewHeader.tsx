@@ -88,15 +88,18 @@ const adminNavItems = [
       </div>
       
       <div className="nav-section">
-        {mainNavItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {mainNavItems.map((item) => {
+          if (item.path === '/' && user?.role === 'admin') return null;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
         
         {adminNavItems.map((item) => {
           const isStudent = user?.role !== 'admin' && user?.role !== 'commandant';
