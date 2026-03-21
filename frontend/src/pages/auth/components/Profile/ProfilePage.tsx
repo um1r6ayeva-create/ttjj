@@ -89,26 +89,37 @@ const ProfilePage: React.FC = () => {
           )}
 
           {/* Панели управления */}
-          {(user.role === 'admin' || user.role === 'commandant' || user.role === 'student') && (
-            <div className="system-card23 management-card">
-              <h3><Shield className="w-5 h-5 inline mr-2" /> {t('profilePage.managementPanels')}</h3>
-              <div className="management-grid">
-                <button onClick={() => navigate('/duty')} className="management-btn">
-                  <Calendar className="w-6 h-6" />
-                  <span>{t('header.duty')}</span>
-                </button>
-                <button onClick={() => navigate('/applications')} className="management-btn">
-                  <FileText className="w-6 h-6" />
-                  <span>{t('header.applications')}</span>
-                </button>
-                {user.role === 'commandant' && (
-                  <button onClick={() => navigate('/content')} className="management-btn">
-                    <Edit3 className="w-6 h-6" />
-                    <span>{t('header.content')}</span>
-                  </button>
-                )}
-              </div>
-            </div>
+          {user && (
+            (() => {
+              const userRole = user.role.toLowerCase();
+              const isCommandant = userRole === 'commandant';
+              const isStarosta = userRole === 'admin' || userRole === 'elder' || userRole === 'starosta';
+              const isStudent = userRole === 'student' || userRole === 'user' || userRole === 'standard';
+              
+              if (!isCommandant && !isStarosta && !isStudent) return null;
+
+              return (
+                <div className="system-card23 management-card">
+                  <h3><Shield className="w-5 h-5 inline mr-2" /> {t('profilePage.managementPanels')}</h3>
+                  <div className="management-grid">
+                    <button onClick={() => navigate('/duty')} className="management-btn">
+                      <Calendar className="w-6 h-6" />
+                      <span>{t('header.duty')}</span>
+                    </button>
+                    <button onClick={() => navigate('/applications')} className="management-btn">
+                      <FileText className="w-6 h-6" />
+                      <span>{t('header.applications')}</span>
+                    </button>
+                    {isCommandant && (
+                      <button onClick={() => navigate('/content')} className="management-btn">
+                        <Edit3 className="w-6 h-6" />
+                        <span>{t('header.content')}</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })()
           )}
 
           {/* Информация о системе */}

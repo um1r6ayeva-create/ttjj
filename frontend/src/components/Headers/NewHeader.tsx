@@ -98,16 +98,18 @@ const adminNavItems = [
         ))}
         
         {adminNavItems.map((item) => {
-          // Определяем видимость пунктов меню в зависимости от роли
-          const isCommandant = user?.role === 'commandant';
-          const isStarosta = user?.role === 'admin';
+          // Определяем видимость пунктов меню в зависимости от роли (регистронезависимо)
+          const userRole = user?.role?.toLowerCase() || '';
+          const isCommandant = userRole === 'commandant';
+          const isStarosta = userRole === 'admin' || userRole === 'elder' || userRole === 'starosta';
+          const isStudent = userRole === 'student' || userRole === 'user' || userRole === 'standard';
 
-          if (isStarosta || user?.role === 'student') {
+          if (isStarosta || isStudent) {
             // Староста и студент видят только дежурства и заявки
             if (item.path !== '/duty' && item.path !== '/applications') return null;
           }
           
-          if (!isCommandant && !isStarosta && user?.role !== 'student') return null;
+          if (!isCommandant && !isStarosta && !isStudent) return null;
 
           return (
             <Link
@@ -159,23 +161,34 @@ const adminNavItems = [
         </button>
 
         {/* Панели управления для персонала и студентов */}
-        {(user.role === 'commandant' || user.role === 'admin' || user.role === 'student') && (
-          <>
-            <button
-              onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
-              className="dropdown-btn"
-            >
-              <i className="fas fa-calendar-alt"></i>
-              <span>{t('header.duty')}</span>
-            </button>
-            <button
-              onClick={() => { navigate('/applications'); setIsProfileOpen(false); }}
-              className="dropdown-btn"
-            >
-              <i className="fas fa-file-alt"></i>
-              <span>{t('header.applications')}</span>
-            </button>
-          </>
+        {user && (
+          (() => {
+            const userRole = user.role.toLowerCase();
+            const isCommandant = userRole === 'commandant';
+            const isStarosta = userRole === 'admin' || userRole === 'elder' || userRole === 'starosta';
+            const isStudent = userRole === 'student' || userRole === 'user' || userRole === 'standard';
+            
+            if (!isCommandant && !isStarosta && !isStudent) return null;
+
+            return (
+              <>
+                <button
+                  onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
+                  className="dropdown-btn"
+                >
+                  <i className="fas fa-calendar-alt"></i>
+                  <span>{t('header.duty')}</span>
+                </button>
+                <button
+                  onClick={() => { navigate('/applications'); setIsProfileOpen(false); }}
+                  className="dropdown-btn"
+                >
+                  <i className="fas fa-file-alt"></i>
+                  <span>{t('header.applications')}</span>
+                </button>
+              </>
+            );
+          })()
         )}
 
         {user.role === 'commandant' && (
