@@ -90,16 +90,14 @@ const ProfilePage: React.FC = () => {
 
           {/* Панели управления */}
           {/* Панели управления */}
-          {user && (
+          {user?.role === 'commandant' && (
             <div className="system-card23 management-card">
               <h3><Shield size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} /> {t('profilePage.managementPanels')}</h3>
               <div className="management-grid">
-                {user.role === 'commandant' && (
-                  <button onClick={() => navigate('/users-control')} className="management-btn">
-                    <UserCheck size={24} />
-                    <span>{t('profilePage.usersControl')}</span>
-                  </button>
-                )}
+                <button onClick={() => navigate('/users-control')} className="management-btn">
+                  <UserCheck size={24} />
+                  <span>{t('profilePage.usersControl')}</span>
+                </button>
               </div>
             </div>
           )}
