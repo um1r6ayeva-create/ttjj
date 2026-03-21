@@ -10,7 +10,7 @@ const UsersControlPage: React.FC = () => {
   
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'pending' | 'active'>('pending');
+  const [filter, setFilter] = useState<'all' | 'pending' | 'active'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [actionLoading, setActionLoading] = useState<number | null>(null);
 
