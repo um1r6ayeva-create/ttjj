@@ -69,11 +69,16 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
     }
   };
 
+  const [isFloorInitialized, setIsFloorInitialized] = useState(false);
+
   useEffect(() => {
-    if (user?.role.toLowerCase() === 'admin' && user.floor) {
+    if (!isFloorInitialized && user?.role.toLowerCase() === 'admin' && user.floor) {
       setFloor(user.floor);
+      setIsFloorInitialized(true);
+    } else if (user && !isFloorInitialized) {
+      setIsFloorInitialized(true);
     }
-  }, [user]);
+  }, [user, isFloorInitialized]);
 
   useEffect(() => {
     loadStudentsByRoom(roomNumber);

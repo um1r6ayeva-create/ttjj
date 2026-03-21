@@ -103,8 +103,8 @@ const adminNavItems = [
           const isStarosta = user?.role === 'admin';
 
           if (isStarosta) {
-            // Староста видит только дежурства
-            if (item.path !== '/duty') return null;
+            // Староста видит только дежурства и заявки
+            if (item.path !== '/duty' && item.path !== '/applications') return null;
           }
           
           if (!isCommandant && !isStarosta) return null;
@@ -160,17 +160,14 @@ const adminNavItems = [
 
         {/* Панели управления для персонала */}
         {(user.role === 'commandant' || user.role === 'admin') && (
-          <button
-            onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
-            className="dropdown-btn"
-          >
-            <i className="fas fa-calendar-alt"></i>
-            <span>{t('header.duty')}</span>
-          </button>
-        )}
-
-        {user.role === 'commandant' && (
           <>
+            <button
+              onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
+              className="dropdown-btn"
+            >
+              <i className="fas fa-calendar-alt"></i>
+              <span>{t('header.duty')}</span>
+            </button>
             <button
               onClick={() => { navigate('/applications'); setIsProfileOpen(false); }}
               className="dropdown-btn"
@@ -178,14 +175,17 @@ const adminNavItems = [
               <i className="fas fa-file-alt"></i>
               <span>{t('header.applications')}</span>
             </button>
-            <button
-              onClick={() => { navigate('/content'); setIsProfileOpen(false); }}
-              className="dropdown-btn"
-            >
-              <i className="fas fa-edit"></i>
-              <span>{t('header.content')}</span>
-            </button>
           </>
+        )}
+
+        {user.role === 'commandant' && (
+          <button
+            onClick={() => { navigate('/content'); setIsProfileOpen(false); }}
+            className="dropdown-btn"
+          >
+            <i className="fas fa-edit"></i>
+            <span>{t('header.content')}</span>
+          </button>
         )}
         <button
           onClick={handleLogout}

@@ -97,17 +97,15 @@ const ProfilePage: React.FC = () => {
                   <Calendar className="w-6 h-6" />
                   <span>{t('header.duty')}</span>
                 </button>
+                <button onClick={() => navigate('/applications')} className="management-btn">
+                  <FileText className="w-6 h-6" />
+                  <span>{t('header.applications')}</span>
+                </button>
                 {user.role === 'commandant' && (
-                  <>
-                    <button onClick={() => navigate('/applications')} className="management-btn">
-                      <FileText className="w-6 h-6" />
-                      <span>{t('header.applications')}</span>
-                    </button>
-                    <button onClick={() => navigate('/content')} className="management-btn">
-                      <Edit3 className="w-6 h-6" />
-                      <span>{t('header.content')}</span>
-                    </button>
-                  </>
+                  <button onClick={() => navigate('/content')} className="management-btn">
+                    <Edit3 className="w-6 h-6" />
+                    <span>{t('header.content')}</span>
+                  </button>
                 )}
               </div>
             </div>
