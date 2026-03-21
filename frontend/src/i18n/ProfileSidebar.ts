@@ -13,7 +13,8 @@ export const profileSidebar = {
     inactive: 'Неактивен',
     editProfile: 'Редактировать профиль',
     changePassword: 'Сменить пароль',
-    logout: 'Выйти из системы'
+    logout: 'Выйти из системы',
+    adminProfileName: 'Профиль Старосты'
   },
   en: {
     admin: 'Administrator (Head)',
@@ -28,7 +29,8 @@ export const profileSidebar = {
     inactive: 'Inactive',
     editProfile: 'Edit Profile',
     changePassword: 'Change Password',
-    logout: 'Logout'
+    logout: 'Logout',
+    adminProfileName: 'Starosta Profile'
   },
   uz: {
     admin: 'Administrator (Boshliq)',
@@ -43,6 +45,7 @@ export const profileSidebar = {
     inactive: 'Faol emas',
     editProfile: 'Profilni tahrirlash',
     changePassword: 'Parolni o\'zgartirish',
-    logout: 'Tizimdan chiqish'
+    logout: 'Tizimdan chiqish',
+    adminProfileName: 'Starosta Profili'
   }
 };

@@ -138,8 +138,12 @@ const adminNavItems = [
     {user ? (
       <>
         <div className="px-4 py-3 border-b border-gray-100">
-          <div className="font-medium text-gray-900">{user.name} {user.surname}</div>
-          <div className="text-sm text-gray-500 truncate">{user.email || user.phone}</div>
+          <div className="font-medium text-gray-900">
+            {user.role === 'admin' ? t('profileSidebar.adminProfileName') : `${user.name} ${user.surname}`}
+          </div>
+          {user.role !== 'admin' && (
+            <div className="text-sm text-gray-500 truncate">{user.email || user.phone}</div>
+          )}
         </div>
         <button
           onClick={() => { navigate('/profile'); setIsProfileOpen(false); }}

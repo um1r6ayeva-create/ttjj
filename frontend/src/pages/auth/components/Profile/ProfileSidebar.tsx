@@ -57,7 +57,7 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
           <User className="w-16 h-16 text-white" />
         </div>
         <h2 className="profile-name">
-          {user.name} {user.surname}
+          {user.role === 'admin' ? t('profileSidebar.adminProfileName') : `${user.name} ${user.surname}`}
         </h2>
         <div className={`role-badge ${getRoleBadgeColor(user.role)}`}>
           <Shield className="w-4 h-4" />
@@ -80,14 +80,14 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
           </div>
         )}
       
-        {user.role !== 'commandant' && user.user_group && (
+        {user.role !== 'commandant' && user.role !== 'admin' && user.user_group && (
           <div className="info-item">
             <Hash className="w-5 h-5" />
             <span>{t('profileSidebar.group')}: {user.user_group}</span>
           </div>
         )}
         
-        {user.role !== 'commandant' && user.n_room && (
+        {user.role !== 'commandant' && user.role !== 'admin' && user.n_room && (
           <div className="info-item">
             <Home className="w-5 h-5" />
             <span>{t('profileSidebar.room')}: {user.n_room}</span>
@@ -101,10 +101,12 @@ const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
       </div>
 
       <div className="profile-actions">
-        <button onClick={onEditClick} className="action-button edit">
-          <Edit className="w-5 h-5" />
-          {t('profileSidebar.editProfile')}
-        </button>
+        {user.role !== 'admin' && (
+          <button onClick={onEditClick} className="action-button edit">
+            <Edit className="w-5 h-5" />
+            {t('profileSidebar.editProfile')}
+          </button>
+        )}
         <button onClick={onChangePasswordClick} className="action-button password">
           <Key className="w-5 h-5" />
           {t('profileSidebar.changePassword')}

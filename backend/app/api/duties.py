@@ -35,13 +35,7 @@ def assign_duty(
     db: Session = Depends(get_db),
     current_user: User = Depends(admin_or_commandant_required),
 ):
-    # Если это староста (admin), он может назначать только на свой этаж
-    if current_user.role.name == "admin":
-        if current_user.floor and duty_in.floor != current_user.floor:
-            raise HTTPException(
-                status_code=http_status.HTTP_403_FORBIDDEN,
-                detail=f"Вы можете назначать дежурства только на {current_user.floor} этаже"
-            )
+    
     
     duty = create_duty(db, duty_in, assigned_by_id=current_user.id)
     db.refresh(duty)
