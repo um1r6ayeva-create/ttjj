@@ -24,12 +24,8 @@ const NewHeader = () => {
 ];
 
 const adminNavItems = [
-  { path: '/rectorate', label: t('header.rectorate') },
-  { path: '/dekanat', label: t('header.dekanat') },
-  { path: '/staff', label: t('header.staff') },
   { path: '/duty', label: t('header.duty') },
   { path: '/applications', label: t('header.applications') },
-  { path: '/content', label: t('header.content') },
   { path: '/users-control', label: t('header.usersControl') },
 ];
 
@@ -99,8 +95,7 @@ const adminNavItems = [
         ))}
         
         {adminNavItems.map((item) => {
-          // Показываем все пункты меню всем, даже неавторизованным пользователям
-          // (доступ к страницам будет защищен роутами)
+          if (item.path === '/users-control' && user?.role !== 'commandant') return null;
           return (
             <Link
               key={item.path}
