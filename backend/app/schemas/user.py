@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, field_validator, model_validator
 from typing import Optional
 from datetime import datetime
 import re
@@ -68,28 +68,27 @@ class UserResponse(BaseModel):
     updated_at: Optional[datetime] = None
     role: str  # строка роли
 
+    @model_validator(mode='before')
     @classmethod
-    def model_validate(cls, obj, **kwargs):
+    def extract_role_name(cls, data):
         # Если это SQLAlchemy объект
-        if hasattr(obj, "role"):
-            data = {
-                "id": obj.id,
-                "name": obj.name,
-                "surname": obj.surname,
-                "phone": obj.phone,
-                "email": obj.email,
-                "user_group": obj.user_group,
-                "n_room": obj.n_room,
-                "floor": obj.floor,
-                "is_active": obj.is_active,
-                "created_at": obj.created_at,
-                "updated_at": obj.updated_at,
-                "role": obj.role.name if obj.role else "student"
+        if hasattr(data, "role"):
+            # Извлекаем данные для словаря, который Pydantic потом провалидирует
+            return {
+                "id": data.id,
+                "name": data.name,
+                "surname": data.surname,
+                "phone": data.phone,
+                "email": data.email,
+                "user_group": data.user_group,
+                "n_room": data.n_room,
+                "floor": data.floor,
+                "is_active": data.is_active,
+                "created_at": data.created_at,
+                "updated_at": data.updated_at,
+                "role": data.role.name if data.role else "student"
             }
-            return super().model_validate(data)
-        
-        # Если это уже словарь или другой объект
-        return super().model_validate(obj)
+        return data
 
 # Для внутреннего использования с полной информацией о роли
 class UserWithRole(UserBase):

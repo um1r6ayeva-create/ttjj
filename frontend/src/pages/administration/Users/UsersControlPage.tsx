@@ -40,8 +40,9 @@ const UsersControlPage: React.FC = () => {
     try {
       await approveUser(userId);
       await loadUsers();
-    } catch (error) {
-      alert('Ошибка при подтверждении');
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.detail || 'Ошибка при подтверждении';
+      alert(errorMsg);
     } finally {
       setActionLoading(null);
     }
@@ -54,8 +55,9 @@ const UsersControlPage: React.FC = () => {
     try {
       await rejectUser(userId);
       await loadUsers();
-    } catch (error) {
-      alert('Ошибка при удалении');
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.detail || 'Ошибка при удалении';
+      alert(errorMsg);
     } finally {
       setActionLoading(null);
     }

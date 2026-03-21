@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 
 from app.db.session import get_db
@@ -53,12 +53,12 @@ def get_students_for_commandant(
 def approve_user(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(commandant_required),
+    current_user: User = Depends(any_admin_required),
 ):
     """
     Подтверждение регистрации пользователя
     """
-    user = db.query(User).filter(User.id == user_id).first()
+    user = db.query(User).options(joinedload(User.role)).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Пользователь не найден")
     
@@ -71,7 +71,7 @@ def approve_user(
 def reject_user(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(commandant_required),
+    current_user: User = Depends(any_admin_required),
 ):
     """
     Отклонение регистрации (удаление пользователя)
