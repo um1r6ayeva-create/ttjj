@@ -100,19 +100,35 @@ const ProfilePage: React.FC = () => {
 
               return (
                 <div className="system-card23 management-card">
-                  <h3><Shield className="w-5 h-5 inline mr-2" /> {t('profilePage.managementPanels')}</h3>
+                  <h3><Shield size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} /> {t('profilePage.managementPanels')}</h3>
                   <div className="management-grid">
+                    {isCommandant && (
+                      <>
+                        <button onClick={() => navigate('/rectorate')} className="management-btn">
+                          <Shield size={24} />
+                          <span>{t('header.rectorate')}</span>
+                        </button>
+                        <button onClick={() => navigate('/dekanat')} className="management-btn">
+                          <Shield size={24} />
+                          <span>{t('header.dekanat')}</span>
+                        </button>
+                        <button onClick={() => navigate('/staff')} className="management-btn">
+                          <Shield size={24} />
+                          <span>{t('header.staff')}</span>
+                        </button>
+                      </>
+                    )}
                     <button onClick={() => navigate('/duty')} className="management-btn">
-                      <Calendar className="w-6 h-6" />
+                      <Calendar size={24} />
                       <span>{t('header.duty')}</span>
                     </button>
                     <button onClick={() => navigate('/applications')} className="management-btn">
-                      <FileText className="w-6 h-6" />
+                      <FileText size={24} />
                       <span>{t('header.applications')}</span>
                     </button>
                     {isCommandant && (
                       <button onClick={() => navigate('/content')} className="management-btn">
-                        <Edit3 className="w-6 h-6" />
+                        <Edit3 size={24} />
                         <span>{t('header.content')}</span>
                       </button>
                     )}
