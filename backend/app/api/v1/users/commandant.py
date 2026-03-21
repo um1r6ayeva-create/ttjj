@@ -21,7 +21,13 @@ def get_students_for_commandant(
     """
     Возвращает всех студентов и администраторов (для управления)
     """
-    users = db.query(User).join(User.role).filter(User.role.name.in_(["student", "admin"])).all()
+    # Используем outerjoin, чтобы включить старых пользователей без явно заданной роли
+    users = db.query(User).outerjoin(User.role).filter(
+        (User.role.has(name="student")) | 
+        (User.role.has(name="admin")) |
+        (User.role_id == None) |
+        (User.role_id == 3) # 3 is student
+    ).all()
 
     return [
         UserResponse(
@@ -32,7 +38,7 @@ def get_students_for_commandant(
             email=u.email,
             user_group=u.user_group,
             n_room=u.n_room,
-            role=u.role.name,
+            role=u.role.name if u.role else "student",
             is_active=u.is_active
         )
         for u in users
