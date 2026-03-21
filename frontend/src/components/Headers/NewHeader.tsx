@@ -102,12 +102,12 @@ const adminNavItems = [
           const isCommandant = user?.role === 'commandant';
           const isStarosta = user?.role === 'admin';
 
-          if (isStarosta) {
-            // Староста видит только дежурства и заявки
+          if (isStarosta || user?.role === 'student') {
+            // Староста и студент видят только дежурства и заявки
             if (item.path !== '/duty' && item.path !== '/applications') return null;
           }
           
-          if (!isCommandant && !isStarosta) return null;
+          if (!isCommandant && !isStarosta && user?.role !== 'student') return null;
 
           return (
             <Link
@@ -158,8 +158,8 @@ const adminNavItems = [
           <span>{t('profile.my_profile')}</span>
         </button>
 
-        {/* Панели управления для персонала */}
-        {(user.role === 'commandant' || user.role === 'admin') && (
+        {/* Панели управления для персонала и студентов */}
+        {(user.role === 'commandant' || user.role === 'admin' || user.role === 'student') && (
           <>
             <button
               onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}

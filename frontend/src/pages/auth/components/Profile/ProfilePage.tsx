@@ -89,7 +89,7 @@ const ProfilePage: React.FC = () => {
           )}
 
           {/* Панели управления */}
-          {(user.role === 'admin' || user.role === 'commandant') && (
+          {(user.role === 'admin' || user.role === 'commandant' || user.role === 'student') && (
             <div className="system-card23 management-card">
               <h3><Shield className="w-5 h-5 inline mr-2" /> {t('profilePage.managementPanels')}</h3>
               <div className="management-grid">
