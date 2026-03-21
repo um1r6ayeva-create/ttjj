@@ -25,6 +25,7 @@ const NewHeader = () => {
 
 const adminNavItems = [
   { path: '/duty', label: t('header.duty') },
+  { path: '/applications', label: t('header.applications') },
   { path: '/users-control', label: t('header.usersControl') },
 ];
 
@@ -95,6 +96,7 @@ const adminNavItems = [
         
         {adminNavItems.map((item) => {
           if (item.path === '/users-control' && user?.role !== 'commandant') return null;
+          if (item.path === '/applications' && user?.role !== 'commandant') return null;
           if (item.path === '/duty' && user?.role !== 'commandant' && user?.role !== 'admin') return null;
           return (
             <Link
@@ -160,13 +162,22 @@ const adminNavItems = [
               <span>{t('header.duty')}</span>
             </button>
             {user.role === 'commandant' && (
-              <button
-                onClick={() => { navigate('/users-control'); setIsProfileOpen(false); }}
-                className="dropdown-btn"
-              >
-                <i className="fas fa-user-shield"></i>
-                <span>{t('header.usersControl')}</span>
-              </button>
+              <>
+                <button
+                  onClick={() => { navigate('/applications'); setIsProfileOpen(false); }}
+                  className="dropdown-btn"
+                >
+                  <i className="fas fa-file-alt"></i>
+                  <span>{t('header.applications')}</span>
+                </button>
+                <button
+                  onClick={() => { navigate('/users-control'); setIsProfileOpen(false); }}
+                  className="dropdown-btn"
+                >
+                  <i className="fas fa-user-shield"></i>
+                  <span>{t('header.usersControl')}</span>
+                </button>
+              </>
             )}
           </>
         )}

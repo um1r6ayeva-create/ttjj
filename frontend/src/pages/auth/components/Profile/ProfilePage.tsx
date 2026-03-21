@@ -8,7 +8,7 @@ import EditProfileForm from './EditProfileForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import SystemInfo from './SystemInfo';
 import { useTranslation } from 'react-i18next';
-import { Shield, UserCheck, ClipboardList } from 'lucide-react';
+import { Shield, UserCheck, ClipboardList, FileText } from 'lucide-react';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -98,10 +98,16 @@ const ProfilePage: React.FC = () => {
                   <span>{t('profilePage.duty')}</span>
                 </button>
                 {user.role === 'commandant' && (
-                  <button onClick={() => navigate('/users-control')} className="management-btn">
-                    <UserCheck size={24} />
-                    <span>{t('profilePage.usersControl')}</span>
-                  </button>
+                  <>
+                    <button onClick={() => navigate('/applications')} className="management-btn">
+                      <FileText size={24} />
+                      <span>{t('profilePage.applications')}</span>
+                    </button>
+                    <button onClick={() => navigate('/users-control')} className="management-btn">
+                      <UserCheck size={24} />
+                      <span>{t('profilePage.usersControl')}</span>
+                    </button>
+                  </>
                 )}
               </div>
             </div>
