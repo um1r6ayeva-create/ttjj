@@ -8,7 +8,7 @@ import EditProfileForm from './EditProfileForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import SystemInfo from './SystemInfo';
 import { useTranslation } from 'react-i18next';
-import { Shield, UserCheck } from 'lucide-react';
+import { Shield, UserCheck, ClipboardList } from 'lucide-react';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -89,14 +89,20 @@ const ProfilePage: React.FC = () => {
           )}
 
           {/* Панели управления */}
-          {user && user.role === 'commandant' && (
+          {user && (user.role === 'commandant' || user.role === 'admin') && (
             <div className="system-card23 management-card">
               <h3><Shield size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} /> {t('profilePage.managementPanels')}</h3>
               <div className="management-grid">
-                <button onClick={() => navigate('/users-control')} className="management-btn">
-                  <UserCheck size={24} />
-                  <span>{t('profilePage.usersControl')}</span>
+                <button onClick={() => navigate('/duty')} className="management-btn">
+                  <ClipboardList size={24} />
+                  <span>{t('profilePage.duty')}</span>
                 </button>
+                {user.role === 'commandant' && (
+                  <button onClick={() => navigate('/users-control')} className="management-btn">
+                    <UserCheck size={24} />
+                    <span>{t('profilePage.usersControl')}</span>
+                  </button>
+                )}
               </div>
             </div>
           )}

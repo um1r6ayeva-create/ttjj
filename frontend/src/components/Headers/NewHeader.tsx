@@ -24,6 +24,7 @@ const NewHeader = () => {
 ];
 
 const adminNavItems = [
+  { path: '/duty', label: t('header.duty') },
   { path: '/users-control', label: t('header.usersControl') },
 ];
 
@@ -94,6 +95,7 @@ const adminNavItems = [
         
         {adminNavItems.map((item) => {
           if (item.path === '/users-control' && user?.role !== 'commandant') return null;
+          if (item.path === '/duty' && user?.role !== 'commandant' && user?.role !== 'admin') return null;
           return (
             <Link
               key={item.path}
@@ -148,15 +150,24 @@ const adminNavItems = [
         </button>
 
         {/* Дополнительные пункты для специальных ролей */}
-        {user && user.role === 'commandant' && (
+        {user && (user.role === 'commandant' || user.role === 'admin') && (
           <>
             <button
-              onClick={() => { navigate('/users-control'); setIsProfileOpen(false); }}
+              onClick={() => { navigate('/duty'); setIsProfileOpen(false); }}
               className="dropdown-btn"
             >
-              <i className="fas fa-user-shield"></i>
-              <span>{t('header.usersControl')}</span>
+              <i className="fas fa-clipboard-list"></i>
+              <span>{t('header.duty')}</span>
             </button>
+            {user.role === 'commandant' && (
+              <button
+                onClick={() => { navigate('/users-control'); setIsProfileOpen(false); }}
+                className="dropdown-btn"
+              >
+                <i className="fas fa-user-shield"></i>
+                <span>{t('header.usersControl')}</span>
+              </button>
+            )}
           </>
         )}
         <button
