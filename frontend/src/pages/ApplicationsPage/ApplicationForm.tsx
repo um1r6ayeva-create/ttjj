@@ -325,7 +325,11 @@ const ApplicationForm: React.FC<ApplicationFormProps> = ({ type, userData, onSuc
       setLoading(true);
       setMessage('');
       
-      const response = await api.post('/applications/', formDataToSend);
+      const response = await api.post('/applications/', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       
       setMessage(t('application.form.success'));
       onSuccess();
