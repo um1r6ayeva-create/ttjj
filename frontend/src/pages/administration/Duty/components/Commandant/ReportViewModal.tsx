@@ -203,7 +203,7 @@ const getStatusText = (status: string): string => {
               <Description /> {t('reportViewModal.workDescription')}
             </h3>
             <div className="description-text">
-              {report.description}
+              {report?.description || t('reportViewModal.noDescription')}
             </div>
           </div>
 

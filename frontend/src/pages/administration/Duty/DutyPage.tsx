@@ -1,3 +1,4 @@
+import { Component, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
 import AdminDutyInterface from './components/Starosta/AdminDuty/AdminDutyInterface';
@@ -6,6 +7,37 @@ import StudentDutyInterface from './components/Student/StudentDutyInterface';
 import GlobalDutyInterface from './components/Commandant/GlobalDutyInterface';
 import './DutyPage.css';
 import { ClipboardList } from 'lucide-react';
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error("ErrorBoundary caught an error", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
 
 const DutyPage = () => {
   const { user } = useAuth();
@@ -46,25 +78,27 @@ const DutyPage = () => {
       </div>
 
       <div className="duty-content">
-        {userRole === 'admin' && <AdminDutyInterface />}
+        <ErrorBoundary fallback={<div className="error-fallback">{t('dutyPage.renderError')}</div>}>
+          {userRole === 'admin' && <AdminDutyInterface />}
 
-        {userRole === 'commandant' && (
-          <>
-            {/* Глобальное дежурство */}
-            <section className="global-duty-section">
-              <h2 className="section-title">{t('dutyPage.globalDuty')}</h2>
-              <GlobalDutyInterface />
-            </section>
+          {userRole === 'commandant' && (
+            <>
+              {/* Глобальное дежурство */}
+              <section className="global-duty-section">
+                <h2 className="section-title">{t('dutyPage.globalDuty')}</h2>
+                <GlobalDutyInterface />
+              </section>
 
-            {/* Обычные дежурства */}
-            <section className="commandant-duty-section">
-              <h2 className="section-title">{t('dutyPage.regularDuty')}</h2>
-              <CommandantDutyInterface />
-            </section>
-          </>
-        )}
+              {/* Обычные дежурства */}
+              <section className="commandant-duty-section">
+                <h2 className="section-title">{t('dutyPage.regularDuty')}</h2>
+                <CommandantDutyInterface />
+              </section>
+            </>
+          )}
 
-        {(userRole === 'admin' || userRole === 'student' || userRole === 'elder') && <StudentDutyInterface />}
+          {(userRole === 'admin' || userRole === 'student' || userRole === 'elder') && <StudentDutyInterface />}
+        </ErrorBoundary>
       </div>
     </div>
   );

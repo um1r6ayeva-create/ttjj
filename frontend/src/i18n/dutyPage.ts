@@ -13,7 +13,8 @@ export const dutyPage = {
       commandant: 'комендант',
       student: 'студент',
       elder: 'староста'
-    }
+    },
+    renderError: 'Произошла ошибка при отображении панели. Пожалуйста, обновите страницу.'
   },
   en: {
     title: 'Duty System',
@@ -28,7 +29,8 @@ export const dutyPage = {
       commandant: 'commandant',
       student: 'student',
       elder: 'elder'
-    }
+    },
+    renderError: 'An error occurred while rendering the panel. Please refresh the page.'
   },
   uz: {
     title: 'Navbatchilik tizimi',
@@ -43,6 +45,7 @@ export const dutyPage = {
       commandant: 'komendant',
       student: 'talaba',
       elder: 'boshliq'
-    }
+    },
+    renderError: 'Panelni ko\'rsatishda xatolik yuz berdi. Iltimos, sahifani yangilang.'
   }
 };

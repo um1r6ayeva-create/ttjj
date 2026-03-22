@@ -101,9 +101,9 @@ const CommandantDutyInterface = () => {
       const completedRes = await api.get('/duties/commandant/completed');
       const globalCompletedRes = await api.get('/global-duty-reports/history');
       
-      setDuties(dutiesRes.data);
-      setReports(reportsRes.data);
-      setGlobalReports(globalReportsRes.data);
+      setDuties(Array.isArray(dutiesRes.data) ? dutiesRes.data : []);
+      setReports(Array.isArray(reportsRes.data) ? reportsRes.data : []);
+      setGlobalReports(Array.isArray(globalReportsRes.data) ? globalReportsRes.data : []);
       
       const getSafeTime = (dateStr: any) => {
         if (!dateStr) return 0;
@@ -111,9 +111,12 @@ const CommandantDutyInterface = () => {
         return isNaN(d.getTime()) ? 0 : d.getTime();
       };
 
+      const completedData = Array.isArray(completedRes.data) ? completedRes.data : [];
+      const globalHistoryData = Array.isArray(globalCompletedRes.data) ? globalCompletedRes.data : [];
+
       const combinedHistory = [
-        ...(Array.isArray(completedRes.data) ? completedRes.data.map((r: any) => ({ ...r, isGlobal: false })) : []),
-        ...(Array.isArray(globalCompletedRes.data) ? globalCompletedRes.data.map((r: any) => ({ ...r, isGlobal: true })) : [])
+        ...completedData.map((r: any) => ({ ...r, isGlobal: false })),
+        ...globalHistoryData.map((r: any) => ({ ...r, isGlobal: true }))
       ].sort((a, b) => getSafeTime(b.reviewed_at) - getSafeTime(a.reviewed_at));
       
       setCompletedReports(combinedHistory);
@@ -134,8 +137,10 @@ const CommandantDutyInterface = () => {
   }, []);
 
   const dutiesWithReports = useMemo(() => {
+    if (!Array.isArray(duties)) return [];
     return duties.map(duty => {
-      const dutyReports = reports.filter(report => report.duty_id === duty.id);
+      const reportsList = Array.isArray(reports) ? reports : [];
+      const dutyReports = reportsList.filter(report => report.duty_id === duty.id);
       return {
         ...duty,
         report: dutyReports[0]
@@ -459,56 +464,62 @@ const getReportStatusText = (status: string): string => {
     </div>
   );
 
-  const renderCompletedReportCard = (report: CompletedReport) => (
-    <div key={report.id} className="completed-report-card">
-      <div className="completed-header">
-        <div>
-          <h4>{getDutyTypeText(report.duty_type)}</h4>
-          <span className="room-info">
-            {t('commandantDuty.completedReports.room')} {report.room_number}
-          </span>
-        </div>
-        <span className={`report-status status-${report.status}`}>
-          {report.status === 'confirmed' 
-            ? t('commandantDuty.reportStatuses.confirmed')
-            : t('commandantDuty.reportStatuses.rejected')
-          }
-        </span>
-      </div>
-      
-      <div className="completed-info">
-        <div className="info-row">
-          <span className="label">
-            {report.isGlobal ? t('commandantDuty.dutyCard.floorOnly') : t('commandantDuty.completedReports.room')}:
-          </span>
-          <span className="value">
-            {report.isGlobal ? report.floor : report.room_number}
-          </span>
-        </div>
-        
-        <div className="info-row">
-          <span className="label">{t('commandantDuty.completedReports.submittedAt')}:</span>
-          <span className="value">{formatDateTime(report.submitted_at)}</span>
-        </div>
-        
-        <div className="info-row">
-          <span className="label">{t('commandantDuty.completedReports.checkedBy')}:</span>
-          <span className="value">{report.reviewer_name}</span>
-        </div>
-        
-        {report.review_notes && (
-          <div className="info-row">
-            <span className="label">{t('commandantDuty.dutyCard.notes')}:</span>
-            <span className="value notes">{report.review_notes}</span>
+  const renderCompletedReportCard = (report: CompletedReport) => {
+    if (!report) return null;
+    return (
+      <div key={`completed-${report.isGlobal ? 'global' : 'room'}-${report.id}`} className="completed-report-card">
+        <div className="completed-header">
+          <div>
+            <h4>{getDutyTypeText(report.duty_type)}</h4>
+            <span className="room-info">
+               {report.isGlobal 
+                 ? `${t('commandantDuty.dutyCard.floorOnly')}: ${report.floor || '?'}`
+                 : `${t('commandantDuty.completedReports.room')} ${report.room_number || '?'}`
+               }
+            </span>
           </div>
-        )}
+          <span className={`report-status status-${report.status}`}>
+            {report.status === 'confirmed' 
+              ? t('commandantDuty.reportStatuses.confirmed')
+              : t('commandantDuty.reportStatuses.rejected')
+            }
+          </span>
+        </div>
         
-        <div className="description">
-          <p>{(report.description || '').substring(0, 200)}...</p>
+        <div className="completed-info">
+          <div className="info-row">
+            <span className="label">
+              {report.isGlobal ? t('commandantDuty.dutyCard.floorOnly') : t('commandantDuty.completedReports.room')}:
+            </span>
+            <span className="value">
+              {report.isGlobal ? report.floor : report.room_number}
+            </span>
+          </div>
+          
+          <div className="info-row">
+            <span className="label">{t('commandantDuty.completedReports.submittedAt')}:</span>
+            <span className="value">{formatDateTime(report.submitted_at)}</span>
+          </div>
+          
+          <div className="info-row">
+            <span className="label">{t('commandantDuty.completedReports.checkedBy')}:</span>
+            <span className="value">{report.reviewer_name || t('commandantDuty.completedReports.unknown')}</span>
+          </div>
+          
+          {report.review_notes && (
+            <div className="info-row">
+              <span className="label">{t('commandantDuty.dutyCard.notes')}:</span>
+              <span className="value notes">{report.review_notes}</span>
+            </div>
+          )}
+          
+          <div className="description">
+            <p>{(report.description || '').substring(0, 200)}{report.description?.length > 200 ? '...' : ''}</p>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   if (loading) {
     return (

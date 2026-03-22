@@ -44,7 +44,7 @@ const GlobalDutyInterface = () => {
     try {
       setLoading(true);
       const res = await api.get('/global-duties/');
-      setDuties(res.data);
+      setDuties(Array.isArray(res.data) ? res.data : []);
       setError(null);
     } catch (err: any) {
       console.error(t('globalDutyInterface.modal.loadError'), err);
@@ -101,9 +101,10 @@ const GlobalDutyInterface = () => {
   };
 
   const startEditDuty = (duty: GlobalDuty) => {
+    if (!duty) return;
     setEditingDuty(duty);
     setEditDutyType(duty.duty_type);
-    setEditDateAssigned(duty.date_assigned.split('T')[0]);
+    setEditDateAssigned(duty.date_assigned ? duty.date_assigned.split('T')[0] : '');
     setEditNotes(duty.notes || '');
   };
 
