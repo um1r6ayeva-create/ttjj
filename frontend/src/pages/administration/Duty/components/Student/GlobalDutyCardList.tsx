@@ -35,6 +35,7 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [floorStatus, setFloorStatus] = useState<any[]>([]);
   const [loadingStatus, setLoadingStatus] = useState(false);
+  const [selectedFloor, setSelectedFloor] = useState<number | string>(user?.floor || '');
 
   const isAdmin = user?.role?.toLowerCase() === 'admin';
 
@@ -136,6 +137,7 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
       const formData = new FormData();
       formData.append('global_duty_id', selectedDuty.id.toString());
       formData.append('description', reportDescription);
+      formData.append('floor', selectedFloor.toString());
       photos.forEach(photo => formData.append('photos', photo));
 
       await api.post('/global-duty-reports/', formData, {
@@ -148,7 +150,8 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
       setPhotos([]);
       setPreviewUrls([]);
       setIsSubmittingReport(false);
-      setSelectedDuty(null);
+      // Не сбрасываем selectedDuty и modalOpen, чтобы пользователь вернулся к сетке
+      fetchFloorStatus(selectedDuty.id);
     } catch (err: any) {
       const errorMessage = err.response?.data?.detail || err.message || 'Ошибка отправки отчета';
       console.error('Ошибка отправки отчета:', err);
@@ -182,7 +185,23 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
             <CalendarMonth />
             <div>
               <h3>{getDutyLabel(selectedDuty.duty_type)}</h3>
-              <p className="duty-location">Этаж: {user?.floor}</p>
+              {isAdmin ? (
+                <div className="floor-selector-group">
+                  <label htmlFor="floor-select">Выберите этаж: </label>
+                  <select 
+                    id="floor-select"
+                    value={selectedFloor}
+                    onChange={(e) => setSelectedFloor(Number(e.target.value))}
+                    className="floor-select"
+                  >
+                    {[2, 3, 4, 5, 6, 7, 8, 9].map(f => (
+                      <option key={f} value={f}>{f} этаж</option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <p className="duty-location">Этаж: {user?.floor}</p>
+              )}
             </div>
           </div>
           <div className="duty-info-dates">

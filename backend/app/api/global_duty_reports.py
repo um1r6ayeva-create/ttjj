@@ -79,6 +79,7 @@ async def submit_global_duty_report(
     global_duty_id: int = Form(...),
     description: str = Form(...),
     photos: List[UploadFile] = File(...),
+    floor: Optional[int] = Form(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(admin_required), # Только староста (admin) может отправить отчет
 ):
@@ -90,17 +91,19 @@ async def submit_global_duty_report(
     if not duty:
         raise HTTPException(status_code=404, detail="Общее дежурство не найдено")
     
-    # Староста должен иметь поле этаж (floor)
-    if not current_user.floor:
+    # Используем этаж из запроса или из профиля пользователя
+    target_floor = floor if floor is not None else current_user.floor
+    
+    if not target_floor:
         raise HTTPException(
             status_code=400,
-            detail="У вас не указан этаж в профиле. Отправка отчета невозможна."
+            detail="Этаж не указан. Отправка отчета невозможна."
         )
     
-    # Можно отправить только один отчет на этаж по одному дежурству?
+    # Можно отправить только один отчет на этаж по одному дежурству
     existing_report = db.query(GlobalDutyReport).filter(
         GlobalDutyReport.global_duty_id == global_duty_id,
-        GlobalDutyReport.floor == current_user.floor
+        GlobalDutyReport.floor == target_floor
     ).first()
     
     if existing_report:
@@ -136,7 +139,7 @@ async def submit_global_duty_report(
         report = GlobalDutyReport(
             global_duty_id=global_duty_id,
             student_id=current_user.id,
-            floor=current_user.floor,
+            floor=target_floor,
             description=description,
             submitted_at=datetime.utcnow(),
             status="waiting"
