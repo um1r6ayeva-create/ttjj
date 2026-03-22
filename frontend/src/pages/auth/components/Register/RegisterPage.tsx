@@ -140,8 +140,8 @@ const RegisterPage: React.FC = () => {
       const registerData = {
         name: formData.name.trim(),
         surname: formData.surname.trim(),
-        // Убираем все нецифровые символы кроме + и оставляем только 12 цифр после +998
-        phone: `+998${formData.phone.replace(/\D/g, '').slice(-9)}`,
+        // phone теперь используется как логин, поэтому не добавляем +998 и не удаляем буквы
+        phone: formData.phone.trim(),
         email: formData.email.trim() || undefined,
         password: formData.password,
         user_group: formData.user_group || undefined,

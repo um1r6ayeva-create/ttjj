@@ -58,7 +58,9 @@ interface ConfirmDialog {
 const StudentDutyInterface: React.FC = () => {
   const { t } = useTranslation();
   const { token, user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'my_duties' | 'submit_report' | 'history' | 'all_duties'>('my_duties');
+  const [activeTab, setActiveTab] = useState<'my_duties' | 'submit_report' | 'history' | 'all_duties'>(
+    user?.role.toLowerCase() === 'admin' ? 'all_duties' : 'my_duties'
+  );
   const [selectedDuty, setSelectedDuty] = useState<Duty | null>(null);
   const [reportDescription, setReportDescription] = useState('');
   const [photos, setPhotos] = useState<File[]>([]);
@@ -432,35 +434,39 @@ const StudentDutyInterface: React.FC = () => {
       {/* Вкладки */}
       <div className="tabs-container">
         <div className="tabs">
-          <button 
-            className={`tab-btn ${activeTab === 'my_duties' ? 'active' : ''}`} 
-            onClick={() => setActiveTab('my_duties')}
-          >
-            <Assignment className="tab-icon" />
-            <span>{t('studentDuty.currentDuties')}</span>
-          </button>
-          
-          <button 
-            className={`tab-btn ${activeTab === 'submit_report' ? 'active' : ''}`} 
-            onClick={() => {
-              if (!selectedDuty) {
-                showNotification('info', t('studentDuty.info.selectDuty'));
-              } else {
-                setActiveTab('submit_report');
-              }
-            }}
-          >
-            <Upload className="tab-icon" />
-            <span>{t('studentDuty.submitReport')}</span>
-          </button>
-          
-          <button 
-            className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`} 
-            onClick={() => setActiveTab('history')}
-          >
-            <History className="tab-icon" />
-            <span>{t('studentDuty.history')}</span>
-          </button>
+          {user?.role.toLowerCase() !== 'admin' && (
+            <>
+              <button 
+                className={`tab-btn ${activeTab === 'my_duties' ? 'active' : ''}`} 
+                onClick={() => setActiveTab('my_duties')}
+              >
+                <Assignment className="tab-icon" />
+                <span>{t('studentDuty.currentDuties')}</span>
+              </button>
+              
+              <button 
+                className={`tab-btn ${activeTab === 'submit_report' ? 'active' : ''}`} 
+                onClick={() => {
+                  if (!selectedDuty) {
+                    showNotification('info', t('studentDuty.info.selectDuty'));
+                  } else {
+                    setActiveTab('submit_report');
+                  }
+                }}
+              >
+                <Upload className="tab-icon" />
+                <span>{t('studentDuty.submitReport')}</span>
+              </button>
+              
+              <button 
+                className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`} 
+                onClick={() => setActiveTab('history')}
+              >
+                <History className="tab-icon" />
+                <span>{t('studentDuty.history')}</span>
+              </button>
+            </>
+          )}
           
           <button 
             className={`tab-btn ${activeTab === 'all_duties' ? 'active' : ''}`} 
@@ -846,7 +852,7 @@ const StudentDutyInterface: React.FC = () => {
         
         {/* Глобальные дежурства */}
         {activeTab === 'all_duties' && (
-          <GlobalDutyCardList token={token} />
+          <GlobalDutyCardList token={token} user={user} />
         )}
       </div>
     </div>

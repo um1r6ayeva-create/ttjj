@@ -13,3 +13,4 @@ class GlobalDuty(Base):
     notes = Column(String, nullable=True) 
     # relation к пользователю, который назначил дежурство
     assigned_by = relationship("User", backref="assigned_global_duties")
+    reports = relationship("GlobalDutyReport", back_populates="global_duty", cascade="all, delete-orphan")

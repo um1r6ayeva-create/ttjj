@@ -8,6 +8,7 @@ from .endpoints.applications import router as applications_router
 from app.routers.global_duty import router as global_duties_router 
 from app.routers.news import router as news_router
 from app.api.translate import router as translate_router
+from app.api.global_duty_reports import router as global_duty_reports_module_router
 
 router = APIRouter()
 
@@ -20,5 +21,6 @@ router.include_router(applications_router, prefix="/applications", tags=["Applic
 router.include_router(commandant_router, prefix="/duties/commandant", tags=["Commandant Duties"])
 router.include_router(news_router, tags=["News"])
 router.include_router(translate_router, tags=["Translate"])
+router.include_router(global_duty_reports_module_router, tags=["Global Duty Reports"])
 
 __all__ = ["router"]

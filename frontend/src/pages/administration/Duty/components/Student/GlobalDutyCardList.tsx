@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../../../../contexts/AuthContext';
 import Modal from '../../../../../components/comon/Modal';
-import { CalendarMonth } from '@mui/icons-material';
+import { CalendarMonth, Upload, PhotoCamera, Cancel, ArrowBack, Info, Warning, CheckCircle } from '@mui/icons-material';
 import './GlobalDutyCardList.css';
 
 interface GlobalDuty {
@@ -14,10 +14,10 @@ interface GlobalDuty {
 
 interface Props {
   token: string | null;
+  user?: any;
 }
 
-
-const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
+const GlobalDutyCardList: React.FC<Props> = ({ token, user }) => {
   const { t } = useTranslation();
   const [duties, setDuties] = useState<GlobalDuty[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +25,15 @@ const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
 
   const [selectedDuty, setSelectedDuty] = useState<GlobalDuty | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
 
+  // Form states
+  const [reportDescription, setReportDescription] = useState('');
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [submitLoading, setSubmitLoading] = useState(false);
+
+  const isAdmin = user?.role?.toLowerCase() === 'admin';
 
   const fetchDuties = async () => {
     setLoading(true);
@@ -35,7 +43,7 @@ const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
       setError(null);
     } catch (err: any) {
       console.error('Ошибка загрузки глобальных дежурств:', err);
-      setError(t('globalDuty.error'));
+      setError(t('globalDuty.error') || 'Error loading global duties');
       setDuties([]);
     } finally {
       setLoading(false);
@@ -45,6 +53,10 @@ const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
   useEffect(() => {
     fetchDuties();
   }, [token]);
+
+  useEffect(() => {
+    return () => previewUrls.forEach(url => URL.revokeObjectURL(url));
+  }, [previewUrls]);
 
   const formatDate = (dateStr: string) => {
     try {
@@ -62,6 +74,197 @@ const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
   const getDutyLabel = (type: 'general_cleaning' | 'community_work') => {
     return t(`globalDuty.dutyTypes.${type}`);
   };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const filesArray = Array.from(e.target.files);
+
+    if (photos.length + filesArray.length > 20) {
+      alert(t('studentDuty.validation.maxPhotos') || 'Макс. 20 фото');
+      return;
+    }
+
+    const validFiles = filesArray.filter(f => f.type.startsWith('image/') && f.size <= 10 * 1024 * 1024);
+    
+    if (validFiles.length < filesArray.length) {
+      alert('Некоторые файлы были пропущены (неверный формат или размер больше 10MB).');
+    }
+
+    const newPhotos = [...photos, ...validFiles];
+    const newPreviewUrls = [...previewUrls, ...validFiles.map(f => URL.createObjectURL(f))];
+    
+    setPhotos(newPhotos);
+    setPreviewUrls(newPreviewUrls);
+  };
+
+  const removePhoto = (index: number) => {
+    const newPhotos = [...photos];
+    const newPreviewUrls = [...previewUrls];
+    URL.revokeObjectURL(newPreviewUrls[index]);
+    newPhotos.splice(index, 1);
+    newPreviewUrls.splice(index, 1);
+    setPhotos(newPhotos);
+    setPreviewUrls(newPreviewUrls);
+  };
+
+  const validateReport = () => {
+    if (!reportDescription.trim()) return false;
+    if (photos.length < 3) return false;
+    return true;
+  };
+
+  const handleSubmitReport = async () => {
+    if (!validateReport() || !selectedDuty) return;
+
+    setSubmitLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('global_duty_id', selectedDuty.id.toString());
+      formData.append('description', reportDescription);
+      photos.forEach(photo => formData.append('photos', photo));
+
+      await api.post('/global-duty-reports/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      alert(t('studentDuty.success.reportSubmitted') || 'Отчет успешно отправлен');
+      
+      setReportDescription('');
+      setPhotos([]);
+      setPreviewUrls([]);
+      setIsSubmittingReport(false);
+      setSelectedDuty(null);
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.detail || err.message || 'Ошибка отправки отчета';
+      console.error('Ошибка отправки отчета:', err);
+      alert(errorMessage);
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  if (isSubmittingReport && selectedDuty) {
+    return (
+      <div className="submit-report global-submit-report">
+        <div className="report-header">
+          <button 
+            className="back-btn"
+            onClick={() => {
+              setIsSubmittingReport(false);
+              setPhotos([]);
+              setPreviewUrls([]);
+              setReportDescription('');
+            }}
+          >
+            <ArrowBack />
+            {t('studentDuty.backToList') || 'Назад'}
+          </button>
+          <h2>{t('studentDuty.reportTitle') || 'Отправить отчет'}</h2>
+        </div>
+        
+        <div className="duty-info-card">
+          <div className="duty-info-header">
+            <CalendarMonth />
+            <div>
+              <h3>{getDutyLabel(selectedDuty.duty_type)}</h3>
+              <p className="duty-location">Этаж: {user?.floor}</p>
+            </div>
+          </div>
+          <div className="duty-info-dates">
+            <div className="info-date">
+              <CalendarMonth />
+              <span>{t('studentDuty.dateAssigned') || 'Дата'}: {formatDate(selectedDuty.date_assigned)}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="report-form">
+          <div className="form-group">
+            <label htmlFor="description" className="form-label">
+              {t('studentDuty.descriptionLabel') || 'Описание'}
+            </label>
+            <textarea 
+              id="description"
+              value={reportDescription} 
+              onChange={e => setReportDescription(e.target.value)} 
+              placeholder={t('studentDuty.descriptionPlaceholder') || 'Введите описание...'} 
+              rows={5} 
+              maxLength={1000}
+              className="form-textarea"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">
+              {t('studentDuty.photosLabel') || 'Фотографии (мин. 3, макс. 20)'}
+            </label>
+            <div className="photo-upload-section">
+              <div className="upload-area">
+                <input 
+                  type="file" 
+                  multiple 
+                  accept="image/*" 
+                  onChange={handlePhotoUpload} 
+                  style={{ display: 'none' }} 
+                  id="global-photo-upload" 
+                />
+                <label htmlFor="global-photo-upload" className="upload-btn">
+                  <PhotoCamera className="upload-icon" />
+                  <span>{t('studentDuty.choosePhotos') || 'Выбрать фото'}</span>
+                </label>
+                
+                {photos.length > 0 && (
+                  <div className="photos-count">
+                    <span>Выбрано: {photos.length}/20</span>
+                  </div>
+                )}
+              </div>
+              
+              {previewUrls.length > 0 && (
+                <div className="photo-previews">
+                  {previewUrls.map((url, i) => (
+                    <div key={i} className="photo-preview">
+                      <img src={url} alt={`preview ${i + 1}`} />
+                      <button 
+                        className="remove-photo-btn" 
+                        onClick={() => removePhoto(i)}
+                      >
+                        <Cancel />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            {photos.length > 0 && photos.length < 3 && (
+              <div className="validation-warning" style={{color: 'orange', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px'}}>
+                <Warning fontSize="small" />
+                <span>Минимум 3 фото</span>
+              </div>
+            )}
+          </div>
+          
+          <div className="form-actions">
+            <button 
+              className="submit-btn primary"
+              onClick={handleSubmitReport}
+              disabled={submitLoading || !validateReport()}
+              style={{marginTop: '20px', width: '100%', display: 'flex', justifyContent: 'center', gap: '10px'}}
+            >
+              {submitLoading ? (
+                <span>Отправка...</span>
+              ) : (
+                <>
+                  <Upload />
+                  <span>{t('studentDuty.submitReportButton') || 'Отправить'}</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="global-duty-card-list">
@@ -85,12 +288,6 @@ const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
               }}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  setSelectedDuty(duty);
-                  setModalOpen(true);
-                }
-              }}
             >
               <CalendarMonth className="duty-icon" />
               <div className="duty-info">
@@ -102,7 +299,7 @@ const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
         </div>
       )}
 
-      {selectedDuty && (
+      {selectedDuty && modalOpen && (
         <Modal
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
@@ -120,6 +317,20 @@ const GlobalDutyCardList: React.FC<Props> = ({ token }) => {
               <p>
                 <strong>{t('globalDuty.notes')}:</strong> {selectedDuty.notes}
               </p>
+            )}
+            
+            {isAdmin && (
+              <button 
+                className="report-btn7" 
+                onClick={() => {
+                  setModalOpen(false);
+                  setIsSubmittingReport(true);
+                }}
+                style={{marginTop: '20px', width: '100%', display: 'flex', justifyContent: 'center', gap: '10px'}}
+              >
+                <Upload />
+                <span>Отправить отчет этажа</span>
+              </button>
             )}
           </div>
         </Modal>
