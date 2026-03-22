@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../../../../contexts/AuthContext';
+import type { User } from '../../../../../contexts/AuthContext';
 import Modal from '../../../../../components/comon/Modal';
-import { CalendarMonth, Upload, PhotoCamera, Cancel, ArrowBack, Info, Warning, CheckCircle } from '@mui/icons-material';
+import { CalendarMonth, Upload, PhotoCamera, Cancel, ArrowBack, Warning } from '@mui/icons-material';
 import './GlobalDutyCardList.css';
 
 interface GlobalDuty {
@@ -14,10 +15,10 @@ interface GlobalDuty {
 
 interface Props {
   token: string | null;
-  user?: any;
+  user: User | null;
 }
 
-const GlobalDutyCardList: React.FC<Props> = ({ token, user }) => {
+const GlobalDutyCardList = ({ token, user }: Props) => {
   const { t } = useTranslation();
   const [duties, setDuties] = useState<GlobalDuty[]>([]);
   const [loading, setLoading] = useState(true);

@@ -852,7 +852,7 @@ const StudentDutyInterface: React.FC = () => {
         
         {/* Глобальные дежурства */}
         {activeTab === 'all_duties' && (
-          <GlobalDutyCardList token={token} user={user} />
+          <GlobalDutyCardList token={token} user={user as any} />
         )}
       </div>
     </div>
