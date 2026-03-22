@@ -362,7 +362,13 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
                 ) : (
                   <div className="floor-status-grid">
                     {floorStatus.map(fs => (
-                      <div key={fs.floor} className={`floor-status-item status-${fs.status}`}>
+                      <div 
+                        key={fs.floor} 
+                        className={`floor-status-item status-${fs.status} ${selectedFloor === fs.floor ? 'selected' : ''}`}
+                        onClick={() => setSelectedFloor(fs.floor)}
+                        role="button"
+                        style={{ cursor: 'pointer' }}
+                      >
                         <span className="floor-num">{fs.floor} эт.</span>
                         <span className="floor-status-label">
                           {fs.status === 'confirmed' ? '✅' : 
