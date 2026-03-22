@@ -88,32 +88,65 @@ const adminNavItems = [
       </div>
       
       <div className="nav-section">
+        {/* ГЛАВНАЯ И ИНФОРМАЦИОННЫЕ ПАНЕЛИ */}
         {mainNavItems.map((item) => {
-          if (item.path === '/' && user?.role === 'admin') return null;
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}
-            >
+          // Если гость - показываем всё из информационных
+          if (!user) return (
+            <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
               {item.label}
             </Link>
           );
+          
+          // Если залогинен:
+          // 1. Студент и Староста НЕ видят эти панели (даже Главную в меню)
+          if (user.role === 'student' || user.role === 'admin') return null;
+          
+          // 2. Комендант видит только Главную
+          if (user.role === 'commandant' && item.path === '/') {
+            return (
+              <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
+                {item.label}
+              </Link>
+            );
+          }
+          
+          return null;
         })}
         
+        {/* ФУНКЦИОНАЛЬНЫЕ ПАНЕЛИ (ДЛЯ ЗАРЕГИСТРИРОВАННЫХ) */}
         {user && adminNavItems.map((item) => {
-          if (item.path === '/users-control' && user?.role !== 'commandant') return null;
-          if (item.path === '/applications' && user?.role === 'admin') return null;
+          // Комендант видит всё функциональное
+          if (user.role === 'commandant') {
+            return (
+              <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
+                {item.label}
+              </Link>
+            );
+          }
+
+          // Студент видит только Дежурство и Заявки
+          if (user.role === 'student') {
+            if (item.path === '/duty' || item.path === '/applications') {
+              return (
+                <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
+                  {item.label}
+                </Link>
+              );
+            }
+          }
+
+          // Староста (admin) видит ТОЛЬКО Дежурство
+          if (user.role === 'admin') {
+            if (item.path === '/duty') {
+              return (
+                <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
+                  {item.label}
+                </Link>
+              );
+            }
+          }
           
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}
-            >
-              {item.label}
-            </Link>
-          );
+          return null;
         })}
       </div>
       
@@ -161,11 +194,13 @@ const adminNavItems = [
         {/* Дополнительные пункты для специальных ролей */}
         {user && (
           <>
-            <button onClick={() => { navigate('/duty'); setIsProfileOpen(false); }} className="dropdown-btn">
-              <i className="fas fa-clipboard-list"></i> <span>{t('header.duty')}</span>
-            </button>
+            {(user.role === 'commandant' || user.role === 'student' || user.role === 'admin') && (
+              <button onClick={() => { navigate('/duty'); setIsProfileOpen(false); }} className="dropdown-btn">
+                <i className="fas fa-clipboard-list"></i> <span>{t('header.duty')}</span>
+              </button>
+            )}
 
-            {user.role !== 'admin' && (
+            {(user.role === 'commandant' || user.role === 'student') && (
               <button onClick={() => { navigate('/applications'); setIsProfileOpen(false); }} className="dropdown-btn">
                 <i className="fas fa-file-alt"></i> <span>{t('header.applications')}</span>
               </button>

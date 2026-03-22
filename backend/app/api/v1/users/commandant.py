@@ -7,6 +7,7 @@ from app.models.user import User
 from app.models.application import Application
 from app.models.duty import Duty
 from app.models.duty_report import DutyReport
+from app.models.report_photo import ReportPhoto
 from app.models.global_duty import GlobalDuty
 from app.models.duty_status_history import DutyStatusHistory
 from app.schemas.user import UserResponse
@@ -81,9 +82,21 @@ def reject_user(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Пользователь не найден")
     
     # Сначала удаляем все связанные записи, чтобы избежать ошибки foreign key constraint
+    # 1. Заявки
     db.query(Application).filter(Application.user_id == user_id).delete(synchronize_session=False)
+    
+    # 2. Фото отчетов (нужно найти ID отчетов)
+    report_ids = [r.id for r in db.query(DutyReport.id).filter(
+        (DutyReport.student_id == user_id) | (DutyReport.reviewed_by == user_id)
+    ).all()]
+    if report_ids:
+        db.query(ReportPhoto).filter(ReportPhoto.report_id.in_(report_ids)).delete(synchronize_session=False)
+        
+    # 3. Сами отчеты
     db.query(DutyReport).filter(DutyReport.student_id == user_id).delete(synchronize_session=False)
     db.query(DutyReport).filter(DutyReport.reviewed_by == user_id).delete(synchronize_session=False)
+    
+    # 4. Остальные связи
     db.query(GlobalDuty).filter(GlobalDuty.assigned_by_id == user_id).delete(synchronize_session=False)
     db.query(DutyStatusHistory).filter(DutyStatusHistory.changed_by == user_id).delete(synchronize_session=False)
     db.query(Duty).filter(Duty.assigned_by_id == user_id).delete(synchronize_session=False)

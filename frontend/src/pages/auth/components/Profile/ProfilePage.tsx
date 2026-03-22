@@ -8,7 +8,7 @@ import EditProfileForm from './EditProfileForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import SystemInfo from './SystemInfo';
 import { useTranslation } from 'react-i18next';
-import { Shield, UserCheck, ClipboardList, FileText } from 'lucide-react';
+import { Shield, UserCheck, ClipboardList, FileText, Home } from 'lucide-react';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
@@ -93,18 +93,29 @@ const ProfilePage: React.FC = () => {
             <div className="system-card23 management-card">
               <h3><Shield size={20} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} /> {t('profilePage.managementPanels')}</h3>
               <div className="management-grid">
+                {/* ГЛАВНАЯ (ТОЛЬКО КОМЕНДАНТ) */}
+                {user.role === 'commandant' && (
+                  <button onClick={() => navigate('/')} className="management-btn">
+                    <Home size={24} />
+                    <span>{t('header.home')}</span>
+                  </button>
+                )}
+
+                {/* ДЕЖУРСТВО (ВСЕ) */}
                 <button onClick={() => navigate('/duty')} className="management-btn">
                   <ClipboardList size={24} />
                   <span>{t('profilePage.duty')}</span>
                 </button>
 
-                {user.role !== 'admin' && (
+                {/* ЗАЯВКИ (СТУДЕНТ И КОМЕНДАНТ) */}
+                {(user.role === 'student' || user.role === 'commandant') && (
                   <button onClick={() => navigate('/applications')} className="management-btn">
                     <FileText size={24} />
                     <span>{t('profilePage.applications')}</span>
                   </button>
                 )}
 
+                {/* ПОЛЬЗОВАТЕЛИ (КОМЕНДАНТ) */}
                 {user.role === 'commandant' && (
                   <button onClick={() => navigate('/users-control')} className="management-btn">
                     <UserCheck size={24} />
