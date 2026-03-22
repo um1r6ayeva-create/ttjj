@@ -36,6 +36,8 @@ interface DutyReport {
   review_notes: string | null;
   photos?: Photo[];
   student_name?: string;
+  isGlobal?: boolean;
+  global_duty_id?: number;
 }
 
 interface ReportViewModalProps {
@@ -63,7 +65,10 @@ const ReportViewModal: React.FC<ReportViewModalProps> = ({
     const loadReportDetails = async () => {
       try {
         setLoadingPhotos(true);
-        const response = await api.get(`/duty-reports/${report.id}`);
+        const endpoint = report.isGlobal 
+          ? `/global-duty-reports/${report.id}`
+          : `/duty-reports/${report.id}`;
+        const response = await api.get(endpoint);
         if (response.data.photos) {
           setPhotos(response.data.photos);
         }

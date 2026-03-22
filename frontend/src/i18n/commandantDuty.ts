@@ -4,6 +4,7 @@ export const commandantDuty = {
     // Заголовки
     title: 'Панель команданта',
     waitingReports: 'Отчеты на проверку',
+    globalReports: 'Отчеты по общим работам',
     history: 'История проверок',
     refresh: 'Обновить',
     
@@ -17,6 +18,8 @@ export const commandantDuty = {
     dutyTypes: {
       kitchen: 'Дежурство на кухне',
       shower: 'Дежурство в душевой',
+      general_cleaning: 'Генеральная уборка',
+      community_work: 'Субботник',
       default: 'Дежурство'
     },
     
@@ -47,6 +50,7 @@ export const commandantDuty = {
       description: 'Описание',
       photos: 'Фотографии',
       photosCount: 'шт.',
+      floorOnly: 'Этаж',
       awaitingReport: 'Ожидается отчет от студентов комнаты'
     },
     

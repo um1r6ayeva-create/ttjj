@@ -47,12 +47,17 @@ const Notifications: React.FC<NotificationsProps> = ({ onOpenTab }) => {
         let allNotifications: NotificationItem[] = [];
 
         if (user.role === 'commandant') {
-          // Только уведомления о проверке
-          const { data } = await authApi.get('/duty-reports/pending', {
+          // Стандартные отчеты на проверку
+          const { data: regularPending } = await authApi.get('/duty-reports/pending', {
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          allNotifications = data.map((r: any) => ({
+          // Глобальные отчеты на проверку
+          const { data: globalPending } = await authApi.get('/global-duty-reports/pending', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const regularNotifications = regularPending.map((r: any) => ({
             id: r.id,
             title: t('notifications.reportCheck'),
             message: `${t('notifications.room')}: ${r.room_number}`,
@@ -60,6 +65,17 @@ const Notifications: React.FC<NotificationsProps> = ({ onOpenTab }) => {
             dutyId: r.duty_id,
             date_assigned: r.submitted_at,
           }));
+
+          const globalNotifications = globalPending.map((r: any) => ({
+            id: 20000 + r.id,
+            title: t('notifications.reportCheck'),
+            message: `${t('notifications.global')}: ${t(`notifications.dutyType.${r.duty_type || 'default'}`)} (${r.floor} ${t('dutyPage.floor')})`,
+            linkTab: 'all_duties',
+            dutyId: r.global_duty_id,
+            date_assigned: r.submitted_at,
+          }));
+
+          allNotifications = [...regularNotifications, ...globalNotifications];
         } else if (user.role === 'student' || user.role === 'admin'){
           // Личные дежурства
           const { data: studentDuties } = await authApi.get(

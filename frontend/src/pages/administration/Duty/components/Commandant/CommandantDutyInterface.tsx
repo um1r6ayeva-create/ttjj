@@ -37,6 +37,8 @@ interface DutyReport {
     uploaded_at: string;
   }>;
   student_name?: string;
+  isGlobal?: boolean;
+  global_duty_id?: number;
 }
 
 interface Duty {
@@ -59,6 +61,7 @@ const CommandantDutyInterface = () => {
   const { t } = useTranslation();
   const [duties, setDuties] = useState<DutyWithReport[]>([]);
   const [reports, setReports] = useState<DutyReport[]>([]);
+  const [globalReports, setGlobalReports] = useState<any[]>([]);
   const [completedReports, setCompletedReports] = useState<CompletedReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -88,10 +91,12 @@ const CommandantDutyInterface = () => {
       
       const dutiesRes = await api.get('/duties/commandant/pending');
       const reportsRes = await api.get('/duty-reports/pending');
+      const globalReportsRes = await api.get('/global-duty-reports/pending');
       const completedRes = await api.get('/duties/commandant/completed');
       
       setDuties(dutiesRes.data);
       setReports(reportsRes.data);
+      setGlobalReports(globalReportsRes.data);
       setCompletedReports(completedRes.data);
       
     } catch (err: any) {
@@ -131,9 +136,13 @@ const CommandantDutyInterface = () => {
     }, 3000);
   };
 
-  const reviewReport = async (reportId: number, status: 'confirmed' | 'rejected', reviewNotes?: string) => {
+  const reviewReport = async (reportId: number, status: 'confirmed' | 'rejected', reviewNotes?: string, isGlobal: boolean = false) => {
     try {
-      await api.post(`/duty-reports/${reportId}/review`, {
+      const endpoint = isGlobal 
+        ? `/global-duty-reports/${reportId}/review`
+        : `/duty-reports/${reportId}/review`;
+
+      await api.post(endpoint, {
         status,
         review_notes: reviewNotes || ''
       });
@@ -166,10 +175,13 @@ const CommandantDutyInterface = () => {
     }
   };
 
-  const openViewReportModal = async (report: DutyReport) => {
+  const openViewReportModal = async (report: DutyReport, isGlobal: boolean = false) => {
     try {
-      const response = await api.get(`/duty-reports/${report.id}`);
-      setSelectedReport(response.data);
+      const endpoint = isGlobal 
+        ? `/global-duty-reports/${report.id}`
+        : `/duty-reports/${report.id}`;
+      const response = await api.get(endpoint);
+      setSelectedReport({ ...response.data, isGlobal });
       setIsViewReportModalOpen(true);
     } catch (err: any) {
       console.error(t('commandantDuty.notifications.errorLoadingReport'), err);
@@ -189,14 +201,16 @@ const CommandantDutyInterface = () => {
 
   const handleConfirmReport = async () => {
     if (currentAction?.type === 'confirm' && currentAction.reportId) {
-      await reviewReport(currentAction.reportId, 'confirmed', t('commandantDuty.notifications.reportConfirmed'));
+      const isGlobal = !!selectedReport?.isGlobal;
+      await reviewReport(currentAction.reportId, 'confirmed', t('commandantDuty.notifications.reportConfirmed'), isGlobal);
     }
     setIsConfirmDialogOpen(false);
   };
 
   const handleRejectReport = async (rejectNotes: string) => {
     if (currentAction?.type === 'reject' && currentAction.reportId) {
-      await reviewReport(currentAction.reportId, 'rejected', rejectNotes);
+      const isGlobal = !!selectedReport?.isGlobal;
+      await reviewReport(currentAction.reportId, 'rejected', rejectNotes, isGlobal);
     }
     setIsRejectDialogOpen(false);
   };
@@ -349,6 +363,76 @@ const getReportStatusText = (status: string): string => {
             <p>{t('commandantDuty.dutyCard.awaitingReport')}</p>
           </div>
         )}
+      </div>
+    </div>
+  );
+
+  const renderGlobalReportCard = (report: any) => (
+    <div key={`global-${report.id}`} className="duty-card waiting">
+      <div className="duty-card-header">
+        <div className="duty-type">
+          <h3>{getDutyTypeText(report.duty_type)}</h3>
+          <span className="room-info">
+            {t('commandantDuty.dutyCard.floorOnly')}: {report.floor}
+          </span>
+        </div>
+        <span className="status-badge status-submitted">
+          {t('commandantDuty.reportStatuses.waiting')}
+        </span>
+      </div>
+      
+      <div className="duty-info">
+        <div className="report-section">
+          <div className="report-info">
+            <p>
+              <strong>{t('commandantDuty.dutyCard.student')}:</strong> {report.student_name}
+            </p>
+            <p>
+              <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(report.submitted_at)}
+            </p>
+            <p className="description-preview">
+              <strong>{t('commandantDuty.dutyCard.description')}:</strong> {report.description.substring(0, 150)}...
+            </p>
+            
+            {report.photos && report.photos.length > 0 && (
+              <p>
+                <strong>{t('commandantDuty.dutyCard.photos')}:</strong> {report.photos.length} {t('commandantDuty.dutyCard.photosCount')}
+              </p>
+            )}
+          </div>
+          
+          <div className="action-buttons">
+            <button 
+              className="btn view-btn"
+              onClick={() => openViewReportModal(report, true)}
+              aria-label={t('commandantDuty.actions.viewReport')}
+            >
+              {t('commandantDuty.actions.viewReport')}
+            </button>
+            
+            <button 
+              className="btn confirm-btn"
+              onClick={() => {
+                setSelectedReport({ ...report, isGlobal: true });
+                openConfirmDialog(report.id);
+              }}
+              aria-label={t('commandantDuty.actions.confirmReport')}
+            >
+              {t('commandantDuty.actions.confirmReport')}
+            </button>
+            
+            <button 
+              className="btn reject-btn"
+              onClick={() => {
+                setSelectedReport({ ...report, isGlobal: true });
+                openRejectDialog(report.id);
+              }}
+              aria-label={t('commandantDuty.actions.rejectReport')}
+            >
+              {t('commandantDuty.actions.rejectReport')}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -557,7 +641,7 @@ const getReportStatusText = (status: string): string => {
         <div className="stats">
           <div className="stat-item">
             <span className="stat-label">{t('commandantDuty.stats.waitingReports')}</span>
-            <span className="stat-value">{waitingReports.length}</span>
+            <span className="stat-value">{waitingReports.length + globalReports.length}</span>
           </div>
           <div className="stat-item">
             <span className="stat-label">{t('commandantDuty.stats.checkHistory')}</span>
@@ -574,6 +658,21 @@ const getReportStatusText = (status: string): string => {
           </div>
           <div className="cards-grid">
             {waitingReports.length > 0 ? waitingReports.map(renderDutyCard) : (
+              <div className="empty-state">
+                <p>{t('commandantDuty.states.noWaitingReports')}</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Секция для общих дежурств */}
+        <section className="duty-section">
+          <div className="section-header">
+            <h2>{t('commandantDuty.globalReports')}</h2>
+            <span className="count-badge">{globalReports.length}</span>
+          </div>
+          <div className="cards-grid">
+            {globalReports.length > 0 ? globalReports.map(renderGlobalReportCard) : (
               <div className="empty-state">
                 <p>{t('commandantDuty.states.noWaitingReports')}</p>
               </div>
