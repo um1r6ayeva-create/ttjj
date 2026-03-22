@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/styles.css";
 import './Content.css';
 
 interface PhotoData {
@@ -24,8 +27,7 @@ interface PhotoData {
 
 const Content: React.FC = () => {
   const { t } = useTranslation();
-  const [selectedPhoto, setSelectedPhoto] = useState<PhotoData | null>(null);
-  const [showModal, setShowModal] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(-1);
   const [photos, setPhotos] = useState<PhotoData[]>([]);
 
   // Инициализация данных фотогалереи
@@ -115,20 +117,17 @@ const Content: React.FC = () => {
     setPhotos(photoData);
   }, [t]);
 
-  const openPhotoModal = (photo: PhotoData) => {
-    setSelectedPhoto(photo);
-    setShowModal(true);
-  };
-
-  const closePhotoModal = () => {
-    setShowModal(false);
-    setSelectedPhoto(null);
-  };
-
   const showLocation = () => {
     const mapUrl = "https://yandex.uz/maps/10335/tashkent/house/YkAYdA9iSE0HQFprfX9zeHtrZQ==/";
     window.open(mapUrl, '_blank');
   };
+
+  const lightboxSlides = photos.map((p) => ({
+    src: p.imgSrc,
+    alt: t(p.altKey),
+    title: t(p.titleKey),
+    description: t(p.descriptionKey)
+  }));
 
   return (
     <div className="content-container">
@@ -137,9 +136,15 @@ const Content: React.FC = () => {
         <h2 className="section-title">{t('content.gallery_title')}</h2>
         
         <div className="gallery-container">
-          {photos.map((photo) => (
+          {photos.map((photo, index) => (
             <div className="photo-card" key={photo.id}>
-              <div className="photo-wrapper">
+              {/* Делаем область фото кликабельной */}
+              <div 
+                className="photo-wrapper" 
+                onClick={() => setLightboxIndex(index)}
+                style={{ cursor: 'pointer' }}
+                title={t('content.click_to_view')}
+              >
                 {photo.imgSrc ? (
                   <img 
                     src={photo.imgSrc} 
@@ -175,8 +180,8 @@ const Content: React.FC = () => {
                     <p><strong>{t('content.address')}:</strong> {photo.clinicInfo.address}</p>
                     <p><strong>{t('content.schedule')}:</strong></p>
                     <ul>
-                      {photo.clinicInfo.schedule.map((item, index) => (
-                        <li key={index}>{t(item.dayKey)}: {item.time}</li>
+                      {photo.clinicInfo.schedule.map((item, i) => (
+                        <li key={i}>{t(item.dayKey)}: {item.time}</li>
                       ))}
                     </ul>
                     <p><strong>{t('content.phones')}:</strong><br />
@@ -190,12 +195,8 @@ const Content: React.FC = () => {
                 )}
               </div>
               
-              <div className="photo-actions">
-                <button className="action-btn" onClick={() => openPhotoModal(photo)}>
-                  <i className="fas fa-expand"></i>
-                  <span>{t('content.view')}</span>
-                </button>
-                
+              {/* Убрали кнопку "Просмотр", оставили только действие, если оно уникальное (например Локация для поликлиники) */}
+              <div className="photo-actions" style={{ justifyContent: 'center' }}>
                 {photo.id === 9 && (
                   <button className="action-btn" onClick={showLocation}>
                     <i className="fas fa-map-marker-alt"></i>
@@ -208,35 +209,25 @@ const Content: React.FC = () => {
         </div>
       </section>
 
-      {/* Модальное окно для просмотра фотографии */}
-      {showModal && selectedPhoto && (
-        <div className="photo-modal show" onClick={closePhotoModal}>
-          <button className="close-modal-btn" onClick={closePhotoModal}>&times;</button>
-          <div className="modal-photo-content" onClick={(e) => e.stopPropagation()}>
-            {selectedPhoto.imgSrc ? (
-              <img 
-                src={selectedPhoto.imgSrc} 
-                alt={t(selectedPhoto.altKey)} 
-                className="modal-photo" 
-              />
-            ) : (
-              <div className="modal-placeholder">
-                <i className={`fas ${
-                  selectedPhoto.id === 1 ? 'fa-building' :
-                  selectedPhoto.id === 2 || selectedPhoto.id === 3 ? 'fa-book' :
-                  selectedPhoto.id === 4 ? 'fa-pray' :
-                  selectedPhoto.id === 5 ? 'fa-user-shield' :
-                  selectedPhoto.id === 6 ? 'fa-tshirt' :
-                  selectedPhoto.id === 7 || selectedPhoto.id === 8 ? 'fa-clinic-medical' :
-                  'fa-hospital'
-                }`}></i>
-                <span>{t(selectedPhoto.titleKey)}</span>
-              </div>
-            )}
-            <div className="modal-caption">{t(selectedPhoto.titleKey)}</div>
-          </div>
-        </div>
-      )}
+      {/* Lightbox с зумом */}
+      <Lightbox
+        open={lightboxIndex >= 0}
+        close={() => setLightboxIndex(-1)}
+        index={lightboxIndex}
+        slides={lightboxSlides}
+        plugins={[Zoom]}
+        zoom={{
+          maxZoomPixelRatio: 5,
+          zoomInMultiplier: 2,
+          doubleTapDelay: 300,
+          doubleClickDelay: 300,
+          doubleClickMaxStops: 2,
+          keyboardMoveDistance: 50,
+          wheelZoomDistanceFactor: 100,
+          pinchZoomDistanceFactor: 100,
+          scrollToZoom: false,
+        }}
+      />
     </div>
   );
 };
