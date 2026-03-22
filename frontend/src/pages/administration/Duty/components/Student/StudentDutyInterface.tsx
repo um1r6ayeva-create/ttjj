@@ -34,6 +34,7 @@ interface Duty {
   status: 'pending' | 'submitted' | 'confirmed' | 'rejected';
   notes?: string;
   assigned_by_id: number;
+  isGlobal?: boolean;
 }
 
 // Типы для уведомлений
@@ -93,7 +94,35 @@ const StudentDutyInterface: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setStudentDuties(data);
+      let allDuties = [...data];
+      
+      // Добавляем загрузку истории общих дежурств для старосты
+      if (user.role.toLowerCase() === 'admin') {
+        try {
+          const globalRes = await authApi.get('/global-duty-reports/my', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          
+          const globalDutiesMapped: Duty[] = globalRes.data.map((gr: any) => ({
+            id: gr.id,
+            duty_type: gr.duty_type,
+            room_number: 0,
+            floor: gr.floor,
+            date_assigned: gr.date_assigned,
+            date_due: gr.date_assigned,
+            status: gr.status,
+            notes: gr.description,
+            assigned_by_id: 0,
+            isGlobal: true
+          }));
+          
+          allDuties = [...allDuties, ...globalDutiesMapped];
+        } catch (gErr) {
+          console.error('Ошибка загрузки истории общих дежурств:', gErr);
+        }
+      }
+      
+      setStudentDuties(allDuties);
 
       if (user.n_room) {
         setStudentRoom(user.n_room.toString());
@@ -819,8 +848,11 @@ const StudentDutyInterface: React.FC = () => {
                                 {formatDate(duty.date_due)}
                               </span>
                               <span className="meta-item">
-                                <LocationOn />
-                                {t('studentDuty.roomLabel')} {duty.room_number}
+                                {duty.isGlobal ? (
+                                  <>Этаж: {duty.floor}</>
+                                ) : (
+                                  <>{t('studentDuty.roomLabel')} {duty.room_number}</>
+                                )}
                               </span>
                             </div>
                           </div>
@@ -829,6 +861,9 @@ const StudentDutyInterface: React.FC = () => {
                             <span>{status.text}</span>
                           </div>
                         </div>
+                        {duty.isGlobal && (
+                          <div className="global-badge-history">Общее дежурство</div>
+                        )}
                       </div>
                     );
                   })

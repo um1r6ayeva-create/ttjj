@@ -318,6 +318,43 @@ def review_global_report(
         date_assigned=report.global_duty.date_assigned if report.global_duty else None
     )
 
+@router.get("/{report_id}", response_model=GlobalDutyReportResponse)
+def get_global_report(
+    report_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(any_admin_required),
+):
+    """
+    Получить конкретный отчет общего дежурства.
+    """
+    report = db.query(GlobalDutyReport).options(
+        joinedload(GlobalDutyReport.photos),
+        joinedload(GlobalDutyReport.student),
+        joinedload(GlobalDutyReport.global_duty)
+    ).filter(GlobalDutyReport.id == report_id).first()
+    
+    if not report:
+        raise HTTPException(status_code=404, detail="Отчет не найден")
+    
+    photos = [ReportPhotoResponse(id=p.id, photo_url=f"/uploads/{p.photo_url}", file_name=p.file_name, uploaded_at=p.uploaded_at) for p in report.photos]
+    
+    return GlobalDutyReportResponse(
+        id=report.id,
+        global_duty_id=report.global_duty_id,
+        student_id=report.student_id,
+        floor=report.floor,
+        description=report.description,
+        submitted_at=report.submitted_at,
+        status=report.status,
+        reviewed_at=report.reviewed_at,
+        reviewed_by=report.reviewed_by,
+        review_notes=report.review_notes,
+        photos=photos,
+        student_name=f"{report.student.name} {report.student.surname}" if report.student else "Неизвестный",
+        duty_type=report.global_duty.duty_type if report.global_duty else None,
+        date_assigned=report.global_duty.date_assigned if report.global_duty else None
+    )
+
 @router.get("/history", response_model=List[GlobalDutyReportResponse])
 def get_global_reports_history(
     db: Session = Depends(get_db),
