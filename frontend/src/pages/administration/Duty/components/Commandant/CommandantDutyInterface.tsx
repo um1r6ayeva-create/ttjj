@@ -105,10 +105,16 @@ const CommandantDutyInterface = () => {
       setReports(reportsRes.data);
       setGlobalReports(globalReportsRes.data);
       
+      const getSafeTime = (dateStr: any) => {
+        if (!dateStr) return 0;
+        const d = new Date(dateStr);
+        return isNaN(d.getTime()) ? 0 : d.getTime();
+      };
+
       const combinedHistory = [
-        ...completedRes.data.map((r: any) => ({ ...r, isGlobal: false })),
-        ...globalCompletedRes.data.map((r: any) => ({ ...r, isGlobal: true }))
-      ].sort((a, b) => new Date(b.reviewed_at).getTime() - new Date(a.reviewed_at).getTime());
+        ...(Array.isArray(completedRes.data) ? completedRes.data.map((r: any) => ({ ...r, isGlobal: false })) : []),
+        ...(Array.isArray(globalCompletedRes.data) ? globalCompletedRes.data.map((r: any) => ({ ...r, isGlobal: true })) : [])
+      ].sort((a, b) => getSafeTime(b.reviewed_at) - getSafeTime(a.reviewed_at));
       
       setCompletedReports(combinedHistory);
       

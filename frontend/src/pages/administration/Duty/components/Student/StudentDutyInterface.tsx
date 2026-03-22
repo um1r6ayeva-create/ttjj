@@ -105,8 +105,9 @@ const StudentDutyInterface: React.FC = () => {
         }
       }
 
-      // 2. Загружаем историю общих дежурств для старосты
-      if (user.role.toLowerCase() === 'admin') {
+      // 2. Загружаем историю общих дежурств для старосты (admin или elder)
+      const userRoleLower = user.role.toLowerCase();
+      if (userRoleLower === 'admin' || userRoleLower === 'elder') {
         try {
           const globalRes = await authApi.get('/global-duty-reports/my', {
             headers: { Authorization: `Bearer ${token}` },
@@ -115,7 +116,7 @@ const StudentDutyInterface: React.FC = () => {
           if (Array.isArray(globalRes.data)) {
             const globalDutiesMapped: Duty[] = globalRes.data.map((gr: any) => ({
               id: gr.id,
-              duty_type: gr.duty_type,
+              duty_type: gr.duty_type || 'default',
               room_number: 0,
               floor: gr.floor,
               date_assigned: gr.date_assigned,
@@ -318,7 +319,8 @@ const StudentDutyInterface: React.FC = () => {
   };
 
   const getDutyDescription = (duty: Duty) => {
-    const dutyKey = duty.duty_type.toLowerCase() as keyof typeof studentDuty.ru.dutyDescriptions;
+    const dutyTypeSafe = (duty.duty_type || 'default').toLowerCase();
+    const dutyKey = dutyTypeSafe as keyof typeof studentDuty.ru.dutyDescriptions;
     const descriptions = t(`studentDuty.dutyDescriptions.${dutyKey}`, 
       { defaultValue: t('studentDuty.dutyDescriptions.default') });
     return duty.notes || descriptions;
@@ -837,8 +839,10 @@ const StudentDutyInterface: React.FC = () => {
                   .filter(duty => duty.status === 'confirmed' || duty.status === 'rejected')
                   .map(duty => {
                     const status = getStatusConfig(duty.status);
+                    const isGlobal = (duty as any).isGlobal;
+                    const dutyUniqueKey = isGlobal ? `global-history-${duty.id}` : `room-history-${duty.id}`;
                     return (
-                      <div key={duty.id} className="history-item">
+                      <div key={dutyUniqueKey} className="history-item">
                         <div className="history-item-header">
                           {getDutyIcon(duty)}
                           <div className="history-item-info">

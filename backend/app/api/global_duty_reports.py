@@ -375,16 +375,18 @@ def get_global_reports_history(
         
     reports = query.order_by(GlobalDutyReport.reviewed_at.desc()).all()
     
+    # Собираем все ID проверяющих
+    reviewer_ids = {r.reviewed_by for r in reports if r.reviewed_by}
+    reviewers_map = {}
+    if reviewer_ids:
+        reviewers = db.query(User).filter(User.id.in_(reviewer_ids)).all()
+        reviewers_map = {u.id: f"{u.name} {u.surname}" for u in reviewers}
+
     reports_response = []
     for report in reports:
         photos = [ReportPhotoResponse(id=p.id, photo_url=f"/uploads/{p.photo_url}", file_name=p.file_name, uploaded_at=p.uploaded_at) for p in report.photos]
         
-        # Получаем имя проверяющего (если есть)
-        reviewer_name = "Неизвестно"
-        if report.reviewed_by:
-            reviewer = db.query(User).filter(User.id == report.reviewed_by).first()
-            if reviewer:
-                reviewer_name = f"{reviewer.name} {reviewer.surname}"
+        reviewer_name = reviewers_map.get(report.reviewed_by, "Неизвестно")
 
         reports_response.append(GlobalDutyReportResponse(
             id=report.id,
