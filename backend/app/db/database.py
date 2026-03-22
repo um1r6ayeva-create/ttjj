@@ -23,7 +23,7 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Общая база для всех моделей
-Base = declarative_base()
+from app.db.base_class import Base
 
 # Зависимость для FastAPI
 def get_db():
