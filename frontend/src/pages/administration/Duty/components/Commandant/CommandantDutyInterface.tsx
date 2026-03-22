@@ -4,25 +4,30 @@ import { api } from '../../../../../contexts/AuthContext';
 import './CommandantDutyInterface.css';
 import ReportViewModal from './ReportViewModal';
 
-interface CompletedReport {
+export interface CompletedReport {
   id: number;
-  duty_id: number;
-  duty_type: string;
-  room_number: number;
-  floor: number;
-  student_id: number;
+  duty_id?: number;
+  global_duty_id?: number;
+  room_number?: number;
+  floor?: number;
   student_name: string;
-  description: string;
+  duty_type: string;
   submitted_at: string;
   reviewed_at: string;
   status: 'confirmed' | 'rejected';
-  reviewer_name: string;
+  isGlobal?: boolean;
+  reviewer_name?: string;
   review_notes: string | null;
+  description: string;
 }
 
-interface DutyReport {
+export interface DutyReport {
   id: number;
-  duty_id: number;
+  duty_id?: number;
+  global_duty_id?: number;
+  duty_type?: string;
+  room_number?: number;
+  floor?: number;
   student_id: number;
   description: string;
   submitted_at: string;
@@ -30,7 +35,7 @@ interface DutyReport {
   reviewed_at: string | null;
   reviewed_by: number | null;
   review_notes: string | null;
-  photos?: Array<{
+  photos: Array<{
     id: number;
     photo_url: string;
     file_name: string;
@@ -38,7 +43,6 @@ interface DutyReport {
   }>;
   student_name?: string;
   isGlobal?: boolean;
-  global_duty_id?: number;
 }
 
 interface Duty {
@@ -62,7 +66,7 @@ const CommandantDutyInterface = () => {
   const [duties, setDuties] = useState<DutyWithReport[]>([]);
   const [reports, setReports] = useState<DutyReport[]>([]);
   const [globalReports, setGlobalReports] = useState<any[]>([]);
-  const [completedReports, setCompletedReports] = useState<CompletedReport[]>([]);
+  const [completedReports, setCompletedReports] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -74,7 +78,9 @@ const CommandantDutyInterface = () => {
   const [currentAction, setCurrentAction] = useState<{
     type: 'confirm' | 'reject';
     reportId: number;
+    isGlobal?: boolean;
   } | null>(null);
+  const [openingModalId, setOpeningModalId] = useState<number | null>(null);
   
   // Уведомления
   const [notification, setNotification] = useState<{
@@ -93,11 +99,18 @@ const CommandantDutyInterface = () => {
       const reportsRes = await api.get('/duty-reports/pending');
       const globalReportsRes = await api.get('/global-duty-reports/pending');
       const completedRes = await api.get('/duties/commandant/completed');
+      const globalCompletedRes = await api.get('/global-duty-reports/history');
       
       setDuties(dutiesRes.data);
       setReports(reportsRes.data);
       setGlobalReports(globalReportsRes.data);
-      setCompletedReports(completedRes.data);
+      
+      const combinedHistory = [
+        ...completedRes.data.map((r: any) => ({ ...r, isGlobal: false })),
+        ...globalCompletedRes.data.map((r: any) => ({ ...r, isGlobal: true }))
+      ].sort((a, b) => new Date(b.reviewed_at).getTime() - new Date(a.reviewed_at).getTime());
+      
+      setCompletedReports(combinedHistory);
       
     } catch (err: any) {
       console.error(t('commandantDuty.states.errorLoading'), err);
@@ -177,6 +190,7 @@ const CommandantDutyInterface = () => {
 
   const openViewReportModal = async (report: DutyReport, isGlobal: boolean = false) => {
     try {
+      setOpeningModalId(report.id);
       const endpoint = isGlobal 
         ? `/global-duty-reports/${report.id}`
         : `/duty-reports/${report.id}`;
@@ -186,31 +200,31 @@ const CommandantDutyInterface = () => {
     } catch (err: any) {
       console.error(t('commandantDuty.notifications.errorLoadingReport'), err);
       showNotification('error', t('commandantDuty.notifications.errorLoadingReport'));
+    } finally {
+      setOpeningModalId(null);
     }
   };
 
-  const openConfirmDialog = (reportId: number) => {
-    setCurrentAction({ type: 'confirm', reportId });
+  const openConfirmDialog = (reportId: number, isGlobal: boolean = false) => {
+    setCurrentAction({ type: 'confirm', reportId, isGlobal });
     setIsConfirmDialogOpen(true);
   };
 
-  const openRejectDialog = (reportId: number) => {
-    setCurrentAction({ type: 'reject', reportId });
+  const openRejectDialog = (reportId: number, isGlobal: boolean = false) => {
+    setCurrentAction({ type: 'reject', reportId, isGlobal });
     setIsRejectDialogOpen(true);
   };
 
   const handleConfirmReport = async () => {
     if (currentAction?.type === 'confirm' && currentAction.reportId) {
-      const isGlobal = !!selectedReport?.isGlobal;
-      await reviewReport(currentAction.reportId, 'confirmed', t('commandantDuty.notifications.reportConfirmed'), isGlobal);
+      await reviewReport(currentAction.reportId, 'confirmed', '', !!currentAction.isGlobal);
     }
     setIsConfirmDialogOpen(false);
   };
 
   const handleRejectReport = async (rejectNotes: string) => {
     if (currentAction?.type === 'reject' && currentAction.reportId) {
-      const isGlobal = !!selectedReport?.isGlobal;
-      await reviewReport(currentAction.reportId, 'rejected', rejectNotes, isGlobal);
+      await reviewReport(currentAction.reportId, 'rejected', rejectNotes, !!currentAction.isGlobal);
     }
     setIsRejectDialogOpen(false);
   };
@@ -321,9 +335,10 @@ const getReportStatusText = (status: string): string => {
                 <button 
                   className="btn view-btn"
                   onClick={() => openViewReportModal(duty.report!)}
+                  disabled={openingModalId === duty.report.id}
                   aria-label={t('commandantDuty.actions.viewReport')}
                 >
-                  {t('commandantDuty.actions.viewReport')}
+                  {openingModalId === duty.report.id ? <div className="loader-small"></div> : t('commandantDuty.actions.viewReport')}
                 </button>
                 
                 <button 
@@ -405,16 +420,17 @@ const getReportStatusText = (status: string): string => {
             <button 
               className="btn view-btn"
               onClick={() => openViewReportModal(report, true)}
+              disabled={openingModalId === report.id}
               aria-label={t('commandantDuty.actions.viewReport')}
             >
-              {t('commandantDuty.actions.viewReport')}
+              {openingModalId === report.id ? <div className="loader-small"></div> : t('commandantDuty.actions.viewReport')}
             </button>
             
             <button 
               className="btn confirm-btn"
               onClick={() => {
                 setSelectedReport({ ...report, isGlobal: true });
-                openConfirmDialog(report.id);
+                openConfirmDialog(report.id, true);
               }}
               aria-label={t('commandantDuty.actions.confirmReport')}
             >
@@ -425,7 +441,7 @@ const getReportStatusText = (status: string): string => {
               className="btn reject-btn"
               onClick={() => {
                 setSelectedReport({ ...report, isGlobal: true });
-                openRejectDialog(report.id);
+                openRejectDialog(report.id, true);
               }}
               aria-label={t('commandantDuty.actions.rejectReport')}
             >
@@ -456,8 +472,12 @@ const getReportStatusText = (status: string): string => {
       
       <div className="completed-info">
         <div className="info-row">
-          <span className="label">{t('commandantDuty.dutyCard.student')}:</span>
-          <span className="value">{report.student_name}</span>
+          <span className="label">
+            {report.isGlobal ? t('commandantDuty.dutyCard.floorOnly') : t('commandantDuty.completedReports.room')}:
+          </span>
+          <span className="value">
+            {report.isGlobal ? report.floor : report.room_number}
+          </span>
         </div>
         
         <div className="info-row">

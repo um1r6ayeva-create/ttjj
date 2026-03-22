@@ -423,13 +423,6 @@ const StudentDutyInterface: React.FC = () => {
         </div>
       )}
 
-      <div className="interface-header">
-        <h1>{t('studentDuty.title')}</h1>
-        <div className="room-badge">
-          <LocationOn />
-          <span>{t('studentDuty.roomLabel')}: {studentRoom}</span>
-        </div>
-      </div>
 
       {/* Вкладки */}
       <div className="tabs-container">

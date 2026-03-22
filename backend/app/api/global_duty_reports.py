@@ -35,6 +35,11 @@ class GlobalDutyReportResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class FloorStatus(BaseModel):
+    floor: int
+    status: str
+    report_id: Optional[int] = None
+
 # --- Router ---
 router = APIRouter(
     prefix="/global-duty-reports",
@@ -309,3 +314,75 @@ def review_global_report(
         duty_type=report.global_duty.duty_type if report.global_duty else None,
         date_assigned=report.global_duty.date_assigned if report.global_duty else None
     )
+
+@router.get("/history", response_model=List[GlobalDutyReportResponse])
+def get_global_reports_history(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(any_admin_required),
+    status: Optional[str] = Query(None), # "confirmed" or "rejected"
+):
+    """
+    Получить историю проверок общих дежурств.
+    """
+    query = db.query(GlobalDutyReport).options(
+        joinedload(GlobalDutyReport.photos),
+        joinedload(GlobalDutyReport.student),
+        joinedload(GlobalDutyReport.global_duty)
+    ).filter(GlobalDutyReport.status.in_(["confirmed", "rejected"]))
+    
+    if status:
+        query = query.filter(GlobalDutyReport.status == status)
+        
+    reports = query.order_by(GlobalDutyReport.reviewed_at.desc()).all()
+    
+    reports_response = []
+    for report in reports:
+        photos = [ReportPhotoResponse(id=p.id, photo_url=f"/uploads/{p.photo_url}", file_name=p.file_name, uploaded_at=p.uploaded_at) for p in report.photos]
+        
+        # Получаем имя проверяющего (если есть)
+        reviewer_name = "Неизвестно"
+        if report.reviewed_by:
+            reviewer = db.query(User).filter(User.id == report.reviewed_by).first()
+            if reviewer:
+                reviewer_name = f"{reviewer.name} {reviewer.surname}"
+
+        reports_response.append(GlobalDutyReportResponse(
+            id=report.id,
+            global_duty_id=report.global_duty_id,
+            student_id=report.student_id,
+            floor=report.floor,
+            description=report.description,
+            submitted_at=report.submitted_at,
+            status=report.status,
+            reviewed_at=report.reviewed_at,
+            reviewed_by=report.reviewed_by,
+            review_notes=report.review_notes,
+            photos=photos,
+            student_name=f"{report.student.name} {report.student.surname}" if report.student else "Неизвестный",
+            duty_type=report.global_duty.duty_type if report.global_duty else None,
+            date_assigned=report.global_duty.date_assigned if report.global_duty else None
+        ))
+    return reports_response
+
+@router.get("/duty/{duty_id}/status", response_model=List[FloorStatus])
+def get_duty_floors_status(
+    duty_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(any_admin_required),
+):
+    """
+    Получить статус сдачи отчетов по этажам для конкретного общего дежурства.
+    """
+    reports = db.query(GlobalDutyReport).filter(GlobalDutyReport.global_duty_id == duty_id).all()
+    report_map = {r.floor: r for r in reports}
+    
+    status_list = []
+    for floor in range(2, 10): # Этажи 2-9
+        report = report_map.get(floor)
+        status_list.append(FloorStatus(
+            floor=floor,
+            status=report.status if report else "not_submitted",
+            report_id=report.id if report else None
+        ))
+    
+    return status_list

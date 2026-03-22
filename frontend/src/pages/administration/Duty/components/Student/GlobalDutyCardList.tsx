@@ -33,6 +33,8 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
   const [photos, setPhotos] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [floorStatus, setFloorStatus] = useState<any[]>([]);
+  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const isAdmin = user?.role?.toLowerCase() === 'admin';
 
@@ -58,6 +60,18 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
   useEffect(() => {
     return () => previewUrls.forEach(url => URL.revokeObjectURL(url));
   }, [previewUrls]);
+
+  const fetchFloorStatus = async (dutyId: number) => {
+    setLoadingStatus(true);
+    try {
+      const res = await api.get(`/global-duty-reports/duty/${dutyId}/status`);
+      setFloorStatus(res.data);
+    } catch (err) {
+      console.error('Ошибка загрузки статуса этажей:', err);
+    } finally {
+      setLoadingStatus(false);
+    }
+  };
 
   const formatDate = (dateStr: string) => {
     try {
@@ -286,6 +300,7 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
               onClick={() => {
                 setSelectedDuty(duty);
                 setModalOpen(true);
+                if (isAdmin) fetchFloorStatus(duty.id);
               }}
               role="button"
               tabIndex={0}
@@ -318,6 +333,28 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
               <p>
                 <strong>{t('globalDuty.notes')}:</strong> {selectedDuty.notes}
               </p>
+            )}
+
+            {isAdmin && (
+              <div className="floor-status-section">
+                <h4>Статус по этажам (2-9):</h4>
+                {loadingStatus ? (
+                  <p>Загрузка...</p>
+                ) : (
+                  <div className="floor-status-grid">
+                    {floorStatus.map(fs => (
+                      <div key={fs.floor} className={`floor-status-item status-${fs.status}`}>
+                        <span className="floor-num">{fs.floor} эт.</span>
+                        <span className="floor-status-label">
+                          {fs.status === 'confirmed' ? '✅' : 
+                           fs.status === 'waiting' ? '⏳' : 
+                           fs.status === 'rejected' ? '❌' : '⚪'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
             
             {isAdmin && (

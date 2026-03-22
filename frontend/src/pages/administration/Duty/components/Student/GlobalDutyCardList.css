@@ -4,6 +4,78 @@
   margin-top: 1rem;
 }
 
+.global.no-duties-text {
+  text-align: center;
+  color: #718096;
+  margin-top: 2rem;
+}
+
+/* Floor Status Section */
+.floor-status-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.floor-status-section h4 {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.floor-status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.floor-status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: #f7fafc;
+  border: 1px solid #edf2f7;
+  transition: transform 0.2s;
+}
+
+.floor-status-item:hover {
+  transform: translateY(-2px);
+}
+
+.floor-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.floor-status-label {
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.floor-status-item.status-confirmed {
+  background: #f0fff4;
+  border-color: #c6f6d5;
+}
+
+.floor-status-item.status-waiting {
+  background: #fffaf0;
+  border-color: #feebc8;
+}
+
+.floor-status-item.status-rejected {
+  background: #fff5f5;
+  border-color: #fed7d7;
+}
+
+.floor-status-item.status-not_submitted {
+  background: #f7fafc;
+  border-color: #edf2f7;
+  opacity: 0.6;
+}
+
 .global-duty-card-list h3 {
   margin-bottom: 0.5rem;
   font-size: 1.2rem;

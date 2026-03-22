@@ -14,30 +14,13 @@ import {
 } from '@mui/icons-material';
 import './CommandantDutyInterface.css';
 
+import type { DutyReport } from './CommandantDutyInterface';
+
 interface Photo {
   id: number;
   photo_url: string;
   file_name: string;
   uploaded_at: string;
-}
-
-interface DutyReport {
-  id: number;
-  duty_id: number;
-  duty_type?: string;
-  room_number?: number;
-  floor?: number;
-  student_id: number;
-  description: string;
-  submitted_at: string;
-  status: 'waiting' | 'confirmed' | 'rejected';
-  reviewed_at: string | null;
-  reviewed_by: number | null;
-  review_notes: string | null;
-  photos?: Photo[];
-  student_name?: string;
-  isGlobal?: boolean;
-  global_duty_id?: number;
 }
 
 interface ReportViewModalProps {
