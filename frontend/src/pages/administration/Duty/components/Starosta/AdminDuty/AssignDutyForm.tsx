@@ -60,7 +60,7 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
       const students = users.filter(
         u =>
           u.n_room === roomNum &&
-          (u.role.toLowerCase() === 'student' || u.role.toLowerCase() === 'admin')
+          ((u.role?.toLowerCase() || '') === 'student' || (u.role?.toLowerCase() || '') === 'admin')
       );
 
       setCurrentRoomStudents(students);
@@ -72,7 +72,8 @@ const AssignDutyForm = ({ onDutyAssigned }: AssignDutyFormProps) => {
   const [isFloorInitialized, setIsFloorInitialized] = useState(false);
 
   useEffect(() => {
-    if (!isFloorInitialized && user?.role.toLowerCase() === 'admin' && user.floor) {
+    const roleLower = user?.role?.toLowerCase() || '';
+    if (!isFloorInitialized && roleLower === 'admin' && user?.floor) {
       setFloor(user.floor);
       setIsFloorInitialized(true);
     } else if (user && !isFloorInitialized) {

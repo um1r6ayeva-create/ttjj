@@ -101,6 +101,14 @@ const CommandantDutyInterface = () => {
       const completedRes = await api.get('/duties/commandant/completed');
       const globalCompletedRes = await api.get('/global-duty-reports/history');
       
+      console.log("CommandantDutyInterface: Data fetched successfully", {
+        duties: dutiesRes.data,
+        reports: reportsRes.data,
+        global: globalReportsRes.data,
+        completed: completedRes.data,
+        globalHistory: globalCompletedRes.data
+      });
+
       setDuties(Array.isArray(dutiesRes.data) ? dutiesRes.data : []);
       setReports(Array.isArray(reportsRes.data) ? reportsRes.data : []);
       setGlobalReports(Array.isArray(globalReportsRes.data) ? globalReportsRes.data : []);
@@ -119,6 +127,7 @@ const CommandantDutyInterface = () => {
         ...globalHistoryData.map((r: any) => ({ ...r, isGlobal: true }))
       ].sort((a, b) => getSafeTime(b.reviewed_at) - getSafeTime(a.reviewed_at));
       
+      console.log("CommandantDutyInterface: Combined history", combinedHistory);
       setCompletedReports(combinedHistory);
       
     } catch (err: any) {

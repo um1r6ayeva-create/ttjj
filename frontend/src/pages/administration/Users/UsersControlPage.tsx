@@ -69,10 +69,14 @@ const UsersControlPage: React.FC = () => {
       filter === 'pending' ? !u.is_active :
       u.is_active;
     
+    const name = u.name || '';
+    const surname = u.surname || '';
+    const phone = u.phone || '';
+
     const matchesSearch = 
-      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.surname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.phone.includes(searchQuery);
+      name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      surname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      phone.includes(searchQuery);
       
     return matchesFilter && matchesSearch;
   });
@@ -146,7 +150,7 @@ const UsersControlPage: React.FC = () => {
                     <td>
                       <div className="user-cell">
                         <div className="user-avatar-small">
-                          {u.name[0]}{u.surname[0]}
+                          {(u.name?.[0] || '?')}{(u.surname?.[0] || '?')}
                         </div>
                         <div className="user-info-text">
                           <div className="user-full-name">{u.name} {u.surname}</div>

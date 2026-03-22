@@ -99,10 +99,10 @@ const adminNavItems = [
           
           // Если залогинен:
           // 1. Студент и Староста НЕ видят эти панели (даже Главную в меню)
-          if (user.role === 'student' || user.role === 'admin') return null;
+          if (user?.role === 'student' || user?.role === 'admin') return null;
           
           // 2. Комендант видит только Главную
-          if (user.role === 'commandant' && item.path === '/') {
+          if (user?.role === 'commandant' && item.path === '/') {
             return (
               <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
                 {item.label}
@@ -116,7 +116,7 @@ const adminNavItems = [
         {/* ФУНКЦИОНАЛЬНЫЕ ПАНЕЛИ (ДЛЯ ЗАРЕГИСТРИРОВАННЫХ) */}
         {user && adminNavItems.map((item) => {
           // Комендант видит всё функциональное
-          if (user.role === 'commandant') {
+          if (user?.role === 'commandant') {
             return (
               <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
                 {item.label}
@@ -125,7 +125,7 @@ const adminNavItems = [
           }
 
           // Студент видит только Дежурство и Заявки
-          if (user.role === 'student') {
+          if (user?.role === 'student') {
             if (item.path === '/duty' || item.path === '/applications') {
               return (
                 <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
@@ -136,7 +136,7 @@ const adminNavItems = [
           }
 
           // Староста (admin) видит ТОЛЬКО Дежурство
-          if (user.role === 'admin') {
+          if (user?.role === 'admin') {
             if (item.path === '/duty') {
               return (
                 <Link key={item.path} to={item.path} className={`nav-btn ${location.pathname === item.path ? 'active' : ''}`}>
@@ -177,10 +177,10 @@ const adminNavItems = [
       <>
         <div className="px-4 py-3 border-b border-gray-100">
           <div className="font-medium text-gray-900">
-            {user.role === 'admin' ? t('profileSidebar.adminProfileName') : `${user.name} ${user.surname}`}
+            {user.role === 'admin' ? t('profileSidebar.adminProfileName') : `${user.name || ''} ${user.surname || ''}`}
           </div>
           {user.role !== 'admin' && (
-            <div className="text-sm text-gray-500 truncate">{user.email || user.phone}</div>
+            <div className="text-sm text-gray-500 truncate">{user.email || user.phone || 'no contact'}</div>
           )}
         </div>
         <button
@@ -194,19 +194,19 @@ const adminNavItems = [
         {/* Дополнительные пункты для специальных ролей */}
         {user && (
           <>
-            {(user.role === 'commandant' || user.role === 'student' || user.role === 'admin') && (
+            {(user?.role === 'commandant' || user?.role === 'student' || user?.role === 'admin') && (
               <button onClick={() => { navigate('/duty'); setIsProfileOpen(false); }} className="dropdown-btn">
                 <i className="fas fa-clipboard-list"></i> <span>{t('header.duty')}</span>
               </button>
             )}
 
-            {(user.role === 'commandant' || user.role === 'student') && (
+            {(user?.role === 'commandant' || user?.role === 'student') && (
               <button onClick={() => { navigate('/applications'); setIsProfileOpen(false); }} className="dropdown-btn">
                 <i className="fas fa-file-alt"></i> <span>{t('header.applications')}</span>
               </button>
             )}
 
-            {user.role === 'commandant' && (
+            {user?.role === 'commandant' && (
               <button onClick={() => { navigate('/users-control'); setIsProfileOpen(false); }} className="dropdown-btn">
                 <i className="fas fa-user-shield"></i> <span>{t('header.usersControl')}</span>
               </button>

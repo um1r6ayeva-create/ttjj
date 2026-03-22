@@ -59,9 +59,9 @@ interface ConfirmDialog {
 const StudentDutyInterface: React.FC = () => {
   const { t } = useTranslation();
   const { token, user } = useAuth();
-  const userRoleLower = user?.role.toLowerCase() || '';
+  const userRoleLower = user?.role?.toLowerCase() || '';
   const [activeTab, setActiveTab] = useState<'my_duties' | 'submit_report' | 'history' | 'all_duties'>(
-    (user?.role.toLowerCase() === 'admin' || user?.role.toLowerCase() === 'elder') ? 'all_duties' : 'my_duties'
+    (userRoleLower === 'admin' || userRoleLower === 'elder') ? 'all_duties' : 'my_duties'
   );
   const [selectedDuty, setSelectedDuty] = useState<Duty | null>(null);
   const [reportDescription, setReportDescription] = useState('');

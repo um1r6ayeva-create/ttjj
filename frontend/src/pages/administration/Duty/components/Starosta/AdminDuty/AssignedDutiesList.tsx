@@ -77,7 +77,7 @@ const AssignedDutiesList = ({ duties, onDutiesLoaded, onDutyUpdated }: AssignedD
     try {
       const users = await fetchUsers();
       const students = users.filter(
-        u => u.role.toLowerCase() === 'user' || u.role.toLowerCase() === 'admin'
+        u => (u.role?.toLowerCase() || '') === 'user' || (u.role?.toLowerCase() || '') === 'admin'
       );
       setAvailableStudents(students);
     } catch {
@@ -92,7 +92,7 @@ const AssignedDutiesList = ({ duties, onDutiesLoaded, onDutyUpdated }: AssignedD
     setEditingDutyId(duty.id);
     setEditedDuty({
       duty_type: duty.duty_type,
-      date_due: duty.date_due.split('T')[0],
+      date_due: duty.date_due ? duty.date_due.split('T')[0] : '',
       floor: duty.floor,
       room_number: duty.room_number,
     });

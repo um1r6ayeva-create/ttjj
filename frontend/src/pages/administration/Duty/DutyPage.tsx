@@ -44,9 +44,12 @@ const DutyPage = () => {
   const { t } = useTranslation();
 
   const getUserRole = () => {
-    if (!user) return 'student';
+    if (!user || !user.role) {
+      console.warn("DutyPage: user or user.role is missing", user);
+      return 'student';
+    }
 
-    const role = user.role.toLowerCase();
+    const role = String(user.role).toLowerCase();
 
     const roleMap: Record<string, string> = {
       admin: 'admin',
@@ -68,39 +71,39 @@ const DutyPage = () => {
   };
 
   return (
-    <div className="duty-page">
-      <div className="duty-header">
-        <h1 className="duty-title">
-          <ClipboardList className="duty-icon" />
-          {t('dutyPage.title')}
-        </h1>
-        <p className="duty-subtitle">{subtitleMap[userRole]}</p>
+    <ErrorBoundary fallback={<div className="error-fallback">{t('dutyPage.renderError')}</div>}>
+      <div className="duty-page">
+        <div className="duty-header">
+          <h1 className="duty-title">
+            <ClipboardList className="duty-icon" />
+            {t('dutyPage.title')}
+          </h1>
+          <p className="duty-subtitle">{subtitleMap[userRole]}</p>
+        </div>
+
+        <div className="duty-content">
+            {userRole === 'admin' && <AdminDutyInterface />}
+
+            {userRole === 'commandant' && (
+              <>
+                {/* Глобальное дежурство */}
+                <section className="global-duty-section">
+                  <h2 className="section-title">{t('dutyPage.globalDuty')}</h2>
+                  <GlobalDutyInterface />
+                </section>
+
+                {/* Обычные дежурства */}
+                <section className="commandant-duty-section">
+                  <h2 className="section-title">{t('dutyPage.regularDuty')}</h2>
+                  <CommandantDutyInterface />
+                </section>
+              </>
+            )}
+
+            {(userRole === 'admin' || userRole === 'student' || userRole === 'elder') && <StudentDutyInterface />}
+        </div>
       </div>
-
-      <div className="duty-content">
-        <ErrorBoundary fallback={<div className="error-fallback">{t('dutyPage.renderError')}</div>}>
-          {userRole === 'admin' && <AdminDutyInterface />}
-
-          {userRole === 'commandant' && (
-            <>
-              {/* Глобальное дежурство */}
-              <section className="global-duty-section">
-                <h2 className="section-title">{t('dutyPage.globalDuty')}</h2>
-                <GlobalDutyInterface />
-              </section>
-
-              {/* Обычные дежурства */}
-              <section className="commandant-duty-section">
-                <h2 className="section-title">{t('dutyPage.regularDuty')}</h2>
-                <CommandantDutyInterface />
-              </section>
-            </>
-          )}
-
-          {(userRole === 'admin' || userRole === 'student' || userRole === 'elder') && <StudentDutyInterface />}
-        </ErrorBoundary>
-      </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 
