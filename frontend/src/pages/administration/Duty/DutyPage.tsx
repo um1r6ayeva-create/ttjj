@@ -32,7 +32,7 @@ const DutyPage = () => {
     admin: t('dutyPage.adminSubtitle'),
     commandant: t('dutyPage.commandantSubtitle'),
     student: t('dutyPage.studentSubtitle'),
-    elder: t('dutyPage.studentSubtitle')
+    elder: t('dutyPage.elderSubtitle', { defaultValue: t('dutyPage.studentSubtitle') })
   };
 
   return (
@@ -64,7 +64,7 @@ const DutyPage = () => {
           </>
         )}
 
-        {(userRole === 'admin' || userRole === 'student') && <StudentDutyInterface />}
+        {(userRole === 'admin' || userRole === 'student' || userRole === 'elder') && <StudentDutyInterface />}
       </div>
     </div>
   );

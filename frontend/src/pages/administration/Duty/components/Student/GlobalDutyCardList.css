@@ -99,18 +99,74 @@
   border-color: #fed7d7;
 }
 
-.floor-status-item.status-not_submitted {
-  background: #f7fafc;
-  border-color: #edf2f7;
-  opacity: 0.6;
+.floor-status-grid-large {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 15px;
 }
 
-.floor-status-item.selected {
-  border: 2px solid #5a67d8 !important;
-  background: #ebf4ff !important;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.4);
-  transform: translateY(-2px);
-  opacity: 1 !important;
+.floor-status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 10px;
+  border-radius: 12px;
+  background: #fff;
+  border: 2px solid #edf2f7;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 80px;
+}
+
+.floor-status-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e0;
+}
+
+.floor-num {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 5px;
+}
+
+.floor-status-icon {
+  font-size: 24px;
+}
+
+.floor-status-item.status-confirmed {
+  background: #f0fff4;
+  border-color: #9ae6b4;
+}
+
+.floor-status-item.status-waiting {
+  background: #fffaf0;
+  border-color: #fbd38d;
+}
+
+.floor-status-item.status-rejected {
+  background: #fff5f5;
+  border-color: #feb2b2;
+}
+
+.floor-status-item.empty {
+  border-style: dashed;
+  background: #fdfdfd;
+}
+
+.hint-text {
+  text-align: center;
+  font-size: 14px;
+  color: #718096;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+.duty-details.simplified {
+  padding: 10px 0;
 }
 
 .global-duty-card-list h3 {

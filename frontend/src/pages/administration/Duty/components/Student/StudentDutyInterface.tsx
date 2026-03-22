@@ -59,8 +59,9 @@ interface ConfirmDialog {
 const StudentDutyInterface: React.FC = () => {
   const { t } = useTranslation();
   const { token, user } = useAuth();
+  const userRoleLower = user?.role.toLowerCase() || '';
   const [activeTab, setActiveTab] = useState<'my_duties' | 'submit_report' | 'history' | 'all_duties'>(
-    user?.role.toLowerCase() === 'admin' ? 'all_duties' : 'my_duties'
+    (user?.role.toLowerCase() === 'admin' || user?.role.toLowerCase() === 'elder') ? 'all_duties' : 'my_duties'
   );
   const [selectedDuty, setSelectedDuty] = useState<Duty | null>(null);
   const [reportDescription, setReportDescription] = useState('');
@@ -106,7 +107,6 @@ const StudentDutyInterface: React.FC = () => {
       }
 
       // 2. Загружаем историю общих дежурств для старосты (admin или elder)
-      const userRoleLower = user.role.toLowerCase();
       if (userRoleLower === 'admin' || userRoleLower === 'elder') {
         try {
           const globalRes = await authApi.get('/global-duty-reports/my', {
@@ -121,7 +121,7 @@ const StudentDutyInterface: React.FC = () => {
               floor: gr.floor,
               date_assigned: gr.date_assigned,
               date_due: gr.date_assigned,
-              status: gr.status,
+              status: gr.status === 'waiting' ? 'submitted' : gr.status,
               notes: gr.description,
               assigned_by_id: 0,
               isGlobal: true
@@ -344,9 +344,9 @@ const StudentDutyInterface: React.FC = () => {
         icon: <Pending />
       },
       submitted: { 
-        text: t('studentDuty.status.submitted'), 
+        text: (userRoleLower === 'admin' || userRoleLower === 'elder') ? t('studentDuty.status.waitingReview') : t('studentDuty.status.submitted'), 
         className: 'status-submitted',
-        icon: <Upload />
+        icon: <Pending />
       },
       confirmed: { 
         text: t('studentDuty.status.confirmed'), 
@@ -459,47 +459,42 @@ const StudentDutyInterface: React.FC = () => {
       {/* Вкладки */}
       <div className="tabs-container">
         <div className="tabs">
-          {user?.role.toLowerCase() !== 'admin' && (
-            <>
-              <button 
-                className={`tab-btn ${activeTab === 'my_duties' ? 'active' : ''}`} 
-                onClick={() => setActiveTab('my_duties')}
-              >
-                <Assignment className="tab-icon" />
-                <span>{t('studentDuty.currentDuties')}</span>
-              </button>
-              
-              <button 
-                className={`tab-btn ${activeTab === 'submit_report' ? 'active' : ''}`} 
-                onClick={() => {
-                  if (!selectedDuty) {
-                    showNotification('info', t('studentDuty.info.selectDuty'));
-                  } else {
-                    setActiveTab('submit_report');
-                  }
-                }}
-              >
-                <Upload className="tab-icon" />
-                <span>{t('studentDuty.submitReport')}</span>
-              </button>
-              
-              <button 
-                className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`} 
-                onClick={() => setActiveTab('history')}
-              >
-                <History className="tab-icon" />
-                <span>{t('studentDuty.history')}</span>
-              </button>
-            </>
+          {/* Вкладка "Мои дежурства" видна студентам и старостам, у которых есть закрепленная комната */}
+          {(!user || (userRoleLower !== 'admin' && userRoleLower !== 'elder') || user.n_room) && (
+            <button 
+              className={`tab-btn ${activeTab === 'my_duties' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('my_duties')}
+            >
+              <Assignment className="tab-icon" />
+              <span>{t('studentDuty.currentDuties')}</span>
+            </button>
           )}
-          
-          {user?.role.toLowerCase() === 'admin' && (
+
+          {/* Вкладка "Общие дежурства" видна только старостам (admin/elder) */}
+          {(userRoleLower === 'admin' || userRoleLower === 'elder') && (
             <button 
               className={`tab-btn ${activeTab === 'all_duties' ? 'active' : ''}`} 
               onClick={() => setActiveTab('all_duties')}
             >
-              <Assignment className="tab-icon" />
+              <LocationOn className="tab-icon" />
               <span>{t('studentDuty.globalDuties')}</span>
+            </button>
+          )}
+
+          {/* Вкладка истории видна всем */}
+          <button 
+            className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`} 
+            onClick={() => setActiveTab('history')}
+          >
+            <History className="tab-icon" />
+            <span>{t('studentDuty.history')}</span>
+          </button>
+
+          {/* Вкладка отправки отчета (видна только если выбрано дежурство) */}
+          {activeTab === 'submit_report' && (
+            <button className="tab-btn active">
+              <Upload className="tab-icon" />
+              <span>{t('studentDuty.submitReport')}</span>
             </button>
           )}
         </div>
@@ -836,7 +831,12 @@ const StudentDutyInterface: React.FC = () => {
             ) : (
               <div className="history-list">
                 {studentDuties
-                  .filter(duty => duty.status === 'confirmed' || duty.status === 'rejected')
+                  .filter(duty => {
+                    if (user?.role.toLowerCase() === 'admin' || user?.role.toLowerCase() === 'elder') {
+                      return duty.status === 'confirmed' || duty.status === 'rejected' || duty.status === 'submitted';
+                    }
+                    return duty.status === 'confirmed' || duty.status === 'rejected';
+                  })
                   .map(duty => {
                     const status = getStatusConfig(duty.status);
                     const isGlobal = (duty as any).isGlobal;
@@ -866,15 +866,18 @@ const StudentDutyInterface: React.FC = () => {
                             <span>{status.text}</span>
                           </div>
                         </div>
-                        {duty.isGlobal && (
-                          <div className="global-badge-history">Общее дежурство</div>
-                        )}
                       </div>
                     );
                   })
                 }
                 
-                {studentDuties.filter(duty => duty.status === 'confirmed' || duty.status === 'rejected').length === 0 && (
+                {studentDuties.filter(duty => {
+                    const role = user?.role.toLowerCase();
+                    if (role === 'admin' || role === 'elder') {
+                      return duty.status === 'confirmed' || duty.status === 'rejected' || duty.status === 'submitted';
+                    }
+                    return duty.status === 'confirmed' || duty.status === 'rejected';
+                  }).length === 0 && (
                   <div className="empty-state">
                     <Info className="empty-icon" />
                     <p>{t('studentDuty.noCompletedDuties')}</p>

@@ -36,8 +36,7 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
   const [floorStatus, setFloorStatus] = useState<any[]>([]);
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [selectedFloor, setSelectedFloor] = useState<number | string>(user?.floor || '');
-
-  const isAdmin = user?.role?.toLowerCase() === 'admin';
+  const isAdmin = user?.role?.toLowerCase() === 'admin' || user?.role?.toLowerCase() === 'elder';
 
   const fetchDuties = async () => {
     setLoading(true);
@@ -161,6 +160,11 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
     }
   };
 
+  const handleFloorClick = (floor: number) => {
+    setSelectedFloor(floor);
+    setIsSubmittingReport(true);
+  };
+
   if (isSubmittingReport && selectedDuty) {
     return (
       <div className="submit-report global-submit-report">
@@ -180,37 +184,15 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
           <h2>{t('studentDuty.reportTitle') || 'Отправить отчет'}</h2>
         </div>
         
-        <div className="duty-info-card">
-          <div className="duty-info-header">
-            <CalendarMonth />
-            <div>
-              <h3>{getDutyLabel(selectedDuty.duty_type)}</h3>
-              {isAdmin ? (
-                <div className="floor-selector-group">
-                  <label htmlFor="floor-select">Выберите этаж: </label>
-                  <select 
-                    id="floor-select"
-                    value={selectedFloor}
-                    onChange={(e) => setSelectedFloor(Number(e.target.value))}
-                    className="floor-select"
-                  >
-                    {[2, 3, 4, 5, 6, 7, 8, 9].map(f => (
-                      <option key={f} value={f}>{f} этаж</option>
-                    ))}
-                  </select>
-                </div>
-              ) : (
-                <p className="duty-location">Этаж: {user?.floor}</p>
-              )}
-            </div>
-          </div>
-          <div className="duty-info-dates">
-            <div className="info-date">
-              <CalendarMonth />
-              <span>{t('studentDuty.dateAssigned') || 'Дата'}: {formatDate(selectedDuty.date_assigned)}</span>
-            </div>
+      <div className="duty-info-card simplified">
+        <div className="duty-info-header">
+          <CalendarMonth />
+          <div>
+            <h3>{getDutyLabel(selectedDuty.duty_type)}</h3>
+            <p className="duty-location">Этаж: <strong>{selectedFloor}</strong></p>
           </div>
         </div>
+      </div>
         
         <div className="report-form">
           <div className="form-group">
@@ -338,65 +320,50 @@ const GlobalDutyCardList = ({ token, user }: Props) => {
         <Modal
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
-          title={t('globalDuty.modalTitle')}
+          title={getDutyLabel(selectedDuty.duty_type)}
           type="info"
         >
-          <div className="duty-details">
-            <p>
-              <strong>{t('globalDuty.dutyType')}:</strong> {getDutyLabel(selectedDuty.duty_type)}
-            </p>
-            <p>
-              <strong>{t('globalDuty.date')}:</strong> {formatDate(selectedDuty.date_assigned)}
-            </p>
-            {selectedDuty.notes && (
-              <p>
-                <strong>{t('globalDuty.notes')}:</strong> {selectedDuty.notes}
-              </p>
-            )}
-
-            {isAdmin && (
-              <div className="floor-status-section">
-                <h4>Статус по этажам (2-9):</h4>
-                {loadingStatus ? (
-                  <p>Загрузка...</p>
+          <div className="duty-details simplified">
+            <div className="floor-status-section">
+              <div className="floor-status-grid-large">
+                {floorStatus.length === 0 && !loadingStatus ? (
+                   [2, 3, 4, 5, 6, 7, 8, 9].map(floor => (
+                    <div 
+                      key={floor} 
+                      className="floor-status-item empty"
+                      onClick={() => handleFloorClick(floor)}
+                    >
+                      <span className="floor-num">{floor} эт.</span>
+                      <span className="floor-status-icon">⚪</span>
+                    </div>
+                   ))
                 ) : (
-                  <div className="floor-status-grid">
-                    {floorStatus.map(fs => (
-                      <div 
-                        key={fs.floor} 
-                        className={`floor-status-item status-${fs.status} ${selectedFloor === fs.floor ? 'selected' : ''}`}
-                        onClick={() => setSelectedFloor(fs.floor)}
-                        role="button"
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <span className="floor-num">{fs.floor} эт.</span>
-                        <span className="floor-status-label">
-                          {fs.status === 'confirmed' ? '✅' : 
-                           fs.status === 'waiting' ? '⏳' : 
-                           fs.status === 'rejected' ? '❌' : '⚪'}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                  floorStatus.map(fs => (
+                    <div 
+                      key={fs.floor} 
+                      className={`floor-status-item status-${fs.status}`}
+                      onClick={() => handleFloorClick(fs.floor)}
+                    >
+                      <span className="floor-num">{fs.floor} эт.</span>
+                      <span className="floor-status-icon">
+                        {fs.status === 'confirmed' ? '✅' : 
+                         fs.status === 'waiting' ? '⏳' : 
+                         fs.status === 'rejected' ? '❌' : '⚪'}
+                      </span>
+                    </div>
+                  ))
                 )}
               </div>
-            )}
+            </div>
             
-            {isAdmin && (
-              <button 
-                className="report-btn7" 
-                onClick={() => {
-                  setModalOpen(false);
-                  setIsSubmittingReport(true);
-                }}
-                style={{marginTop: '20px', width: '100%', display: 'flex', justifyContent: 'center', gap: '10px'}}
-              >
-                <Upload />
-                <span>Отправить отчет этажа</span>
-              </button>
-            )}
+            <p className="hint-text">Нажмите на этаж, чтобы отправить отчет</p>
           </div>
         </Modal>
+      )}
+
+      {/* Переместил handleSubmitReport сюда для доступа */}
+      {isSubmittingReport && selectedDuty && (
+        <div style={{display: 'none'}}>{/* Вспомогательный элемент если нужно */}</div>
       )}
     </div>
   );
