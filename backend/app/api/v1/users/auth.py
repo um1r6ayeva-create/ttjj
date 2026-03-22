@@ -1,5 +1,6 @@
 # backend/app/api/v1/users/auth.py
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
@@ -22,7 +23,7 @@ def login_user(
     Вход в систему по phone и паролю
     """
     print(f"--- Login attempt for: {user_data.phone} ---")
-    user = db.query(User).filter(User.phone == user_data.phone).first()
+    user = db.query(User).filter(func.lower(User.phone) == func.lower(user_data.phone)).first()
     
     if not user:
         print(f"User not found in DB: {user_data.phone}")

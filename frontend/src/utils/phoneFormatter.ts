@@ -1,6 +1,12 @@
 export const formatPhoneForDisplay = (phone: string): string => {
+  if (!phone) return '';
   const digits = phone.replace(/\D/g, '');
-  if (digits.length < 12) return '+998';
+  
+  // Если это не стандартный номер телефона (12 цифр, начинающихся с 998), 
+  // возвращаем как есть (логин пользователя)
+  if (digits.length !== 12 || !digits.startsWith('998')) {
+    return phone;
+  }
   
   const part1 = digits.slice(3, 5);
   const part2 = digits.slice(5, 8);
@@ -17,7 +23,14 @@ export const formatPhoneForDisplay = (phone: string): string => {
 };
 
 export const formatPhoneForBackend = (phone: string): string => {
+  if (!phone) return '';
   const digits = phone.replace(/\D/g, '');
+  
+  // Если это логин (буквы) или неполный номер, отправляем как есть
+  if (digits.length < 9) {
+    return phone;
+  }
+  
   return '+998' + digits.slice(-9);
 };
 
