@@ -104,7 +104,7 @@ const GlobalDutyInterface = () => {
     if (!duty) return;
     setEditingDuty(duty);
     setEditDutyType(duty.duty_type);
-    setEditDateAssigned(duty.date_assigned ? duty.date_assigned.split('T')[0] : '');
+    setEditDateAssigned(duty.date_assigned?.includes('T') ? duty.date_assigned.split('T')[0] : (duty.date_assigned || ''));
     setEditNotes(duty.notes || '');
   };
 

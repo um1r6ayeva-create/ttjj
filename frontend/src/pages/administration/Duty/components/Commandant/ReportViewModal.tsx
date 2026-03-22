@@ -52,9 +52,7 @@ const ReportViewModal: React.FC<ReportViewModalProps> = ({
           ? `/global-duty-reports/${report.id}`
           : `/duty-reports/${report.id}`;
         const response = await api.get(endpoint);
-        if (response.data.photos) {
-          setPhotos(response.data.photos);
-        }
+        setPhotos(Array.isArray(response.data?.photos) ? response.data.photos : []);
       } catch (error) {
         console.error(t('reportViewModal.errorLoadingPhotos'), error);
       } finally {
@@ -77,8 +75,11 @@ const ReportViewModal: React.FC<ReportViewModalProps> = ({
 };
 
   const formatDateTime = (dateString: string): string => {
+    if (!dateString) return '—';
     try {
-      return new Date(dateString).toLocaleString('ru-RU', {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleString('ru-RU', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',

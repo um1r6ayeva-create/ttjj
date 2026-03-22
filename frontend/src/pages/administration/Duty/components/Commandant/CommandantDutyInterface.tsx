@@ -123,8 +123,8 @@ const CommandantDutyInterface = () => {
       const globalHistoryData = Array.isArray(globalCompletedRes.data) ? globalCompletedRes.data : [];
 
       const combinedHistory = [
-        ...completedData.map((r: any) => ({ ...r, isGlobal: false })),
-        ...globalHistoryData.map((r: any) => ({ ...r, isGlobal: true }))
+        ...completedData.filter(Boolean).map((r: any) => ({ ...r, isGlobal: false })),
+        ...globalHistoryData.filter(Boolean).map((r: any) => ({ ...r, isGlobal: true }))
       ].sort((a, b) => getSafeTime(b.reviewed_at) - getSafeTime(a.reviewed_at));
       
       console.log("CommandantDutyInterface: Combined history", combinedHistory);
@@ -283,8 +283,11 @@ const getReportStatusText = (status: string): string => {
   };
 
   const formatDateTime = (dateString: string): string => {
+    if (!dateString) return '—';
     try {
-      return new Date(dateString).toLocaleString('ru-RU', {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleString('ru-RU', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
