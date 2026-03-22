@@ -461,13 +461,15 @@ const StudentDutyInterface: React.FC = () => {
             </>
           )}
           
-          <button 
-            className={`tab-btn ${activeTab === 'all_duties' ? 'active' : ''}`} 
-            onClick={() => setActiveTab('all_duties')}
-          >
-            <Assignment className="tab-icon" />
-            <span>{t('studentDuty.globalDuties')}</span>
-          </button>
+          {user?.role.toLowerCase() === 'admin' && (
+            <button 
+              className={`tab-btn ${activeTab === 'all_duties' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('all_duties')}
+            >
+              <Assignment className="tab-icon" />
+              <span>{t('studentDuty.globalDuties')}</span>
+            </button>
+          )}
         </div>
       </div>
 
