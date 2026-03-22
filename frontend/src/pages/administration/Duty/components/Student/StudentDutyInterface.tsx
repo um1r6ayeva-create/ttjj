@@ -90,53 +90,54 @@ const StudentDutyInterface: React.FC = () => {
     
     setIsLoading(true);
     try {
-      const { data } = await authApi.get(`/duties/room/${user.n_room}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      let allDuties = [...data];
+      let allDuties: Duty[] = [];
       
-      // Добавляем загрузку истории общих дежурств для старосты
+      // 1. Загружаем обычные дежурства по комнате (если есть комната)
+      if (user.n_room) {
+        try {
+          const { data } = await authApi.get(`/duties/room/${user.n_room}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          allDuties = [...data];
+          setStudentRoom(user.n_room.toString());
+        } catch (err) {
+          console.warn('Обычные дежурства не найдены или ошибка загрузки:', err);
+        }
+      }
+
+      // 2. Загружаем историю общих дежурств для старосты
       if (user.role.toLowerCase() === 'admin') {
         try {
           const globalRes = await authApi.get('/global-duty-reports/my', {
             headers: { Authorization: `Bearer ${token}` },
           });
           
-          const globalDutiesMapped: Duty[] = globalRes.data.map((gr: any) => ({
-            id: gr.id,
-            duty_type: gr.duty_type,
-            room_number: 0,
-            floor: gr.floor,
-            date_assigned: gr.date_assigned,
-            date_due: gr.date_assigned,
-            status: gr.status,
-            notes: gr.description,
-            assigned_by_id: 0,
-            isGlobal: true
-          }));
-          
-          allDuties = [...allDuties, ...globalDutiesMapped];
+          if (Array.isArray(globalRes.data)) {
+            const globalDutiesMapped: Duty[] = globalRes.data.map((gr: any) => ({
+              id: gr.id,
+              duty_type: gr.duty_type,
+              room_number: 0,
+              floor: gr.floor,
+              date_assigned: gr.date_assigned,
+              date_due: gr.date_assigned,
+              status: gr.status,
+              notes: gr.description,
+              assigned_by_id: 0,
+              isGlobal: true
+            }));
+            
+            allDuties = [...allDuties, ...globalDutiesMapped];
+          }
         } catch (gErr) {
           console.error('Ошибка загрузки истории общих дежурств:', gErr);
         }
       }
       
       setStudentDuties(allDuties);
-
-      if (user.n_room) {
-        setStudentRoom(user.n_room.toString());
-      } else if (data.length > 0) {
-        setStudentRoom(data[0].room_number.toString());
-      } else {
-        setStudentRoom('-');
-      }
-      
       setError(null);
     } catch (err: any) {
-      console.error('Ошибка загрузки дежурств:', err);
+      console.error('Ошибка в fetchDuties:', err);
       setError(t('studentDuty.error.loadDuties'));
-      showNotification('error', t('studentDuty.error.loadDuties'));
     } finally {
       setIsLoading(false);
     }

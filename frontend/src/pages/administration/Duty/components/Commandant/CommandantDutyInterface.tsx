@@ -320,7 +320,7 @@ const getReportStatusText = (status: string): string => {
                 <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(duty.report.submitted_at)}
               </p>
               <p className="description-preview">
-                <strong>{t('commandantDuty.dutyCard.description')}:</strong> {duty.report.description.substring(0, 150)}...
+                <strong>{t('commandantDuty.dutyCard.description')}:</strong> {(duty.report.description || '').substring(0, 150)}...
               </p>
               
               {duty.report.photos && duty.report.photos.length > 0 && (
@@ -406,7 +406,7 @@ const getReportStatusText = (status: string): string => {
               <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(report.submitted_at)}
             </p>
             <p className="description-preview">
-              <strong>{t('commandantDuty.dutyCard.description')}:</strong> {report.description.substring(0, 150)}...
+              <strong>{t('commandantDuty.dutyCard.description')}:</strong> {(report.description || '').substring(0, 150)}...
             </p>
             
             {report.photos && report.photos.length > 0 && (
@@ -498,7 +498,7 @@ const getReportStatusText = (status: string): string => {
         )}
         
         <div className="description">
-          <p>{report.description.substring(0, 200)}...</p>
+          <p>{(report.description || '').substring(0, 200)}...</p>
         </div>
       </div>
     </div>
