@@ -158,7 +158,7 @@ async def submit_duty_report(
             # Сохраняем в базу данных
             photo_record = ReportPhoto(
                 report_id=report.id,
-                photo_url=str(file_info["file_path"].relative_to("uploads")),
+                photo_url=str(file_info["file_path"].relative_to(BASE_DIR / "uploads")),
                 file_name=file_info["original_filename"],
                 file_size=file_info["size"],
                 mime_type=file_info["mime_type"],

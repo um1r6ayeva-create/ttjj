@@ -160,7 +160,7 @@ async def submit_global_duty_report(
             file_info = save_uploaded_file(photo, report_dir)
             photo_record = GlobalReportPhoto(
                 report_id=report.id,
-                photo_url=str(file_info["file_path"].relative_to("uploads")),
+                photo_url=str(file_info["file_path"].relative_to(BASE_DIR / "uploads")),
                 file_name=file_info["original_filename"],
                 file_size=file_info["size"],
                 mime_type=file_info["mime_type"],
