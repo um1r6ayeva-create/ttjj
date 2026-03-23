@@ -7,6 +7,7 @@ export const dutyPage = {
     studentSubtitle: 'Мои дежурства - отправка отчетов',
     globalDuty: 'Общие дежурство',
     regularDuty: 'Обычные дежурства',
+    floor: 'этаж',
     roles: {
       admin: 'администратор',
       user: 'студент',
@@ -14,7 +15,8 @@ export const dutyPage = {
       student: 'студент',
       elder: 'староста'
     },
-    renderError: 'Произошла ошибка при отображении панели. Пожалуйста, обновите страницу.'
+    renderError: 'Произошла ошибка при отображении панели. Пожалуйста, обновите страницу.',
+    componentError: 'Произошла ошибка при загрузке данных компонента.'
   },
   en: {
     title: 'Duty System',
@@ -23,6 +25,7 @@ export const dutyPage = {
     studentSubtitle: 'My Duties - Report Submission',
     globalDuty: 'Community Duty',
     regularDuty: 'Regular Duties',
+    floor: 'floor',
     roles: {
       admin: 'administrator',
       user: 'student',
@@ -30,7 +33,8 @@ export const dutyPage = {
       student: 'student',
       elder: 'elder'
     },
-    renderError: 'An error occurred while rendering the panel. Please refresh the page.'
+    renderError: 'An error occurred while rendering the panel. Please refresh the page.',
+    componentError: 'An error occurred while loading component data.'
   },
   uz: {
     title: 'Navbatchilik tizimi',
@@ -39,6 +43,7 @@ export const dutyPage = {
     studentSubtitle: 'Mening navbatchiliklarim - hisobot topshirish',
     globalDuty: 'Umumiy navbatchilik',
     regularDuty: 'Oddiy navbatchiliklar',
+    floor: 'qavat',
     roles: {
       admin: 'administrator',
       user: 'talaba',
@@ -46,6 +51,7 @@ export const dutyPage = {
       student: 'talaba',
       elder: 'boshliq'
     },
-    renderError: 'Panelni ko\'rsatishda xatolik yuz berdi. Iltimos, sahifani yangilang.'
+    renderError: 'Panelni ko\'rsatishda xatolik yuz berdi. Iltimos, sahifani yangilang.',
+    componentError: 'Komponent ma\'lumotlarini yuklashda xatolik yuz berdi.'
   }
 };

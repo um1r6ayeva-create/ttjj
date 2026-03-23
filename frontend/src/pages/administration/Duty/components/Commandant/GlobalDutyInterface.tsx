@@ -302,22 +302,24 @@ const GlobalDutyInterface = () => {
         <h2>{t('globalDutyInterface.dutiesList')}</h2>
         {duties.length > 0 ? (
           <ul className="duties-ul" role="list">
-            {duties.map((duty) => (
-              <li key={duty.id} className="duty-item">
-                <span className="duty-info">
-                  {getDutyTypeLabel(duty.duty_type)} — {formatDate(duty.date_assigned)}
-                  {duty.notes && <span className="duty-notes"> ({duty.notes})</span>}
-                </span>
-                <div className="duty-actions">
-                  <button
-                    className="btn edit-btn"
-                    onClick={() => startEditDuty(duty)}
-                    title={t('globalDutyInterface.edit')}
-                    aria-label={`${t('globalDutyInterface.edit')} ${getDutyTypeLabel(duty.duty_type)}`}
-                  >
-                    ✏️
-                  </button>
-                  <button
+            {duties.map((duty) => {
+              if (!duty) return null;
+              return (
+                <li key={duty.id || Math.random()} className="duty-item">
+                  <span className="duty-info">
+                    {getDutyTypeLabel(duty.duty_type)} — {formatDate(duty.date_assigned)}
+                    {duty.notes && <span className="duty-notes"> ({duty.notes})</span>}
+                  </span>
+                  <div className="duty-actions">
+                    <button
+                      className="btn edit-btn"
+                      onClick={() => startEditDuty(duty)}
+                      title={t('globalDutyInterface.edit')}
+                      aria-label={`${t('globalDutyInterface.edit')} ${getDutyTypeLabel(duty.duty_type)}`}
+                    >
+                      ✏️
+                    </button>
+                    <button
                     className="btn delete-btn"
                     onClick={() => confirmDeleteDuty(duty)}
                     title={t('globalDutyInterface.delete')}
@@ -327,8 +329,9 @@ const GlobalDutyInterface = () => {
                   </button>
                 </div>
               </li>
-            ))}
-          </ul>
+            );
+          })}
+        </ul>
         ) : (
           <p className="no-duties-message">{t('globalDutyInterface.noDuties')}</p>
         )}

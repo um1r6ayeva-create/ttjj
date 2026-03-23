@@ -28,7 +28,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   componentDidCatch(error: Error, errorInfo: any) {
-    console.error("ErrorBoundary caught an error", error, errorInfo);
+    console.error("DutyPage ErrorBoundary caught an error:", error, errorInfo);
   }
 
   render() {
@@ -78,29 +78,41 @@ const DutyPage = () => {
             <ClipboardList className="duty-icon" />
             {t('dutyPage.title')}
           </h1>
-          <p className="duty-subtitle">{subtitleMap[userRole]}</p>
+          <p className="duty-subtitle">{subtitleMap[userRole] || t('dutyPage.studentSubtitle')}</p>
         </div>
 
         <div className="duty-content">
-            {userRole === 'admin' && <AdminDutyInterface />}
+            {userRole === 'admin' && (
+              <ErrorBoundary fallback={<div className="component-error">{t('dutyPage.componentError')}</div>}>
+                <AdminDutyInterface />
+              </ErrorBoundary>
+            )}
 
             {userRole === 'commandant' && (
               <>
                 {/* Глобальное дежурство */}
                 <section className="global-duty-section">
                   <h2 className="section-title">{t('dutyPage.globalDuty')}</h2>
-                  <GlobalDutyInterface />
+                  <ErrorBoundary fallback={<div className="component-error">{t('dutyPage.componentError')}</div>}>
+                    <GlobalDutyInterface />
+                  </ErrorBoundary>
                 </section>
 
                 {/* Обычные дежурства */}
                 <section className="commandant-duty-section">
                   <h2 className="section-title">{t('dutyPage.regularDuty')}</h2>
-                  <CommandantDutyInterface />
+                  <ErrorBoundary fallback={<div className="component-error">{t('dutyPage.componentError')}</div>}>
+                    <CommandantDutyInterface />
+                  </ErrorBoundary>
                 </section>
               </>
             )}
 
-            {(userRole === 'admin' || userRole === 'student' || userRole === 'elder') && <StudentDutyInterface />}
+            {(userRole === 'admin' || userRole === 'student' || userRole === 'elder') && (
+              <ErrorBoundary fallback={<div className="component-error">{t('dutyPage.componentError')}</div>}>
+                <StudentDutyInterface />
+              </ErrorBoundary>
+            )}
         </div>
       </div>
     </ErrorBoundary>

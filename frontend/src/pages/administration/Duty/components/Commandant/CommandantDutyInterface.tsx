@@ -122,10 +122,18 @@ const CommandantDutyInterface = () => {
       const completedData = Array.isArray(completedRes.data) ? completedRes.data : [];
       const globalHistoryData = Array.isArray(globalCompletedRes.data) ? globalCompletedRes.data : [];
 
-      const combinedHistory = [
-        ...completedData.filter(Boolean).map((r: any) => ({ ...r, isGlobal: false })),
-        ...globalHistoryData.filter(Boolean).map((r: any) => ({ ...r, isGlobal: true }))
-      ].sort((a, b) => getSafeTime(b.reviewed_at) - getSafeTime(a.reviewed_at));
+      const combinedHistory: CompletedReport[] = [
+        ...(Array.isArray(completedData) ? completedData : [])
+          .filter(Boolean)
+          .map((r: any) => ({ ...r, isGlobal: false })),
+        ...(Array.isArray(globalHistoryData) ? globalHistoryData : [])
+          .filter(Boolean)
+          .map((r: any) => ({ ...r, isGlobal: true }))
+      ].sort((a, b) => {
+        const timeA = getSafeTime(a?.reviewed_at || a?.submitted_at);
+        const timeB = getSafeTime(b?.reviewed_at || b?.submitted_at);
+        return timeB - timeA;
+      });
       
       console.log("CommandantDutyInterface: Combined history", combinedHistory);
       setCompletedReports(combinedHistory);
@@ -145,16 +153,18 @@ const CommandantDutyInterface = () => {
     fetchData();
   }, []);
 
-  const dutiesWithReports = useMemo(() => {
+  const dutiesWithReports = useMemo((): DutyWithReport[] => {
     if (!Array.isArray(duties)) return [];
-    return duties.map(duty => {
-      const reportsList = Array.isArray(reports) ? reports : [];
-      const dutyReports = reportsList.filter(report => report.duty_id === duty.id);
-      return {
-        ...duty,
-        report: dutyReports[0]
-      };
-    });
+    return duties
+      .filter((duty): duty is DutyWithReport => duty !== null && duty !== undefined)
+      .map(duty => {
+        const reportsList = Array.isArray(reports) ? reports : [];
+        const dutyReports = reportsList.filter(report => report && report.duty_id === duty.id);
+        return {
+          ...duty,
+          report: dutyReports[0] || undefined
+        };
+      });
   }, [duties, reports]);
 
   const waitingReports = useMemo(
@@ -299,187 +309,190 @@ const getReportStatusText = (status: string): string => {
     }
   };
 
-  const renderDutyCard = (duty: DutyWithReport) => (
-    <div key={duty.id} className={`duty-card ${duty.status}`}>
-      <div className="duty-card-header">
-        <div className="duty-type">
-          <h3>{getDutyTypeText(duty.duty_type)}</h3>
-          <span className="room-info">
-            {t('commandantDuty.dutyCard.room')} {duty.room_number}, {duty.floor} {t('commandantDuty.dutyCard.floor')}
+  const renderDutyCard = (duty: DutyWithReport) => {
+    if (!duty) return null;
+    return (
+      <div key={duty.id} className={`duty-card ${duty.status || 'pending'}`}>
+        <div className="duty-card-header">
+          <div className="duty-type">
+            <h3>{getDutyTypeText(duty.duty_type || 'default')}</h3>
+            <span className="room-info">
+              {t('commandantDuty.dutyCard.room')} {duty.room_number || '?'}, {duty.floor || '?'} {t('commandantDuty.dutyCard.floor')}
+            </span>
+          </div>
+          <span className={`status-badge status-${duty.status}`}>
+            {getDutyStatusText(duty.status)}
           </span>
         </div>
-        <span className={`status-badge status-${duty.status}`}>
-          {getDutyStatusText(duty.status)}
-        </span>
+        
+        <div className="duty-info">
+          <div className="info-row">
+            <span className="label">{t('commandantDuty.dutyCard.dueDate')}:</span>
+            <span className="value">{formatDate(duty.date_due)}</span>
+          </div>
+          
+          {duty.notes && (
+            <div className="info-row">
+              <span className="label">{t('commandantDuty.dutyCard.notes')}:</span>
+              <span className="value notes">{duty.notes}</span>
+            </div>
+          )}
+          
+          {duty.report && (
+            <div className="report-section">
+              <div className="report-header">
+                <h4>{t('commandantDuty.dutyCard.studentReport')}</h4>
+                <span className={`report-status status-${duty.report.status}`}>
+                  {getReportStatusText(duty.report.status)}
+                </span>
+              </div>
+              
+              <div className="report-info">
+                <p>
+                  <strong>{t('commandantDuty.dutyCard.student')}:</strong> {duty.report.student_name || t('commandantDuty.completedReports.unknown')}
+                </p>
+                <p>
+                  <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(duty.report.submitted_at || '')}
+                </p>
+                <p className="description-preview">
+                  <strong>{t('commandantDuty.dutyCard.description')}:</strong> {(duty.report.description || '').substring(0, 150)}...
+                </p>
+                
+                {duty.report.photos && duty.report.photos.length > 0 && (
+                  <p>
+                    <strong>{t('commandantDuty.dutyCard.photos')}:</strong> {duty.report.photos.length} {t('commandantDuty.dutyCard.photosCount')}
+                  </p>
+                )}
+              </div>
+              
+              {duty.report.status === 'waiting' && (
+                <div className="action-buttons">
+                  <button 
+                    className="btn view-btn"
+                    onClick={() => openViewReportModal(duty.report!)}
+                    disabled={openingModalId === (duty.report?.id)}
+                    aria-label={t('commandantDuty.actions.viewReport')}
+                  >
+                    {openingModalId === (duty.report?.id) ? <div className="loader-small"></div> : t('commandantDuty.actions.viewReport')}
+                  </button>
+                  
+                  <button 
+                    className="btn confirm-btn"
+                    onClick={() => openConfirmDialog(duty.report!.id)}
+                    aria-label={t('commandantDuty.actions.confirmReport')}
+                  >
+                    {t('commandantDuty.actions.confirmReport')}
+                  </button>
+                  
+                  <button 
+                    className="btn reject-btn"
+                    onClick={() => openRejectDialog(duty.report!.id)}
+                    aria-label={t('commandantDuty.actions.rejectReport')}
+                  >
+                    {t('commandantDuty.actions.rejectReport')}
+                  </button>
+                </div>
+              )}
+              
+              {duty.report.status === 'confirmed' && duty.status !== 'confirmed' && (
+                <div className="action-buttons">
+                  <button 
+                    className="btn secondary-btn"
+                    onClick={() => confirmDuty(duty.id)}
+                    aria-label={t('commandantDuty.actions.confirmDuty')}
+                  >
+                    {t('commandantDuty.actions.confirmDuty')}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {!duty.report && duty.status === 'submitted' && (
+            <div className="no-report">
+              <p>{t('commandantDuty.dutyCard.awaitingReport')}</p>
+            </div>
+          )}
+        </div>
       </div>
-      
-      <div className="duty-info">
-        <div className="info-row">
-          <span className="label">{t('commandantDuty.dutyCard.dueDate')}:</span>
-          <span className="value">{formatDate(duty.date_due)}</span>
+    );
+  };
+
+  const renderGlobalReportCard = (report: any) => {
+    if (!report) return null;
+    const reportId = report.id || Math.random();
+    return (
+      <div key={`global-${reportId}`} className="duty-card waiting">
+        <div className="duty-card-header">
+          <div className="duty-type">
+            <h3>{getDutyTypeText(report.duty_type)}</h3>
+            <span className="room-info">
+              {t('commandantDuty.dutyCard.floorOnly')}: {report.floor}
+            </span>
+          </div>
+          <span className="status-badge status-submitted">
+            {t('commandantDuty.reportStatuses.waiting')}
+          </span>
         </div>
         
-        {duty.notes && (
-          <div className="info-row">
-            <span className="label">{t('commandantDuty.dutyCard.notes')}:</span>
-            <span className="value notes">{duty.notes}</span>
-          </div>
-        )}
-        
-        {duty.report && (
+        <div className="duty-info">
           <div className="report-section">
-            <div className="report-header">
-              <h4>{t('commandantDuty.dutyCard.studentReport')}</h4>
-              <span className={`report-status status-${duty.report.status}`}>
-                {getReportStatusText(duty.report.status)}
-              </span>
-            </div>
-            
             <div className="report-info">
               <p>
-                <strong>{t('commandantDuty.dutyCard.student')}:</strong> {duty.report.student_name || `ID: ${duty.report.student_id}`}
+                <strong>{t('commandantDuty.dutyCard.student')}:</strong> {report.student_name}
               </p>
               <p>
-                <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(duty.report.submitted_at)}
+                <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(report.submitted_at)}
               </p>
               <p className="description-preview">
-                <strong>{t('commandantDuty.dutyCard.description')}:</strong> {(duty.report.description || '').substring(0, 150)}...
+                <strong>{t('commandantDuty.dutyCard.description')}:</strong> {(report.description || '').substring(0, 150)}...
               </p>
               
-              {duty.report.photos && duty.report.photos.length > 0 && (
+              {report.photos && Array.isArray(report.photos) && report.photos.length > 0 && (
                 <p>
-                  <strong>{t('commandantDuty.dutyCard.photos')}:</strong> {duty.report.photos.length} {t('commandantDuty.dutyCard.photosCount')}
+                  <strong>{t('commandantDuty.dutyCard.photos')}:</strong> {report.photos.length} {t('commandantDuty.dutyCard.photosCount')}
                 </p>
               )}
             </div>
             
-            {duty.report.status === 'waiting' && (
-              <div className="action-buttons">
-                <button 
-                  className="btn view-btn"
-                  onClick={() => openViewReportModal(duty.report!)}
-                  disabled={openingModalId === duty.report.id}
-                  aria-label={t('commandantDuty.actions.viewReport')}
-                >
-                  {openingModalId === duty.report.id ? <div className="loader-small"></div> : t('commandantDuty.actions.viewReport')}
-                </button>
-                
-                <button 
-                  className="btn confirm-btn"
-                  onClick={() => openConfirmDialog(duty.report!.id)}
-                  aria-label={t('commandantDuty.actions.confirmReport')}
-                >
-                  {t('commandantDuty.actions.confirmReport')}
-                </button>
-                
-                <button 
-                  className="btn reject-btn"
-                  onClick={() => openRejectDialog(duty.report!.id)}
-                  aria-label={t('commandantDuty.actions.rejectReport')}
-                >
-                  {t('commandantDuty.actions.rejectReport')}
-                </button>
-              </div>
-            )}
-            
-            {duty.report.status === 'confirmed' && duty.status !== 'confirmed' && (
-              <div className="action-buttons">
-                <button 
-                  className="btn secondary-btn"
-                  onClick={() => confirmDuty(duty.id)}
-                  aria-label={t('commandantDuty.actions.confirmDuty')}
-                >
-                  {t('commandantDuty.actions.confirmDuty')}
-                </button>
-              </div>
-            )}
+            <div className="action-buttons">
+              <button 
+                className="btn view-btn"
+                onClick={() => openViewReportModal(report, true)}
+                disabled={openingModalId === report.id}
+                aria-label={t('commandantDuty.actions.viewReport')}
+              >
+                {openingModalId === report.id ? <div className="loader-small"></div> : t('commandantDuty.actions.viewReport')}
+              </button>
+              
+              <button 
+                className="btn confirm-btn"
+                onClick={() => openConfirmDialog(report.id, true)}
+                aria-label={t('commandantDuty.actions.confirmReport')}
+              >
+                {t('commandantDuty.actions.confirmReport')}
+              </button>
+              
+              <button 
+                className="btn reject-btn"
+                onClick={() => openRejectDialog(report.id, true)}
+                aria-label={t('commandantDuty.actions.rejectReport')}
+              >
+                {t('commandantDuty.actions.rejectReport')}
+              </button>
+            </div>
           </div>
-        )}
-        
-        {!duty.report && duty.status === 'submitted' && (
-          <div className="no-report">
-            <p>{t('commandantDuty.dutyCard.awaitingReport')}</p>
-          </div>
-        )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
-  const renderGlobalReportCard = (report: any) => (
-    <div key={`global-${report.id}`} className="duty-card waiting">
-      <div className="duty-card-header">
-        <div className="duty-type">
-          <h3>{getDutyTypeText(report.duty_type)}</h3>
-          <span className="room-info">
-            {t('commandantDuty.dutyCard.floorOnly')}: {report.floor}
-          </span>
-        </div>
-        <span className="status-badge status-submitted">
-          {t('commandantDuty.reportStatuses.waiting')}
-        </span>
-      </div>
-      
-      <div className="duty-info">
-        <div className="report-section">
-          <div className="report-info">
-            <p>
-              <strong>{t('commandantDuty.dutyCard.student')}:</strong> {report.student_name}
-            </p>
-            <p>
-              <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(report.submitted_at)}
-            </p>
-            <p className="description-preview">
-              <strong>{t('commandantDuty.dutyCard.description')}:</strong> {(report.description || '').substring(0, 150)}...
-            </p>
-            
-            {report.photos && report.photos.length > 0 && (
-              <p>
-                <strong>{t('commandantDuty.dutyCard.photos')}:</strong> {report.photos.length} {t('commandantDuty.dutyCard.photosCount')}
-              </p>
-            )}
-          </div>
-          
-          <div className="action-buttons">
-            <button 
-              className="btn view-btn"
-              onClick={() => openViewReportModal(report, true)}
-              disabled={openingModalId === report.id}
-              aria-label={t('commandantDuty.actions.viewReport')}
-            >
-              {openingModalId === report.id ? <div className="loader-small"></div> : t('commandantDuty.actions.viewReport')}
-            </button>
-            
-            <button 
-              className="btn confirm-btn"
-              onClick={() => {
-                setSelectedReport({ ...report, isGlobal: true });
-                openConfirmDialog(report.id, true);
-              }}
-              aria-label={t('commandantDuty.actions.confirmReport')}
-            >
-              {t('commandantDuty.actions.confirmReport')}
-            </button>
-            
-            <button 
-              className="btn reject-btn"
-              onClick={() => {
-                setSelectedReport({ ...report, isGlobal: true });
-                openRejectDialog(report.id, true);
-              }}
-              aria-label={t('commandantDuty.actions.rejectReport')}
-            >
-              {t('commandantDuty.actions.rejectReport')}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   const renderCompletedReportCard = (report: CompletedReport) => {
     if (!report) return null;
+    const reportKey = `completed-${report.isGlobal ? 'global' : 'room'}-${report.id || Math.random()}`;
     return (
-      <div key={`completed-${report.isGlobal ? 'global' : 'room'}-${report.id}`} className="completed-report-card">
+      <div key={reportKey} className="completed-report-card">
         <div className="completed-header">
           <div>
             <h4>{getDutyTypeText(report.duty_type)}</h4>
@@ -490,10 +503,12 @@ const getReportStatusText = (status: string): string => {
                }
             </span>
           </div>
-          <span className={`report-status status-${report.status}`}>
+          <span className={`report-status status-${report.status || 'unknown'}`}>
             {report.status === 'confirmed' 
               ? t('commandantDuty.reportStatuses.confirmed')
-              : t('commandantDuty.reportStatuses.rejected')
+              : report.status === 'rejected'
+              ? t('commandantDuty.reportStatuses.rejected')
+              : t('commandantDuty.reportStatuses.unknown', { defaultValue: report.status || '?' })
             }
           </span>
         </div>
@@ -504,7 +519,7 @@ const getReportStatusText = (status: string): string => {
               {report.isGlobal ? t('commandantDuty.dutyCard.floorOnly') : t('commandantDuty.completedReports.room')}:
             </span>
             <span className="value">
-              {report.isGlobal ? report.floor : report.room_number}
+              {report.isGlobal ? (report.floor || '—') : (report.room_number || '—')}
             </span>
           </div>
           
@@ -670,8 +685,8 @@ const getReportStatusText = (status: string): string => {
         <ReportViewModal
           report={selectedReport}
           onClose={() => setIsViewReportModalOpen(false)}
-          onConfirm={() => openConfirmDialog(selectedReport.id)}
-          onReject={() => openRejectDialog(selectedReport.id)}
+          onConfirm={() => selectedReport && openConfirmDialog(selectedReport.id, !!selectedReport.isGlobal)}
+          onReject={() => selectedReport && openRejectDialog(selectedReport.id, !!selectedReport.isGlobal)}
           api={api}
         />
       )}

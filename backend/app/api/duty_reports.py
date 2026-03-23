@@ -321,7 +321,9 @@ def get_all_reports(
             reviewed_by=report.reviewed_by,
             review_notes=report.review_notes,
             photos=photos_response,
-            student_name=f"{report.student.name} {report.student.surname}" if report.student else "Неизвестный студент"
+            student_name=f"{report.student.name} {report.student.surname}" if report.student else "Неизвестный студент",
+            room_number=report.duty.room_number if report.duty else None,
+            floor=report.duty.floor if report.duty else None
         ))
     
     return reports_response
