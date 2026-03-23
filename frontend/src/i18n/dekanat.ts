@@ -294,7 +294,7 @@ export const dekanat = {
     faculties: {
       profEducation: {
         name: 'Axborot-kommunikatsiya texnologiyalari sohasidagi kasbiy ta\'lim fakulteti',
-        description: 'Fakultet axborot-kommunikatsiya texnologiyalari sohasida yuqori malakali mutaxassislar tayyorlaydi. Talabalar IT-industriyasida muvaffaqiyatli karera uchun zarur bo\'lgan amaliyotga yo\'naltirilgan ta\'lim oladilar.'
+        description: 'Fakultet axborot-kommunikatsiya texnologiyalari sohasida yuqori malakali mutaxassislar tayyorlaydi. Talabalar IT-industriyasida muvaffaqiyatli karyera uchun zarur bo\'lgan amaliyotga yo\'naltirilgan ta\'lim oladilar.'
       },
       computerEng: {
         name: 'Kompyuter injiniringi fakulteti',
@@ -328,17 +328,17 @@ export const dekanat = {
     
     people: {
       igamberdiev: 'Igamberdiyev Karimberdi Abdullayevich',
-      norbekov: 'Norbekov Suxrob Farxod ugli',
-      normatov: 'Normatov Otaxon Masaribovich',
+      norbekov: 'Norbekov Suxrob Farxod O\'g\'li',
+      normatov: 'Normatov Otaxon Masharibovich',
       kuchkorov: 'Kuchkorov Temurbek Ataxanovich',
       karimovAbdulatif: 'Karimov Abdulatif Botirovich',
-      karimovSardor: 'Karimov Sardor Atxam ogli',
-      ruzibaev: 'Ruzibayev O\'rtiq Baxtiyorovich',
-      suvonov: 'Suvonov Ximmadjon Hakimjon ogli',
-      shirinov: 'Shirinov Laziz Taxirovich',
+      karimovSardor: 'Karimov Sardor Atxam O\'g\'li',
+      ruzibaev: 'Ruzibayev Ortiq Baxtiyorovich',
+      suvonov: 'Suvonov Ximmadjon Hakimjon O\'g\'li',
+      shirinov: 'Shirinov Laziz Toxirovich',
       nasrullayev: 'Nasrullayev Nurbek Baxtiyorovich',
-      berdiboyev: 'Berdiboyev Oltinboy Abdibogiyevich',
-      shukurov: 'Shukurov O\'rziqul Pardayevich',
+      berdiboyev: 'Erdiboyev Oltinboy Abdiboqi O\'g\'li',
+      shukurov: 'Shukurov Orziqul Pardayevich',
       madaminov: 'Madaminov Xaydar Xudayorovich',
       usmanov: 'Usmanov Behzod Shuxratovich',
       ochilov: 'Ochilov Laziz Siddiqovich',
@@ -346,10 +346,10 @@ export const dekanat = {
       muminov: 'Muminov Sanjar Saylqulovich',
       tuyakov: 'Tuyakov Oybek Auezxo\'jayevich',
       sattarov: 'Sattarov Xurshid Abdishukur o\'gli',
-      teshaboyev: 'Teshaboyev Xo\'jamir Normajon o\'gli',
-      badalov: 'Badalov Yasur Ismoilovich',
-      saitkamolov: 'Saitqamolov Muhammadxo\'ja Sobirxo\'jiyevich',
-      nurmukhamedova: 'Nurmuxamedova Dilfuza Irkenovna',
+      teshaboyev: 'Teshaboyev Xo\'jamir Normajon O\'g\'li',
+      badalov: 'Badalov Jasur Ismoilovich',
+      saitkamolov: 'Saitkamolov Muxammadxo\'ja Sobirxo\'ja O\'g\'li',
+      nurmukhamedova: 'Nurmuxamedova Dilfuza Erkinovna',
       zaripov: 'Zaripov Alisher Muhammadovich'
     },
     

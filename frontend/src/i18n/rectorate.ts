@@ -122,12 +122,12 @@ export const rectorate = {
       viceRectorRegional: 'Hududiy ta\'lim muassasalari bo‘yicha prorektor'
     },
     persons: {
-      mahkamov: 'Maxqamov Baxtiyor Shuxratovich',
+      mahkamov: 'Maxkamov Baxtiyor Shuxratovich',
       yakhshibayev: 'Yaxshiboyev Doniyor Sultonboyevich',
       sultanov: 'Sultonov Jamshid Bahodirovich',
       tashev: 'Toshev Komil Ahmadovich',
       toshmatov: 'Toshmatov Salohiddin Zayniddinovich',
-      turaev: 'Turoev Shavkat Shuxratovich'
+      turaev: 'To\'rayev Shavkat Shuxratovich'
     },
     degrees: {
       mahkamov: 'Iqtisod fanlari doktori, professor',

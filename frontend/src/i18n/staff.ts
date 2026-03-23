@@ -90,9 +90,9 @@ export const staff = {
     },
     
     people: {
-      arifdjanov: 'Arifjonov Mahmud Marifjonovich',
+      arifdjanov: 'Orifjonov Mahmud Marifjonovich',
       raupova: 'Raupova Dilfuza Sahabovna',
-      abzamova: 'Abzamova Miyassar Turgunovna'
+      abzamova: 'Abzamova Muyassar Turg\'unovna'
     },
     
     receptions: {

@@ -4,7 +4,7 @@ export const application = {
     university_subtitle: "имени Мухаммада ал-Хоразмий",
     position: "Первому проректору по делам молодежи",
     position_subtitle: "и духовно-просветительской работе",
-    recipient: "Яхшибаеву Данияру Султанбаевичу",
+    recipient: "Яхшибаеву Дониёру Султанбаевичу",
     
     months: {
       january: "января",
@@ -141,7 +141,7 @@ export const application = {
     university_subtitle: "named after Muhammad al-Khwarizmi",
     position: "To the First Vice-Rector for Youth Affairs",
     position_subtitle: "and Spiritual-Educational Work",
-    recipient: "Yakhshibayev Daniyar Sultanbaevich",
+    recipient: "Yakhshibayev Doniyor Sultanbaevich",
     
     months: {
       january: "January",
@@ -278,7 +278,7 @@ export const application = {
     university_subtitle: "Muhammad al-Xorazmiy nomidagi",
     position: "Yoshlar ishlari va ma'naviy-ma'rifiy ishlar bo'yicha birinchi prorektor",
     position_subtitle: "va ma'naviy-ma'rifiy ishlar bo'yicha",
-    recipient: "Yaxshiboyev Daniyar Sultonboyevichga",
+    recipient: "Yaxshiboyev Doniyor Sultonboyevichga",
     
     months: {
       january: "yanvar",
