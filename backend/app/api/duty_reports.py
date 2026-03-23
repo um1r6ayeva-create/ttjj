@@ -328,6 +328,54 @@ def get_all_reports(
     
     return reports_response
 
+# --- Получить мои отчеты (для студента) ---
+@router.get("/student/my-reports", response_model=List[DutyReportResponse])
+def get_my_reports(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(student_required),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=100)
+):
+    """
+    Получить все отчеты, отправленные текущим студентом.
+    """
+    reports = db.query(DutyReport).options(
+        joinedload(DutyReport.photos),
+        joinedload(DutyReport.duty)
+    ).filter(
+        DutyReport.student_id == current_user.id
+    ).order_by(
+        DutyReport.submitted_at.desc()
+    ).offset(skip).limit(limit).all()
+    
+    reports_response = []
+    for report in reports:
+        photos_response = [
+            ReportPhotoResponse(
+                id=photo.id,
+                photo_url=f"/uploads/{photo.photo_url}",
+                file_name=photo.file_name,
+                uploaded_at=photo.uploaded_at
+            )
+            for photo in report.photos
+        ]
+        
+        reports_response.append(DutyReportResponse(
+            id=report.id,
+            duty_id=report.duty_id,
+            student_id=report.student_id,
+            description=report.description,
+            submitted_at=report.submitted_at,
+            status=report.status,
+            reviewed_at=report.reviewed_at,
+            reviewed_by=report.reviewed_by,
+            review_notes=report.review_notes,
+            photos=photos_response,
+            student_name=f"{current_user.name} {current_user.surname}"
+        ))
+    
+    return reports_response
+
 # --- Получить отчет по ID ---
 @router.get("/{report_id}", response_model=DutyReportDetailResponse)
 def get_report_by_id(
@@ -468,52 +516,6 @@ def review_report(
         student_name=f"{report.student.name} {report.student.surname}" if report.student else "Неизвестный студент"
     )
 
-# --- Получить мои отчеты (для студента) ---
-@router.get("/student/my-reports", response_model=List[DutyReportResponse])
-def get_my_reports(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(student_required),
-    skip: int = Query(0, ge=0),
-    limit: int = Query(50, ge=1, le=100)
-):
-    """
-    Получить все отчеты, отправленные текущим студентом.
-    """
-    reports = db.query(DutyReport).options(
-        joinedload(DutyReport.photos),
-        joinedload(DutyReport.duty)
-    ).filter(
-        DutyReport.student_id == current_user.id
-    ).order_by(
-        DutyReport.submitted_at.desc()
-    ).offset(skip).limit(limit).all()
-    
-    reports_response = []
-    for report in reports:
-        photos_response = [
-            ReportPhotoResponse(
-                id=photo.id,
-                photo_url=f"/uploads/{photo.photo_url}",
-                file_name=photo.file_name,
-                uploaded_at=photo.uploaded_at
-            )
-            for photo in report.photos
-        ]
-        
-        reports_response.append(DutyReportResponse(
-            id=report.id,
-            duty_id=report.duty_id,
-            student_id=report.student_id,
-            description=report.description,
-            submitted_at=report.submitted_at,
-            status=report.status,
-            reviewed_at=report.reviewed_at,
-            reviewed_by=report.reviewed_by,
-            review_notes=report.review_notes,
-            photos=photos_response,
-            student_name=f"{current_user.name} {current_user.surname}"
-        ))
-    
     return reports_response
 
 # --- Удалить отчет (только если статус waiting и это свой отчет) ---
