@@ -105,11 +105,15 @@ if (user?.role === 'commandant') {
   const getUserDataForForm = () => {
     if (!user) return null;
 
+    // Only pre-fill phone if it looks like a phone number
+    const phoneValue = user.phone || '';
+    const isActuallyPhone = /^\+?\d+$/.test(phoneValue);
+
     return {
       user_id: user.id,
       name: user.name || '',
       surname: user.surname || '',
-      phone: user.phone || '',
+      phone: isActuallyPhone ? phoneValue : '',
       room: user.n_room ? String(user.n_room) : '',
       group: user.user_group || '',
       faculty: '',
