@@ -321,6 +321,7 @@ if (user?.role === 'commandant') {
           {/* Формы */}
           {isAuthenticated ? (
             <ApplicationForm 
+              key={activeTab}
               type={activeTab}
               onSuccess={handleSubmitSuccess}
               onError={handleSubmitError}
