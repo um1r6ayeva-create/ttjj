@@ -245,7 +245,7 @@ def update_duty_by_id(
     duty_id: int,
     duty_in: DutyUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(admin_required),
+    current_user: User = Depends(any_admin_required),
 ):
     duty = update_duty(db, duty_id, duty_in)
     if not duty:
@@ -268,7 +268,7 @@ def update_duty_by_id(
 def delete_duty_by_id(
     duty_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(admin_required),
+    current_user: User = Depends(any_admin_required),
 ):
     success = delete_duty(db, duty_id)
     if not success:

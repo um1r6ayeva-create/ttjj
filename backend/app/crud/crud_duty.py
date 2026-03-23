@@ -134,15 +134,30 @@ def update_duty(db: Session, duty_id: int, duty_in: DutyUpdate) -> Optional[Duty
 
 def delete_duty(db: Session, duty_id: int) -> bool:
     """
-    Удалить дежурство.
+    Удалить дежурство, учитывая связи с отчетами и фото.
     """
     duty = db.query(Duty).filter(Duty.id == duty_id).first()
     if not duty:
         return False
 
-    # Удаляем все связанные отчеты (если каскадное удаление не настроено в модели)
-    db.query(DutyReport).filter(DutyReport.duty_id == duty_id).delete()
+    # 1. Удаляем историю статусов (важно для Foreign Key)
+    from app.models.duty_status_history import DutyStatusHistory
+    db.query(DutyStatusHistory).filter(DutyStatusHistory.duty_id == duty_id).delete(synchronize_session=False)
+
+    # 2. Находим все ID отчетов для этого дежурства
+    report_ids = [r.id for r in db.query(DutyReport).filter(DutyReport.duty_id == duty_id).all()]
     
+    if report_ids:
+        # Для удаления фото нам нужно импортировать модель ReportPhoto
+        from app.models.report_photo import ReportPhoto
+        
+        # 2. Удаляем фото для этих отчетов (важно для Foreign Key)
+        db.query(ReportPhoto).filter(ReportPhoto.report_id.in_(report_ids)).delete(synchronize_session=False)
+        
+        # 3. Удаляем сами отчеты
+        db.query(DutyReport).filter(DutyReport.id.in_(report_ids)).delete(synchronize_session=False)
+
+    # 5. Удаляем само дежурство
     db.delete(duty)
     db.commit()
     return True
