@@ -337,7 +337,7 @@ export const dekanat = {
       suvonov: 'Suvonov Ximmadjon Hakimjon O\'g\'li',
       shirinov: 'Shirinov Laziz Toxirovich',
       nasrullayev: 'Nasrullayev Nurbek Baxtiyorovich',
-      berdiboyev: 'Erdiboyev Oltinboy Abdiboqi O\'g\'li',
+      berdiboyev: 'Berdiboyev Oltinboy Abdiboqi O\'g\'li',
       shukurov: 'Shukurov Orziqul Pardayevich',
       madaminov: 'Madaminov Xaydar Xudayorovich',
       usmanov: 'Usmanov Behzod Shuxratovich',
