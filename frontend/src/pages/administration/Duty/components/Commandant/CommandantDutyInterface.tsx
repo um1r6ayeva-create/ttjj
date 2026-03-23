@@ -145,7 +145,12 @@ const CommandantDutyInterface = () => {
       
     } catch (err: any) {
       console.error(t('commandantDuty.states.errorLoading'), err);
-      setError(err.response?.data?.detail || err.message || t('commandantDuty.states.errorLoading'));
+      let errorMsg = String(err.message || t('commandantDuty.states.errorLoading'));
+      if (err.response?.data?.detail) {
+        const detail = err.response.data.detail;
+        errorMsg = typeof detail === 'string' ? detail : JSON.stringify(detail);
+      }
+      setError(errorMsg);
       setDuties([]);
       setReports([]);
       setCompletedReports([]);
