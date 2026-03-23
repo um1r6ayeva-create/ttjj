@@ -102,16 +102,20 @@ const CommandantDutyInterface = () => {
       const globalCompletedRes = await api.get('/global-duty-reports/history');
       
       console.log("CommandantDutyInterface: Data fetched successfully", {
-        duties: dutiesRes.data,
-        reports: reportsRes.data,
-        global: globalReportsRes.data,
-        completed: completedRes.data,
-        globalHistory: globalCompletedRes.data
+        duties: dutiesRes?.data,
+        reports: reportsRes?.data,
+        global: globalReportsRes?.data,
+        completed: completedRes?.data,
+        globalHistory: globalCompletedRes?.data
       });
 
-      setDuties(Array.isArray(dutiesRes.data) ? dutiesRes.data : []);
-      setReports(Array.isArray(reportsRes.data) ? reportsRes.data : []);
-      setGlobalReports(Array.isArray(globalReportsRes.data) ? globalReportsRes.data : []);
+      const safeDuties = Array.isArray(dutiesRes?.data) ? dutiesRes.data : [];
+      const safeReports = Array.isArray(reportsRes?.data) ? reportsRes.data : [];
+      const safeGlobalReports = Array.isArray(globalReportsRes?.data) ? globalReportsRes.data : [];
+
+      setDuties(safeDuties);
+      setReports(safeReports);
+      setGlobalReports(safeGlobalReports);
       
       const getSafeTime = (dateStr: any) => {
         if (!dateStr) return 0;
@@ -119,24 +123,25 @@ const CommandantDutyInterface = () => {
         return isNaN(d.getTime()) ? 0 : d.getTime();
       };
 
-      const completedData = Array.isArray(completedRes.data) ? completedRes.data : [];
-      const globalHistoryData = Array.isArray(globalCompletedRes.data) ? globalCompletedRes.data : [];
+      try {
+        const completedData = Array.isArray(completedRes?.data) ? completedRes.data : [];
+        const globalHistoryData = Array.isArray(globalCompletedRes?.data) ? globalCompletedRes.data : [];
 
-      const combinedHistory: CompletedReport[] = [
-        ...(Array.isArray(completedData) ? completedData : [])
-          .filter(Boolean)
-          .map((r: any) => ({ ...r, isGlobal: false })),
-        ...(Array.isArray(globalHistoryData) ? globalHistoryData : [])
-          .filter(Boolean)
-          .map((r: any) => ({ ...r, isGlobal: true }))
-      ].sort((a, b) => {
-        const timeA = getSafeTime(a?.reviewed_at || a?.submitted_at);
-        const timeB = getSafeTime(b?.reviewed_at || b?.submitted_at);
-        return timeB - timeA;
-      });
-      
-      console.log("CommandantDutyInterface: Combined history", combinedHistory);
-      setCompletedReports(combinedHistory);
+        const combinedHistory: CompletedReport[] = [
+          ...completedData.filter(Boolean).map((r: any) => ({ ...r, isGlobal: false })),
+          ...globalHistoryData.filter(Boolean).map((r: any) => ({ ...r, isGlobal: true }))
+        ].sort((a, b) => {
+          const timeA = getSafeTime(a?.reviewed_at || a?.submitted_at);
+          const timeB = getSafeTime(b?.reviewed_at || b?.submitted_at);
+          return timeB - timeA;
+        });
+        
+        console.log("CommandantDutyInterface: Combined history processed", combinedHistory.length);
+        setCompletedReports(combinedHistory);
+      } catch (historyErr) {
+        console.error("Error processing history data:", historyErr);
+        setCompletedReports([]);
+      }
       
     } catch (err: any) {
       console.error(t('commandantDuty.states.errorLoading'), err);
@@ -154,17 +159,33 @@ const CommandantDutyInterface = () => {
   }, []);
 
   const dutiesWithReports = useMemo((): DutyWithReport[] => {
-    if (!Array.isArray(duties)) return [];
-    return duties
-      .filter((duty): duty is DutyWithReport => duty !== null && duty !== undefined)
-      .map(duty => {
-        const reportsList = Array.isArray(reports) ? reports : [];
-        const dutyReports = reportsList.filter(report => report && report.duty_id === duty.id);
-        return {
-          ...duty,
-          report: dutyReports[0] || undefined
-        };
-      });
+    try {
+      if (!Array.isArray(duties)) {
+        console.warn("CommandantDutyInterface: duties is not an array", duties);
+        return [];
+      }
+      
+      console.log("CommandantDutyInterface: Processing dutiesWithReports", { dutiesCount: duties.length, reportsCount: (reports || []).length });
+      
+      return duties
+        .filter((duty): duty is DutyWithReport => duty !== null && duty !== undefined && typeof duty === 'object')
+        .map(duty => {
+          const reportsList = Array.isArray(reports) ? reports : [];
+          const dutyReports = reportsList.filter(report => report && typeof report === 'object' && report.duty_id === duty.id);
+          
+          if (dutyReports.length > 0) {
+            console.log(`CommandantDutyInterface: Linked report to duty ${duty.id}`);
+          }
+          
+          return {
+            ...duty,
+            report: dutyReports[0] || undefined
+          };
+        });
+    } catch (memoErr) {
+      console.error("CommandantDutyInterface: Error in dutiesWithReports useMemo", memoErr);
+      return [];
+    }
   }, [duties, reports]);
 
   const waitingReports = useMemo(
@@ -280,32 +301,37 @@ const getReportStatusText = (status: string): string => {
   });
 };
   // Исправленные функции форматирования даты
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: any): string => {
     try {
-      return new Date(dateString).toLocaleDateString('ru-RU', {
+      if (!dateString) return '—';
+      const d = new Date(dateString);
+      if (isNaN(d.getTime())) return String(dateString);
+      return d.toLocaleDateString('ru-RU', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
       } as Intl.DateTimeFormatOptions);
-    } catch {
-      return dateString;
+    } catch (err) {
+      console.error("CommandantDutyInterface: Error formatting date:", err);
+      return String(dateString || '');
     }
   };
 
-  const formatDateTime = (dateString: string): string => {
-    if (!dateString) return '—';
+  const formatDateTime = (dateString: any): string => {
     try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return dateString;
-      return date.toLocaleString('ru-RU', {
+      if (!dateString) return '—';
+      const d = new Date(dateString);
+      if (isNaN(d.getTime())) return String(dateString);
+      return d.toLocaleString('ru-RU', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit'
       } as Intl.DateTimeFormatOptions);
-    } catch {
-      return dateString;
+    } catch (err) {
+      console.error("CommandantDutyInterface: Error formatting date-time:", err);
+      return String(dateString || '');
     }
   };
 
@@ -320,8 +346,8 @@ const getReportStatusText = (status: string): string => {
               {t('commandantDuty.dutyCard.room')} {duty.room_number || '?'}, {duty.floor || '?'} {t('commandantDuty.dutyCard.floor')}
             </span>
           </div>
-          <span className={`status-badge status-${duty.status}`}>
-            {getDutyStatusText(duty.status)}
+          <span className={`status-badge status-${duty.status || 'unknown'}`}>
+            {getDutyStatusText(duty.status || 'unknown')}
           </span>
         </div>
         
@@ -349,7 +375,7 @@ const getReportStatusText = (status: string): string => {
               
               <div className="report-info">
                 <p>
-                  <strong>{t('commandantDuty.dutyCard.student')}:</strong> {duty.report.student_name || t('commandantDuty.completedReports.unknown')}
+                  <strong>{t('commandantDuty.dutyCard.student')}:</strong> {duty.report.student_name || t('commandantDuty.completedReports.unknown', { defaultValue: '???' })}
                 </p>
                 <p>
                   <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(duty.report.submitted_at || '')}
@@ -431,7 +457,7 @@ const getReportStatusText = (status: string): string => {
             </span>
           </div>
           <span className="status-badge status-submitted">
-            {t('commandantDuty.reportStatuses.waiting')}
+            {t('commandantDuty.reportStatuses.waiting', { defaultValue: 'Waiting' })}
           </span>
         </div>
         
@@ -445,7 +471,7 @@ const getReportStatusText = (status: string): string => {
                 <strong>{t('commandantDuty.dutyCard.submitted')}:</strong> {formatDate(report.submitted_at)}
               </p>
               <p className="description-preview">
-                <strong>{t('commandantDuty.dutyCard.description')}:</strong> {(report.description || '').substring(0, 150)}...
+                <strong>{t('commandantDuty.dutyCard.description')}:</strong> {String(report.description || '').substring(0, 150)}...
               </p>
               
               {report.photos && Array.isArray(report.photos) && report.photos.length > 0 && (

@@ -80,7 +80,8 @@ export const commandantDuty = {
       checkedBy: 'Проверил',
       room: 'Комната',
       submittedAt: 'Отправлен',
-      checkedAt: 'Проверен'
+      checkedAt: 'Проверен',
+      unknown: 'Неизвестно'
     },
     
     // Уведомления
@@ -136,6 +137,8 @@ export const commandantDuty = {
     dutyTypes: {
       kitchen: 'Kitchen Duty',
       shower: 'Shower Duty',
+      general_cleaning: 'General Cleaning',
+      community_work: 'Community Work',
       default: 'Duty'
     },
     
@@ -195,7 +198,8 @@ export const commandantDuty = {
       checkedBy: 'Checked by',
       room: 'Room',
       submittedAt: 'Submitted',
-      checkedAt: 'Checked'
+      checkedAt: 'Checked',
+      unknown: 'Unknown'
     },
     
     // Notifications
@@ -251,6 +255,8 @@ export const commandantDuty = {
     dutyTypes: {
       kitchen: 'Oshxonada navbatchilik',
       shower: 'Dushxonada navbatchilik',
+      general_cleaning: 'Umumiy tozalash',
+      community_work: 'Hashar',
       default: 'Navbatchilik'
     },
     
@@ -310,7 +316,8 @@ export const commandantDuty = {
       checkedBy: 'Tekshirgan',
       room: 'Xona',
       submittedAt: 'Yuborilgan',
-      checkedAt: 'Tekshirilgan'
+      checkedAt: 'Tekshirilgan',
+      unknown: 'Noma\'lum'
     },
     
     // Bildirishnomalar
