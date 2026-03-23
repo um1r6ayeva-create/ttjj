@@ -46,9 +46,13 @@ router = APIRouter(
     tags=["Global Duty Reports"],
 )
 
-UPLOAD_DIR = Path("uploads/global_duty_reports")
+# --- Настройка путей для загрузок ---
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+UPLOAD_DIR = BASE_DIR / "uploads" / "global_duty_reports"
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+
+# Создать директорию для загрузок, если она не существует
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 def validate_photo_file(photo: UploadFile) -> bool:

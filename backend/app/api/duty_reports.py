@@ -22,12 +22,13 @@ from app.dependencies.auth import admin_or_student_required, get_current_user, s
 
 router = APIRouter()
 
-# Директория для загрузки фото
-UPLOAD_DIR = Path("uploads/duty_reports")
+# --- Настройка путей для загрузок ---
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+UPLOAD_DIR = BASE_DIR / "uploads" / "duty_reports"
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.bmp'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
-# --- Создать директорию для загрузок ---
+# Создать директорию для загрузок, если она не существует
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 def validate_photo_file(photo: UploadFile) -> bool:
