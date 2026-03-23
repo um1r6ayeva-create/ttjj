@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './ApplicationsPage.css';
 import ApplicationForm from './ApplicationForm';
 import { api, useAuth } from '../../contexts/AuthContext';
@@ -202,7 +202,7 @@ if (user?.role === 'commandant') {
   };
 
   // Данные пользователя для формы
-  const userFormData = getUserDataForForm();
+  const userFormData = useMemo(() => getUserDataForForm(), [user]);
 
   return (
     <div className="applications-page">
