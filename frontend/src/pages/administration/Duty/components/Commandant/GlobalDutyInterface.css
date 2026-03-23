@@ -472,6 +472,12 @@ textarea {
   color: white;
 }
 
+.error-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
 .secondary-btn {
   background: #95a5a6;
   color: white;

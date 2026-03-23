@@ -360,6 +360,7 @@ const GlobalDutyInterface = () => {
         <p className="delete-confirmation-message">{t('globalDutyInterface.deleteMessage')}</p>
         <div className="button-group">
           <button
+            type="button"
             className="btn error-btn"
             onClick={deleteDuty}
             aria-label={t('globalDutyInterface.deleteButton')}
@@ -367,8 +368,12 @@ const GlobalDutyInterface = () => {
             {t('globalDutyInterface.deleteButton')}
           </button>
           <button
+            type="button"
             className="btn secondary-btn"
-            onClick={() => setDeleteModalOpen(false)}
+            onClick={() => {
+              setDeleteModalOpen(false);
+              setDutyToDelete(null);
+            }}
             aria-label={t('globalDutyInterface.cancelButton')}
           >
             {t('globalDutyInterface.cancelButton')}
