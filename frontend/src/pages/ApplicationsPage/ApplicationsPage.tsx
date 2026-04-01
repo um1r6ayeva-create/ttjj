@@ -139,7 +139,7 @@ if (user?.role === 'commandant') {
 
     // file_path в БД: applications/YYYY/MM/uuid.docx
     const filePath = application.file_path.replace(/\\/g, '/');
-    const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com').replace(/\/+$/, '');
+    const API_BASE_URL = (import.meta.env.VITE_API_URL || 'https://backend-ttj.tuit').replace(/\/+$/, '');
     const fileUrl = `${API_BASE_URL}/uploads/${filePath}`;
 
     console.log('URL для скачивания:', fileUrl);

@@ -18,6 +18,9 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "https://ttjj.vercel.app",
         "https://ttjj-*.vercel.app",
+        "https://ttj.tuit",
+        "https://ttj-tuit.vercel.app",
+        "https://ttj-*.vercel.app",
     ]  # обязательно список фронтендов
 
     # Настройки приложения

@@ -112,7 +112,7 @@ const getStatusText = (status: string): string => {
       .replace(/^\/+/, '');
 
     // Получаем базовый URL без /api/v1 и концевых слешей
-    const rawApiUrl = import.meta.env.VITE_API_URL || 'https://ttjj.onrender.com';
+    const rawApiUrl = import.meta.env.VITE_API_URL || 'https://backend-ttj.tuit';
     const baseUrl = rawApiUrl.split('/api/')[0].replace(/\/+$/, '');
     
     return `${baseUrl}/${cleaned}`;
